@@ -1,5 +1,6 @@
 package com.example.moneyandaccountmanagementservice.service.account;
 
+import com.example.moneyandaccountmanagementservice.exception.AccountNotFound;
 import com.example.moneyandaccountmanagementservice.model.Account;
 import com.example.moneyandaccountmanagementservice.repository.AccountRepository;
 import com.example.moneyandaccountmanagementservice.service.DateService;
@@ -31,7 +32,12 @@ public class AccountService {
         accountRepository.deleteById(accountId);
     }
 
-    public void getBalance(Long accountId) {
-        accountRepository.findById(a)
+    public Float getBalance(Long accountId) {
+        Account account = accountRepository.findById(accountId).orElseThrow(AccountNotFound::new);
+        return account.getBalance();
+    }
+
+    public Account getAccountDetail(Long accountId) {
+        return accountRepository.findById(accountId).orElseThrow(AccountNotFound::new);
     }
 }
