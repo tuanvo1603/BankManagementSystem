@@ -1,12 +1,12 @@
 package com.example.moneyandaccountmanagementservice.service.account;
 
-import com.example.moneyandaccountmanagementservice.exception.AccountNotFound;
+import com.example.moneyandaccountmanagementservice.exception.AppException;
+import com.example.moneyandaccountmanagementservice.exception.ErrorCode;
 import com.example.moneyandaccountmanagementservice.model.Account;
 import com.example.moneyandaccountmanagementservice.repository.AccountRepository;
 import com.example.moneyandaccountmanagementservice.service.DateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AccountService {
@@ -33,11 +33,39 @@ public class AccountService {
     }
 
     public Float getBalance(Long accountId) {
-        Account account = accountRepository.findById(accountId).orElseThrow(AccountNotFound::new);
+        Account account = accountRepository.findById(accountId).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
         return account.getBalance();
     }
 
     public Account getAccountDetail(Long accountId) {
-        return accountRepository.findById(accountId).orElseThrow(AccountNotFound::new);
+        return accountRepository.findById(accountId).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
+    }
+
+    private void filterMoneyInput(Float money){
+        if(money <= 0f) {
+            throw new AppException(ErrorCode.INVALID_MONEY_INPUT);
+        }
+    }
+
+    public void increaseBalance(Long accountId, Float money){
+        filterMoneyInput(money);
+        Account account = accountRepository.findById(accountId).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
+        account.setBalance(account.getBalance() + money);
+        accountRepository.save(account);
+    }
+
+    private void isEnoughMoneyInBalance(Account account, Float money) {
+        if(account.getBalance() < money)
+            throw new AppException(ErrorCode.NOT_ENOUGH_MONEY_IN_ACCOUNT);
+    }
+
+    public void decreaseBalance(Long accountId, Float money){
+        filterMoneyInput(money);
+
+        Account account = accountRepository.findById(accountId).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
+        isEnoughMoneyInBalance(account, money);
+        account.setBalance(account.getBalance() - money);
+        accountRepository.save(account);
+
     }
 }
