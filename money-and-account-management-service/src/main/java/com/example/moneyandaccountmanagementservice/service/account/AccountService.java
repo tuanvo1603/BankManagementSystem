@@ -32,6 +32,6 @@ public class AccountService {
     }
 
     public void getBalance(Long accountId) {
-        accountRepository.findById(a)
+//        accountRepository.findById()
     }
 }
