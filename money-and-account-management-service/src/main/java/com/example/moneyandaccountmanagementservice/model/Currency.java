@@ -1,5 +1,6 @@
 package com.example.moneyandaccountmanagementservice.model;
 
+import com.example.moneyandaccountmanagementservice.constant.CurrencySymbol;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,5 +19,5 @@ public class Currency {
 
     @Column(nullable = false, unique = true)
     @Enumerated(EnumType.STRING)
-    private String symbol;
+    private CurrencySymbol symbol;
 }

@@ -41,14 +41,7 @@ public class AccountService {
         return accountRepository.findById(accountId).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
     }
 
-    private void filterMoneyInput(Float money){
-        if(money <= 0f) {
-            throw new AppException(ErrorCode.INVALID_MONEY_INPUT);
-        }
-    }
-
     public void increaseBalance(Long accountId, Float money){
-        filterMoneyInput(money);
         Account account = accountRepository.findById(accountId).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
         account.setBalance(account.getBalance() + money);
         accountRepository.save(account);
@@ -60,12 +53,17 @@ public class AccountService {
     }
 
     public void decreaseBalance(Long accountId, Float money){
-        filterMoneyInput(money);
-
         Account account = accountRepository.findById(accountId).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
         isEnoughMoneyInBalance(account, money);
         account.setBalance(account.getBalance() - money);
         accountRepository.save(account);
+    }
 
+    public void updateAccount(Account account) {
+        if(!accountRepository.existsById(account.getAccountId())) {
+            throw new AppException(ErrorCode.ACCOUNT_NOT_FOUND);
+        }
+
+        accountRepository.save(account);
     }
 }

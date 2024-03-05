@@ -27,4 +27,8 @@ public class Account {
 
     @Column(name = "create_at", nullable = false)
     private Date createAt;
+
+    @Column(name = "account_number", nullable = false, unique = true, length = 17)
+    private String accountNumber;
+
 }
