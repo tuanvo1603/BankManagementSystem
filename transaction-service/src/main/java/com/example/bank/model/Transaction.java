@@ -18,7 +18,7 @@ public class Transaction {
     @Column(name = "transaction_id")
     private Long transactionId;
 
-    @Column(name = "source_account_id", nullable = false)
+    @Column(name = "source_account_id")
     private Long sourceAccountId;
 
     @Column(name = "destination_account_id")

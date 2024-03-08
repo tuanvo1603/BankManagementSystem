@@ -1,6 +1,5 @@
 package com.example.bank.config.producer;
 
-import com.example.bank.dto.CreditResponseDTO;
 import com.example.bank.model.Account;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;

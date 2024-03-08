@@ -2,22 +2,19 @@ package com.example.bank.model;
 
 import com.example.bank.constant.AccountType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.io.Serializable;
-import java.sql.Date;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "account")
-public class Account implements Serializable {
+public class Account {
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long accountId;
-
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
 
     @Column(name = "account_type", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -26,11 +23,13 @@ public class Account implements Serializable {
     @Column(nullable = false)
     private Float balance;
 
-    @Column(name = "create_at", nullable = false)
-    private Date createAt;
+    public void subtractMoney(Float money) {
+        this.balance -= money;
+    }
 
-    @Column(name = "account_number", nullable = false, unique = true, length = 17)
-    private String accountNumber;
+    public void addMoney(Float money) {
+        this.balance += money;
+    }
 
 }
 

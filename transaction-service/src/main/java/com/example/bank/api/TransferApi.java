@@ -3,8 +3,8 @@ package com.example.bank.api;
 import com.example.bank.constant.TransactionType;
 import com.example.bank.exception.StatusCode;
 import com.example.bank.model.Transaction;
-import com.example.bank.request.ExchangeRequest;
-import com.example.bank.response.ExchangeResponse;
+import com.example.bank.request.TransferRequest;
+import com.example.bank.response.TransferResponse;
 import com.example.bank.service.AccountService;
 import com.example.bank.service.DateService;
 import com.example.bank.service.TransactionService;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.ExecutionException;
 
 @Component
-public class ExchangeApi extends CommonApi<ExchangeResponse, ExchangeRequest>{
+public class TransferApi extends CommonApi<TransferResponse, TransferRequest>{
 
     private static final String EXCHANGE_SUCCESSFULLY_NOTIFY = "Exchange successfully.";
 
@@ -28,7 +28,7 @@ public class ExchangeApi extends CommonApi<ExchangeResponse, ExchangeRequest>{
     private DateService dateService;
 
     @Override
-    public ExchangeResponse execute(ExchangeRequest request) throws ExecutionException, InterruptedException {
+    public TransferResponse execute(TransferRequest request) throws ExecutionException, InterruptedException {
         accountService.credit(request.getDestinationAccountId(), request.getMoney());
         accountService.debit(request.getSourceAccountId(), request.getMoney());
         Transaction transaction = Transaction.builder()
@@ -40,6 +40,6 @@ public class ExchangeApi extends CommonApi<ExchangeResponse, ExchangeRequest>{
                 .build();
         transactionService.createTransaction(transaction);
 
-        return new ExchangeResponse(StatusCode.SUCCESS.getCode(), EXCHANGE_SUCCESSFULLY_NOTIFY);
+        return new TransferResponse(StatusCode.SUCCESS.getCode(), EXCHANGE_SUCCESSFULLY_NOTIFY);
     }
 }

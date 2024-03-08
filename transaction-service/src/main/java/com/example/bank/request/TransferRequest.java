@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ExchangeRequest extends ApiRequest{
+public class TransferRequest extends ApiRequest{
 
     @NotEmpty(message = "INVALID_ACCOUNT_ID")
     private Long sourceAccountId;

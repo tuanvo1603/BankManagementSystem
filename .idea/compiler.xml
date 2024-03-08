@@ -17,6 +17,7 @@
       <module name="oauth-server" target="17" />
       <module name="oauth-server.main" target="17" />
       <module name="oauth-server.test" target="17" />
+      <module name="test" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
