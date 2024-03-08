@@ -1,11 +1,11 @@
-package com.example.bank.dto;
+package com.example.bank.dto.producer;
 
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
-public class CreditResponseDTO implements Serializable{
+public class DebitResponseMessage implements Serializable {
 
     private Long accountId;
 

@@ -2,13 +2,13 @@ package com.example.bank.controller;
 
 import com.example.bank.api.DepositingApi;
 import com.example.bank.api.DrawMoneyApi;
-import com.example.bank.api.ExchangeApi;
+import com.example.bank.api.TransferApi;
 import com.example.bank.request.DepositingRequest;
 import com.example.bank.request.DrawMoneyRequest;
-import com.example.bank.request.ExchangeRequest;
+import com.example.bank.request.TransferRequest;
 import com.example.bank.response.DepositingResponse;
 import com.example.bank.response.DrawMoneyResponse;
-import com.example.bank.response.ExchangeResponse;
+import com.example.bank.response.TransferResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,7 +28,7 @@ public class CustomerController {
     private DepositingApi depositingApi;
 
     @Autowired
-    private ExchangeApi exchangeApi;
+    private TransferApi transferApi;
 
     @PostMapping("/draw-money/{sourceAccountId}/{money}")
     public DrawMoneyResponse drawMoney(@PathVariable Long sourceAccountId, @PathVariable Float money) {
@@ -42,13 +42,11 @@ public class CustomerController {
         return depositingApi.execute(depositingRequest);
     }
 
-    @PostMapping("/exchange/{sourceAccountId}/{destinationAccountId}/{money}")
-    public ExchangeResponse exchange(@PathVariable Long sourceAccountId,
+    @PostMapping("/transfer/{sourceAccountId}/{destinationAccountId}/{money}")
+    public TransferResponse transfer(@PathVariable Long sourceAccountId,
                                      @PathVariable Long destinationAccountId,
                                      @PathVariable Float money) throws ExecutionException, InterruptedException {
-        ExchangeRequest exchangeRequest = new ExchangeRequest(sourceAccountId, destinationAccountId, money);
-        return exchangeApi.execute(exchangeRequest);
+        TransferRequest transferRequest = new TransferRequest(sourceAccountId, destinationAccountId, money);
+        return transferApi.execute(transferRequest);
     }
-
-
 }

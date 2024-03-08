@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountService {
 
-    public static final Float INITIAL_BALANCE = 0f;
+    public static final Float INITIAL_BALANCE_VALUE = 0f;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -24,10 +24,12 @@ public class AccountService {
     private KafkaTemplate<String, Account> createdAccountKafkaTemplate;
 
     public Account createAccount(Account account) {
-
-        account.setBalance(INITIAL_BALANCE);
+        if(account.getBalance() == null) {
+            account.setBalance(INITIAL_BALANCE_VALUE);
+        }
         account.setCreateAt(dateService.getCurrentDate());
         Account savedAccount = accountRepository.save(account);
+
         createdAccountKafkaTemplate.send("createdAccount", savedAccount);
         return savedAccount;
     }
