@@ -4,10 +4,12 @@ package com.example.userService.controller;
 import com.example.userService.enitity.Role;
 import com.example.userService.enitity.User;
 import com.example.userService.enitity.UserRole;
-import com.example.userService.helper.UserFoundException;
+import com.example.userService.exception.UserFoundException;
 import com.example.userService.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,21 +17,40 @@ import java.util.HashSet;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/user")
-@CrossOrigin("*")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+//    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @GetMapping("/test")
+    public String test(){
+        return "Ok Test";
+    }
+
+    @GetMapping("/test1")
+    public String test1(){
+        return "Ok Test1";
+    }
+
+
+    @GetMapping("/admin")
+    public String admin(){
+        return "Role admin";
+    }
+
+
+    @GetMapping("/manage")
+    public String manage(){
+        return "Role manage";
+    }
 
     //creating user
     @PostMapping("/")
     public User createUser(@RequestBody User user) throws Exception {
         //encoding password with bcryptpasswordencoder
-        user.setPassword(this.bCryptPasswordEncoder.encode(user.getPassword()));
+//        user.setPassword(this.bCryptPasswordEncoder.encode(user.getPassword()));
 
         Set<UserRole> roles = new HashSet<>();
 

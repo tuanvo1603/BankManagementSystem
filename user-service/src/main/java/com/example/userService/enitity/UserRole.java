@@ -2,7 +2,7 @@ package com.example.userService.enitity;
 
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @AllArgsConstructor
 @Getter
