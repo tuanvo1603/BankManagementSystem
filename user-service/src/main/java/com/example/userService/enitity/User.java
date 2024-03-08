@@ -5,7 +5,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -25,7 +25,7 @@ public class User implements UserDetails {
     private String password;
     @Column(length = 128, nullable = false, unique = true)
     private String email;
-    @Column(name = "first_name", length = 90, nullable = false)
+    @Column(name = "fullname", length = 90, nullable = false)
     private String full_name;
     private Date created_at;
 
