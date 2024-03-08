@@ -4,12 +4,13 @@ import com.example.bank.constant.AccountType;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 @Data
 @Entity
 @Table(name = "account")
-public class Account {
+public class Account implements Serializable {
 
     @Id
 //    @GeneratedValue(strategy = GenerationType.AUTO)

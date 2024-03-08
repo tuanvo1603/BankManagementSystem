@@ -1,6 +1,7 @@
 package com.example.bank.request;
 
 import com.example.bank.model.Account;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +10,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class AccountCreationRequest extends ApiRequest{
 
-    @NotNull(message = "ACCOUNT_NOT_FILLED")
+    @NotEmpty(message = "ACCOUNT_NOT_FILLED")
     private Account account;
 }

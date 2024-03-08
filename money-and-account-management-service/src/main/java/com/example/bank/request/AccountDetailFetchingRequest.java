@@ -1,5 +1,6 @@
 package com.example.bank.request;
 
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +9,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class AccountDetailFetchingRequest extends ApiRequest {
 
-    @NotNull(message = "INVALID_ACCOUNT_ID")
+    @NotEmpty(message = "INVALID_ACCOUNT_ID")
     private Long accountId;
 }

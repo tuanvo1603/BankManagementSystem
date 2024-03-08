@@ -11,14 +11,8 @@ import org.springframework.kafka.config.TopicBuilder;
 public class TopicConfig {
 
     @Bean
-    @Qualifier("credit")
-    public NewTopic creditTopic() {
-        return TopicBuilder.name(Topic.CREDIT.getTopic()).build();
-    }
-
-    @Bean
-    @Qualifier("created_account")
-    public NewTopic createAccountTopic() {
-        return TopicBuilder.name(Topic.CREATED_ACCOUNT.getTopic()).build();
+    @Qualifier("debit")
+    public NewTopic debitTopic() {
+        return TopicBuilder.name(Topic.DEBIT.getTopic()).build();
     }
 }

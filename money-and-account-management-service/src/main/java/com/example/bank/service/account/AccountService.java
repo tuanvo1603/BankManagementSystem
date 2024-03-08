@@ -1,6 +1,5 @@
 package com.example.bank.service.account;
 
-import com.example.bank.dto.AccountDTO;
 import com.example.bank.exception.AppException;
 import com.example.bank.exception.ErrorCode;
 import com.example.bank.model.Account;
@@ -29,12 +28,6 @@ public class AccountService {
         account.setBalance(INITIAL_BALANCE);
         account.setCreateAt(dateService.getCurrentDate());
         Account savedAccount = accountRepository.save(account);
-//        AccountDTO accountDTO = new AccountDTO();
-//        accountDTO.setAccountId(savedAccount.getAccountId());
-//        accountDTO.setAccountType(savedAccount.getAccountType());
-//        accountDTO.setAccountNumber(savedAccount.getAccountNumber());
-//        accountDTO.setUserId(savedAccount.getUserId());
-//        accountDTO.setCreateAt(savedAccount.getCreateAt());
         createdAccountKafkaTemplate.send("createdAccount", savedAccount);
         return savedAccount;
     }

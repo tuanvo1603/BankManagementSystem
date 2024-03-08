@@ -2,6 +2,7 @@ package com.example.bank.model;
 
 import com.example.bank.constant.TransactionType;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.sql.Date;
@@ -9,6 +10,7 @@ import java.sql.Date;
 @Entity
 @Table(name = "transaction")
 @Data
+@Builder
 public class Transaction {
 
     @Id

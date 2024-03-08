@@ -2,16 +2,16 @@ package com.example.bank.constant;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 @AllArgsConstructor
 @Getter
 public enum Topic {
 
+    CREATED_ACCOUNT("created_topic"),
+
     CREDIT("credit"),
 
-    CREATED_ACCOUNT("created_account");
-
+    DEBIT("debit");
 
     private final String topic;
 }
