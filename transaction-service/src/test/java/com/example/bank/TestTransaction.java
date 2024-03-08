@@ -61,10 +61,10 @@ public class TestTransaction {
 
 
         Account account = new Account();
-        account.setUserId(3L);
+//        account.setUserId(3L);
         account.setAccountType(AccountType.SAVINGS);
-        account.setCreateAt(Date.valueOf(LocalDate.now()));
-        account.setAccountNumber("12345678901234578");
+//        account.setCreateAt(Date.valueOf(LocalDate.now()));
+//        account.setAccountNumber("12345678901234578");
         // Call the method to be tested
         System.out.println(account);
 //        Account createdAccount = accountService.createAccount(account);
