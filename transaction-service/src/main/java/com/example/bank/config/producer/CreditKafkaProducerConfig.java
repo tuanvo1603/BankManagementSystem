@@ -1,5 +1,6 @@
 package com.example.bank.config.producer;
 
+import com.example.bank.dto.CreditResponseMessage;
 import com.example.bank.model.Account;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -19,7 +20,7 @@ public class CreditKafkaProducerConfig {
 
     @Bean
     @Qualifier("creditProducerFactory")
-    public ProducerFactory<String, Account> creditProducerFactory() {
+    public ProducerFactory<String, CreditResponseMessage> creditProducerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -29,7 +30,7 @@ public class CreditKafkaProducerConfig {
 
     @Bean
     @Qualifier("creditKafkaTemplate")
-    public KafkaTemplate<String, Account> creditKafkaTemplate() {
+    public KafkaTemplate<String, CreditResponseMessage> creditKafkaTemplate() {
         return new KafkaTemplate<>(creditProducerFactory());
     }
 }

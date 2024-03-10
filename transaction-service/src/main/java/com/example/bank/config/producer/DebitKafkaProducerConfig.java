@@ -1,5 +1,6 @@
 package com.example.bank.config.producer;
 
+import com.example.bank.dto.DebitResponseMessage;
 import com.example.bank.model.Account;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -19,7 +20,7 @@ public class DebitKafkaProducerConfig {
 
     @Bean
     @Qualifier("debitProducerFactory")
-    public ProducerFactory<String, Account> debitProducerFactory() {
+    public ProducerFactory<String, DebitResponseMessage> debitProducerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -29,7 +30,7 @@ public class DebitKafkaProducerConfig {
 
     @Bean
     @Qualifier("debitKafkaTemplate")
-    public KafkaTemplate<String, Account> debitKafkaTemplate() {
+    public KafkaTemplate<String, DebitResponseMessage> debitKafkaTemplate() {
         return new KafkaTemplate<>(debitProducerFactory());
     }
 }

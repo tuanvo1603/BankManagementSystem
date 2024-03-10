@@ -1,5 +1,6 @@
 package com.example.bank.event;
 
+import com.example.bank.dto.DebitResponseMessage;
 import com.example.bank.exception.AppException;
 import com.example.bank.exception.ErrorCode;
 import com.example.bank.model.Account;
@@ -16,12 +17,12 @@ public class DebitHandler {
     private AccountRepository accountRepository;
 
     @KafkaListener(topics = "debit", groupId = "account_group")
-    public void handleDebiting(ConsumerRecord<String, Account> record) {
+    public void handleDebiting(ConsumerRecord<String, DebitResponseMessage> record) {
         System.out.println(record);
         Account account = accountRepository
                 .findById(record.value().getAccountId())
                 .orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
-        account.setBalance(record.value().getBalance());
+        account.subtractMoney(record.value().getMoney());
         accountRepository.save(account);
         System.out.println(record.value().toString());
     }

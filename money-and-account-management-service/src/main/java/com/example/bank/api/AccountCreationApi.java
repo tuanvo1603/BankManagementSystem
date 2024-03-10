@@ -3,7 +3,7 @@ package com.example.bank.api;
 import com.example.bank.exception.StatusCode;
 import com.example.bank.request.AccountCreationRequest;
 import com.example.bank.response.AccountCreationResponse;
-import com.example.bank.service.account.AccountService;
+import com.example.bank.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

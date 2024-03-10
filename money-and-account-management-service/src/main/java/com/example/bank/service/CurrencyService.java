@@ -1,4 +1,4 @@
-package com.example.bank.service.currency;
+package com.example.bank.service;
 
 import com.example.bank.exception.AppException;
 import com.example.bank.exception.ErrorCode;

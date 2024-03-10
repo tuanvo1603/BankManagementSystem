@@ -1,6 +1,8 @@
 package com.example.bank.service;
 
 import com.example.bank.constant.Topic;
+import com.example.bank.dto.CreditResponseMessage;
+import com.example.bank.dto.DebitResponseMessage;
 import com.example.bank.exception.AppException;
 import com.example.bank.exception.ErrorCode;
 import com.example.bank.model.Account;
@@ -20,17 +22,18 @@ public class AccountService {
     private DateService dateService;
 
     @Autowired
-    private KafkaTemplate<String, Account> creditKafkaTemplate;
+    private KafkaTemplate<String, CreditResponseMessage> creditKafkaTemplate;
 
     @Autowired
-    private KafkaTemplate<String, Account> debitKafkaTemplate;
+    private KafkaTemplate<String, DebitResponseMessage> debitKafkaTemplate;
 
     @Transactional
     public void credit(Long destinationAccountId, Float money) {
         Account account = accountRepository.findById(destinationAccountId).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
         account.addMoney(money);
         Account changedAccount = accountRepository.save(account);
-        creditKafkaTemplate.send(Topic.CREDIT.getTopic(), changedAccount);
+        CreditResponseMessage creditResponseMessage = new CreditResponseMessage(changedAccount.getAccountId(), money);
+        creditKafkaTemplate.send(Topic.CREDIT.getTopic(), creditResponseMessage);
     }
 
     private void isBalanceSufficient(Account account, Float money) {
@@ -44,7 +47,8 @@ public class AccountService {
         isBalanceSufficient(account, money);
         account.subtractMoney(money);
         Account changedAccount = accountRepository.save(account);
-        debitKafkaTemplate.send(Topic.DEBIT.getTopic(), changedAccount);
+        DebitResponseMessage debitResponseMessage = new DebitResponseMessage(changedAccount.getAccountId(), money);
+        debitKafkaTemplate.send(Topic.DEBIT.getTopic(), debitResponseMessage);
     }
 
 }

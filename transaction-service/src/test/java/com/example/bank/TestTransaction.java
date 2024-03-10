@@ -1,12 +1,11 @@
 package com.example.bank;
 
-import com.example.bank.api.DepositingApi;
+import com.example.bank.api.DepositApi;
 import com.example.bank.api.DrawMoneyApi;
 import com.example.bank.constant.AccountType;
 import com.example.bank.model.Account;
-import com.example.bank.request.DepositingRequest;
-import com.example.bank.request.DrawMoneyRequest;
-import com.example.bank.response.DepositingResponse;
+import com.example.bank.request.DepositRequest;
+import com.example.bank.response.DepositResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +14,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import org.junit.jupiter.api.*;
 
-
-import java.sql.Date;
-import java.time.LocalDate;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.hibernate.validator.internal.util.Contracts.assertTrue;
@@ -31,7 +27,7 @@ public class TestTransaction {
     @Autowired
     private DrawMoneyApi drawMoneyApi;
     @Autowired
-    private DepositingApi depositingApi;
+    private DepositApi depositApi;
 
     @BeforeEach
     void setUp() {
@@ -41,14 +37,14 @@ public class TestTransaction {
     @RepeatedTest(1000)
     void testAddMoney() {
 
-        DepositingRequest depositingRequest = new DepositingRequest(202L,100f);
-        DepositingResponse depositingResponse = depositingApi.execute(depositingRequest);
-        System.out.println(depositingResponse);
+        DepositRequest depositRequest = new DepositRequest(453L,100f);
+        DepositResponse depositResponse = depositApi.execute(depositRequest);
+        System.out.println(depositResponse);
 
 
 //        assertNotNull(depositingResponse);
         assertFalse(() -> {
-            boolean b = depositingResponse.getCode() != 1;
+            boolean b = depositResponse.getCode() != 1;
             return b;
         });
 

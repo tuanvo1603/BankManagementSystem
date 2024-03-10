@@ -1,11 +1,10 @@
 package com.example.bank.api;
 
 import com.example.bank.constant.TransactionType;
-import com.example.bank.exception.ErrorCode;
 import com.example.bank.exception.StatusCode;
 import com.example.bank.model.Transaction;
-import com.example.bank.request.DepositingRequest;
-import com.example.bank.response.DepositingResponse;
+import com.example.bank.request.DepositRequest;
+import com.example.bank.response.DepositResponse;
 import com.example.bank.service.AccountService;
 import com.example.bank.service.DateService;
 import com.example.bank.service.TransactionService;
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
-public class DepositingApi extends CommonApi<DepositingResponse, DepositingRequest>{
+public class DepositApi extends CommonApi<DepositResponse, DepositRequest>{
 
     @Autowired
     private AccountService accountService;
@@ -29,18 +28,16 @@ public class DepositingApi extends CommonApi<DepositingResponse, DepositingReque
 
     @Override
     @Transactional
-    public DepositingResponse execute(DepositingRequest request) {
+    public DepositResponse execute(DepositRequest request) {
         accountService.credit(request.getDestinationAccountId(), request.getMoney());
         Transaction transaction = Transaction.builder()
                 .transactionDate(dateService.getCurrentDate())
                 .transactionType(TransactionType.CREDIT)
                 .destinationAccountId(request.getDestinationAccountId())
-                .sourceAccountId(null)
                 .amount(request.getMoney())
                 .build();
-        System.out.println(transaction);
         transactionService.createTransaction(transaction);
 
-        return new DepositingResponse(StatusCode.SUCCESS.getCode(), DEPOSITING_SUCCESSFULLY_NOTIFY);
+        return new DepositResponse(StatusCode.SUCCESS.getCode(), DEPOSITING_SUCCESSFULLY_NOTIFY);
     }
 }

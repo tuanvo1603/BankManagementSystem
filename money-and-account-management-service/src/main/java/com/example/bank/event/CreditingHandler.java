@@ -1,5 +1,6 @@
 package com.example.bank.event;
 
+import com.example.bank.dto.CreditResponseMessage;
 import com.example.bank.exception.AppException;
 import com.example.bank.exception.ErrorCode;
 import com.example.bank.model.Account;
@@ -19,12 +20,12 @@ public class CreditingHandler {
 
     @KafkaListener(topics = "credit", groupId = "account_group")
     @Transactional
-    public void handleCrediting(ConsumerRecord<String, Account> record) throws JsonProcessingException {
+    public void handleCrediting(ConsumerRecord<String, CreditResponseMessage> record) throws JsonProcessingException {
         System.out.println(record.value().toString());
         Account account = accountRepository
                 .findById(record.value().getAccountId())
                 .orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
-        account.setBalance(record.value().getBalance());
+        account.addMoney(record.value().getMoney());
         accountRepository.save(account);
     }
 }

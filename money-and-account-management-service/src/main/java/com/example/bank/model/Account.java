@@ -31,4 +31,12 @@ public class Account {
     @Column(name = "account_number", nullable = false, unique = true, length = 17)
     private String accountNumber;
 
+    public void subtractMoney(Float money) {
+        this.balance -= money;
+    }
+
+    public void addMoney(Float money) {
+        this.balance += money;
+    }
+
 }

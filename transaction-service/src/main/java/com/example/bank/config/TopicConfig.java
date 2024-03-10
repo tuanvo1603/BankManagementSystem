@@ -11,7 +11,11 @@ import org.springframework.kafka.config.TopicBuilder;
 public class TopicConfig {
 
     @Bean
-    @Qualifier("debit")
+    public NewTopic creditTopic() {
+        return TopicBuilder.name(Topic.CREDIT.getTopic()).build();
+    }
+
+    @Bean
     public NewTopic debitTopic() {
         return TopicBuilder.name(Topic.DEBIT.getTopic()).build();
     }

@@ -1,7 +1,7 @@
 package com.example.bank.config.consumer;
 
 import com.example.bank.constant.GroupId;
-import com.example.bank.dto.consumer.CreatedAccountMessage;
+import com.example.bank.dto.CreatedAccountMessage;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;

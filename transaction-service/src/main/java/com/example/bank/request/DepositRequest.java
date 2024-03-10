@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class DepositingRequest extends ApiRequest{
+public class DepositRequest extends ApiRequest{
 
     @NotEmpty(message = "INVALID_ACCOUNT_ID")
     private Long destinationAccountId;

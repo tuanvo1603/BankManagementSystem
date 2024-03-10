@@ -1,6 +1,7 @@
 package com.example.bank.config.consumer;
 
 import com.example.bank.constant.GroupId;
+import com.example.bank.dto.DebitResponseMessage;
 import com.example.bank.model.Account;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -21,7 +22,7 @@ import java.util.Map;
 public class DebitKafkaConsumerConfig {
 
     @Bean
-    public ConsumerFactory<String, Account> debitConsumerFactory() {
+    public ConsumerFactory<String, DebitResponseMessage> debitConsumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ConsumerConfig.GROUP_ID_CONFIG, GroupId.ACCOUNT_GROUP.getGroupId());
@@ -32,8 +33,8 @@ public class DebitKafkaConsumerConfig {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Account> debitKafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, Account> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, DebitResponseMessage> debitKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, DebitResponseMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(debitConsumerFactory());
 //        factory.getContainerProperties().setErrorHandler(new SeekToCurrentErrorHandler()); // Error handling
 //        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE); // Acknowledgment mode

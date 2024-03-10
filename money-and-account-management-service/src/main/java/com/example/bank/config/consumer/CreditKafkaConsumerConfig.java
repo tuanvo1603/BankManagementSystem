@@ -1,6 +1,7 @@
 package com.example.bank.config.consumer;
 
 import com.example.bank.constant.GroupId;
+import com.example.bank.dto.CreditResponseMessage;
 import com.example.bank.model.Account;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -22,7 +23,7 @@ public class CreditKafkaConsumerConfig {
 
     @Bean
     @Qualifier("creditConsumerFactory")
-    public ConsumerFactory<String, Account> creditConsumerFactory() {
+    public ConsumerFactory<String, CreditResponseMessage> creditConsumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ConsumerConfig.GROUP_ID_CONFIG, GroupId.ACCOUNT_GROUP.getGroupId());
@@ -33,8 +34,8 @@ public class CreditKafkaConsumerConfig {
 
     @Bean
     @Qualifier("creditKafkaListenerContainerFactory")
-    public ConcurrentKafkaListenerContainerFactory<String, Account> creditKafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, Account> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, CreditResponseMessage> creditKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, CreditResponseMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(creditConsumerFactory());
 //        factory.getContainerProperties().setErrorHandler(new SeekToCurrentErrorHandler()); // Error handling
 //        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE); // Acknowledgment mode

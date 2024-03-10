@@ -1,5 +1,6 @@
 package com.example.bank.config.producer;
 
+import com.example.bank.dto.CreatedAccountMessage;
 import com.example.bank.model.Account;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -19,7 +20,7 @@ public class CreatedAccountProducerConfig {
 
     @Bean
     @Qualifier("createdAccountProducerFactory")
-    public ProducerFactory<String, Account> createdAccountProducerFactory() {
+    public ProducerFactory<String, CreatedAccountMessage> createdAccountProducerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -29,7 +30,7 @@ public class CreatedAccountProducerConfig {
 
     @Bean
     @Qualifier("createdAccountKafkaTemplate")
-    public KafkaTemplate<String, Account> createdAccountKafkaTemplate() {
+    public KafkaTemplate<String, CreatedAccountMessage> createdAccountKafkaTemplate() {
         return new KafkaTemplate<>(createdAccountProducerFactory());
     }
 }

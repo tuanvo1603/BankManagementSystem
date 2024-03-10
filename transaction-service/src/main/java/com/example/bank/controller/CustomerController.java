@@ -1,12 +1,12 @@
 package com.example.bank.controller;
 
-import com.example.bank.api.DepositingApi;
+import com.example.bank.api.DepositApi;
 import com.example.bank.api.DrawMoneyApi;
 import com.example.bank.api.TransferApi;
-import com.example.bank.request.DepositingRequest;
+import com.example.bank.request.DepositRequest;
 import com.example.bank.request.DrawMoneyRequest;
 import com.example.bank.request.TransferRequest;
-import com.example.bank.response.DepositingResponse;
+import com.example.bank.response.DepositResponse;
 import com.example.bank.response.DrawMoneyResponse;
 import com.example.bank.response.TransferResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class CustomerController {
     private DrawMoneyApi drawMoneyApi;
 
     @Autowired
-    private DepositingApi depositingApi;
+    private DepositApi depositApi;
 
     @Autowired
     private TransferApi transferApi;
@@ -37,9 +37,9 @@ public class CustomerController {
     }
 
     @PostMapping("/deposit/{destinationAccountId}/{money}")
-    public DepositingResponse deposit(@PathVariable Long destinationAccountId, @PathVariable Float money) {
-        DepositingRequest depositingRequest = new DepositingRequest(destinationAccountId, money);
-        return depositingApi.execute(depositingRequest);
+    public DepositResponse deposit(@PathVariable Long destinationAccountId, @PathVariable Float money) {
+        DepositRequest depositRequest = new DepositRequest(destinationAccountId, money);
+        return depositApi.execute(depositRequest);
     }
 
     @PostMapping("/transfer/{sourceAccountId}/{destinationAccountId}/{money}")
