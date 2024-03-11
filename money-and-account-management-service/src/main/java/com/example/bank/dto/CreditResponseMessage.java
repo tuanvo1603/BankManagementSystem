@@ -11,7 +11,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class CreditResponseMessage implements Serializable{
 
-    private Long accountId;
+    private String accountNumber;
 
     private Float money;
 }

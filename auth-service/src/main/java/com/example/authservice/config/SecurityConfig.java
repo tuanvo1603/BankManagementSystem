@@ -135,6 +135,7 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
+
     @Bean
     public OAuth2TokenCustomizer<JwtEncodingContext> jwtEncodingContextOAuth2TokenCustomizer(){
         return context -> {

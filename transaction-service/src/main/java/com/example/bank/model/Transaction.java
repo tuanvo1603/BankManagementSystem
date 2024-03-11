@@ -18,11 +18,11 @@ public class Transaction {
     @Column(name = "transaction_id")
     private Long transactionId;
 
-    @Column(name = "source_account_id")
-    private Long sourceAccountId;
+    @Column(name = "source_account_number")
+    private String sourceAccountNumber;
 
-    @Column(name = "destination_account_id")
-    private Long destinationAccountId;
+    @Column(name = "destination_account_number")
+    private String destinationAccountNumber;
 
     @Column(name = "amount", nullable = false)
     private Float amount;

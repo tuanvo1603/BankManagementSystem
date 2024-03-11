@@ -23,8 +23,10 @@ public class CreditingHandler {
     public void handleCrediting(ConsumerRecord<String, CreditResponseMessage> record) throws JsonProcessingException {
         System.out.println(record.value().toString());
         Account account = accountRepository
-                .findById(record.value().getAccountId())
-                .orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
+                .findByAccountNumber(record.value().getAccountNumber());
+        if(account == null) {
+            throw new AppException(ErrorCode.ACCOUNT_NOT_FOUND);
+        }
         account.addMoney(record.value().getMoney());
         accountRepository.save(account);
     }

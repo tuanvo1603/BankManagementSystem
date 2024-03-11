@@ -28,7 +28,7 @@ public class Account {
     @Column(name = "create_at", nullable = false)
     private Date createAt;
 
-    @Column(name = "account_number", nullable = false, unique = true, length = 17)
+    @Column(name = "account_number", nullable = false, unique = true, columnDefinition = "CHAR(10)")
     private String accountNumber;
 
     public void subtractMoney(Float money) {

@@ -30,23 +30,23 @@ public class CustomerController {
     @Autowired
     private TransferApi transferApi;
 
-    @PostMapping("/draw-money/{sourceAccountId}/{money}")
-    public DrawMoneyResponse drawMoney(@PathVariable Long sourceAccountId, @PathVariable Float money) {
-        DrawMoneyRequest drawMoneyRequest = new DrawMoneyRequest(sourceAccountId, money);
+    @PostMapping("/draw-money/{sourceAccountNumber}/{money}")
+    public DrawMoneyResponse drawMoney(@PathVariable String sourceAccountNumber, @PathVariable Float money) {
+        DrawMoneyRequest drawMoneyRequest = new DrawMoneyRequest(sourceAccountNumber, money);
         return drawMoneyApi.execute(drawMoneyRequest);
     }
 
-    @PostMapping("/deposit/{destinationAccountId}/{money}")
-    public DepositResponse deposit(@PathVariable Long destinationAccountId, @PathVariable Float money) {
-        DepositRequest depositRequest = new DepositRequest(destinationAccountId, money);
+    @PostMapping("/deposit/{destinationAccountNumber}/{money}")
+    public DepositResponse deposit(@PathVariable String destinationAccountNumber, @PathVariable Float money) {
+        DepositRequest depositRequest = new DepositRequest(destinationAccountNumber, money);
         return depositApi.execute(depositRequest);
     }
 
     @PostMapping("/transfer/{sourceAccountId}/{destinationAccountId}/{money}")
-    public TransferResponse transfer(@PathVariable Long sourceAccountId,
-                                     @PathVariable Long destinationAccountId,
+    public TransferResponse transfer(@PathVariable String sourceAccountNumber,
+                                     @PathVariable String destinationAccountNumber,
                                      @PathVariable Float money) throws ExecutionException, InterruptedException {
-        TransferRequest transferRequest = new TransferRequest(sourceAccountId, destinationAccountId, money);
+        TransferRequest transferRequest = new TransferRequest(sourceAccountNumber, destinationAccountNumber, money);
         return transferApi.execute(transferRequest);
     }
 }

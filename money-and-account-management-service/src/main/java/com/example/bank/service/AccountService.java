@@ -33,7 +33,7 @@ public class AccountService {
         }
         account.setCreateAt(dateService.getCurrentDate());
         Account savedAccount = accountRepository.save(account);
-        CreatedAccountMessage createdAccountMessage = new CreatedAccountMessage(savedAccount.getAccountId(), savedAccount.getAccountType(), savedAccount.getBalance());
+        CreatedAccountMessage createdAccountMessage = new CreatedAccountMessage(savedAccount.getAccountId(), savedAccount.getAccountType(), savedAccount.getBalance(), account.getAccountNumber());
         createdAccountKafkaTemplate.send("createdAccount", createdAccountMessage);
         return savedAccount;
     }

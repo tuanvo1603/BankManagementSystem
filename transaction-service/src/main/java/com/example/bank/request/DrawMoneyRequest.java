@@ -8,13 +8,13 @@ import lombok.Setter;
 @Setter
 public class DrawMoneyRequest extends ApiRequest{
     @NotEmpty(message = "INVALID_ACCOUNT_ID")
-    private Long sourceAccountId;
+    private String sourceAccountNumber;
 
     @NotEmpty(message = "INVALID_MONEY_INPUT")
     private Float money;
 
-    public DrawMoneyRequest(Long sourceAccountId, Float money) {
-        this.sourceAccountId = sourceAccountId;
+    public DrawMoneyRequest(String sourceAccountNumber, Float money) {
+        this.sourceAccountNumber = sourceAccountNumber;
         this.money = money;
     }
 }

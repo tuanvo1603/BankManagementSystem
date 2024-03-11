@@ -20,10 +20,11 @@ public class DebitHandler {
     public void handleDebiting(ConsumerRecord<String, DebitResponseMessage> record) {
         System.out.println(record);
         Account account = accountRepository
-                .findById(record.value().getAccountId())
-                .orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
+                .findByAccountNumber(record.value().getAccountNumber());
+        if(account == null) {
+            throw new AppException(ErrorCode.ACCOUNT_NOT_FOUND);
+        }
         account.subtractMoney(record.value().getMoney());
         accountRepository.save(account);
-        System.out.println(record.value().toString());
     }
 }

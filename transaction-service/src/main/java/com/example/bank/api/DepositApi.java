@@ -29,11 +29,11 @@ public class DepositApi extends CommonApi<DepositResponse, DepositRequest>{
     @Override
     @Transactional
     public DepositResponse execute(DepositRequest request) {
-        accountService.credit(request.getDestinationAccountId(), request.getMoney());
+        accountService.credit(request.getDestinationAccountNumber(), request.getMoney());
         Transaction transaction = Transaction.builder()
                 .transactionDate(dateService.getCurrentDate())
                 .transactionType(TransactionType.CREDIT)
-                .destinationAccountId(request.getDestinationAccountId())
+                .destinationAccountNumber(request.getDestinationAccountNumber())
                 .amount(request.getMoney())
                 .build();
         transactionService.createTransaction(transaction);

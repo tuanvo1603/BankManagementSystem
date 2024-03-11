@@ -29,11 +29,11 @@ public class TransferApi extends CommonApi<TransferResponse, TransferRequest>{
 
     @Override
     public TransferResponse execute(TransferRequest request) throws ExecutionException, InterruptedException {
-        accountService.credit(request.getDestinationAccountId(), request.getMoney());
-        accountService.debit(request.getSourceAccountId(), request.getMoney());
+        accountService.credit(request.getDestinationAccountNumber(), request.getMoney());
+        accountService.debit(request.getSourceAccountNumber(), request.getMoney());
         Transaction transaction = Transaction.builder()
-                .sourceAccountId(request.getSourceAccountId())
-                .destinationAccountId(request.getDestinationAccountId())
+                .sourceAccountNumber(request.getSourceAccountNumber())
+                .destinationAccountNumber(request.getDestinationAccountNumber())
                 .amount(request.getMoney())
                 .transactionType(TransactionType.TRANSFER)
                 .transactionDate(dateService.getCurrentDate())

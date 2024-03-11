@@ -23,6 +23,9 @@ public class Account {
     @Column(nullable = false)
     private Float balance;
 
+    @Column(name = "account_number", nullable = false, unique = true, columnDefinition = "CHAR(10)")
+    private String accountNumber;
+
     public void subtractMoney(Float money) {
         this.balance -= money;
     }

@@ -15,4 +15,6 @@ public class CreatedAccountMessage {
     private AccountType accountType;
 
     private Float balance;
+
+    private String accountNumber;
 }

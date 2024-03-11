@@ -12,10 +12,10 @@ import lombok.Setter;
 public class TransferRequest extends ApiRequest{
 
     @NotEmpty(message = "INVALID_ACCOUNT_ID")
-    private Long sourceAccountId;
+    private String sourceAccountNumber;
 
     @NotEmpty(message = "INVALID_ACCOUNT_ID")
-    private Long destinationAccountId;
+    private String destinationAccountNumber;
 
     @Positive(message = "INVALID_MONEY_INPUT")
     private Float money;

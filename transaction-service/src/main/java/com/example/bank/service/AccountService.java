@@ -28,11 +28,14 @@ public class AccountService {
     private KafkaTemplate<String, DebitResponseMessage> debitKafkaTemplate;
 
     @Transactional
-    public void credit(Long destinationAccountId, Float money) {
-        Account account = accountRepository.findById(destinationAccountId).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
+    public void credit(String destinationAccountNumber, Float money) {
+        Account account = accountRepository.findByAccountNumber(destinationAccountNumber);
+        if(destinationAccountNumber == null) {
+            throw new AppException(ErrorCode.ACCOUNT_NOT_FOUND);
+        }
         account.addMoney(money);
         Account changedAccount = accountRepository.save(account);
-        CreditResponseMessage creditResponseMessage = new CreditResponseMessage(changedAccount.getAccountId(), money);
+        CreditResponseMessage creditResponseMessage = new CreditResponseMessage(changedAccount.getAccountNumber(), money);
         creditKafkaTemplate.send(Topic.CREDIT.getTopic(), creditResponseMessage);
     }
 
@@ -42,12 +45,15 @@ public class AccountService {
     }
 
     @Transactional
-    public void debit(Long sourceAccountId, Float money) {
-        Account account = accountRepository.findById(sourceAccountId).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
+    public void debit(String sourceAccountNumber, Float money) {
+        Account account = accountRepository.findByAccountNumber(sourceAccountNumber);
+        if(sourceAccountNumber == null) {
+            throw new AppException(ErrorCode.ACCOUNT_NOT_FOUND);
+        }
         isBalanceSufficient(account, money);
         account.subtractMoney(money);
         Account changedAccount = accountRepository.save(account);
-        DebitResponseMessage debitResponseMessage = new DebitResponseMessage(changedAccount.getAccountId(), money);
+        DebitResponseMessage debitResponseMessage = new DebitResponseMessage(changedAccount.getAccountNumber(), money);
         debitKafkaTemplate.send(Topic.DEBIT.getTopic(), debitResponseMessage);
     }
 

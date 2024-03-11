@@ -7,12 +7,16 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 public class DepositRequest extends ApiRequest{
 
     @NotEmpty(message = "INVALID_ACCOUNT_ID")
-    private Long destinationAccountId;
+    private String destinationAccountNumber;
 
     @NotEmpty(message = "INVALID_MONEY_INPUT")
     private Float money;
+
+    public DepositRequest(String destinationAccountNumber, Float money) {
+        this.destinationAccountNumber = destinationAccountNumber;
+        this.money = money;
+    }
 }
