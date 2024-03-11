@@ -13,6 +13,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -50,6 +51,10 @@ public class AccountService {
         account.setBalance(account.getBalance() - money);
         Account changedAccount = accountRepository.save(account);
         debitKafkaTemplate.send(Topic.DEBIT.getTopic(), changedAccount);
+    }
+
+    public List<Account> getAllAccountByUser(Long userId){
+        return accountRepository.findAllByUserId(userId);
     }
 
 
