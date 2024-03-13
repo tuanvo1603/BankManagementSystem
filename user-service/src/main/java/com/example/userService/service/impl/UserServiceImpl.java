@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
         this.userRepository.deleteById(userId);
     }
 
-    public boolean isExistedUserById(Long userId) {
+    public Boolean isExistedUserById(Long userId) {
         return userRepository.existsById(userId);
     }
 }

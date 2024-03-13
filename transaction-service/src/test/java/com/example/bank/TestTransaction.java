@@ -37,7 +37,7 @@ public class TestTransaction {
     @RepeatedTest(1000)
     void testAddMoney() {
 
-        DepositRequest depositRequest = new DepositRequest(453L,100f);
+        DepositRequest depositRequest = new DepositRequest("453",100f);
         DepositResponse depositResponse = depositApi.execute(depositRequest);
         System.out.println(depositResponse);
 

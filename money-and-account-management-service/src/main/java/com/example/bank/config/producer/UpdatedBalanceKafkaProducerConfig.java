@@ -16,7 +16,6 @@ import java.util.Map;
 public class UpdatedBalanceKafkaProducerConfig {
 
     @Bean
-    @Qualifier("updatedBalanceProducerFactory")
     public ProducerFactory<String, String> updatedBalanceProducerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -26,7 +25,6 @@ public class UpdatedBalanceKafkaProducerConfig {
     }
 
     @Bean
-    @Qualifier("updatedBalanceKafkaTemplate")
     public KafkaTemplate<String, String> updatedBalanceKafkaTemplate() {
         return new KafkaTemplate<>(updatedBalanceProducerFactory());
     }

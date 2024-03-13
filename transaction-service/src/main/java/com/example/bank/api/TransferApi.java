@@ -28,7 +28,7 @@ public class TransferApi extends CommonApi<TransferResponse, TransferRequest>{
     private DateService dateService;
 
     @Override
-    public TransferResponse execute(TransferRequest request) throws ExecutionException, InterruptedException {
+    public TransferResponse execute(TransferRequest request) {
         accountService.credit(request.getDestinationAccountNumber(), request.getMoney());
         accountService.debit(request.getSourceAccountNumber(), request.getMoney());
         Transaction transaction = Transaction.builder()

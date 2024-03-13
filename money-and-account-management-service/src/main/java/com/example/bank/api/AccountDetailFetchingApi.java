@@ -15,7 +15,7 @@ public class AccountDetailFetchingApi extends CommonApi<AccountDetailFetchingRes
 
     @Override
     public AccountDetailFetchingResponse execute(AccountDetailFetchingRequest request) {
-        Account account = accountService.getAccountDetail(request.getAccountId());
+        Account account = accountService.getAccountDetail(request.getAccountNumber());
 
         return new AccountDetailFetchingResponse(account);
     }

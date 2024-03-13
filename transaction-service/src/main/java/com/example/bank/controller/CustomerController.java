@@ -45,7 +45,7 @@ public class CustomerController {
     @PostMapping("/transfer/{sourceAccountId}/{destinationAccountId}/{money}")
     public TransferResponse transfer(@PathVariable String sourceAccountNumber,
                                      @PathVariable String destinationAccountNumber,
-                                     @PathVariable Float money) throws ExecutionException, InterruptedException {
+                                     @PathVariable Float money){
         TransferRequest transferRequest = new TransferRequest(sourceAccountNumber, destinationAccountNumber, money);
         return transferApi.execute(transferRequest);
     }

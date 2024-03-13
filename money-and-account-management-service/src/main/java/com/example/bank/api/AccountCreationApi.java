@@ -17,8 +17,8 @@ public class AccountCreationApi extends CommonApi<AccountCreationResponse, Accou
 
     @Override
     public AccountCreationResponse execute(AccountCreationRequest request) {
-            accountService.createAccount(request.getAccount());
+        accountService.createAccount(request.getAccount());
 
-            return new AccountCreationResponse(StatusCode.SUCCESS.getCode(), CREATION_SUCCESSFULLY);
+        return new AccountCreationResponse(StatusCode.SUCCESS.getCode(), CREATION_SUCCESSFULLY);
     }
 }

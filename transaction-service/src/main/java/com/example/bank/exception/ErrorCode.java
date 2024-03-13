@@ -15,7 +15,7 @@ public enum ErrorCode {
 
     CURRENCY_NOT_FOUND(1003, "There is not this currency in system."),
 
-    INVALID_ACCOUNT_ID(1007, "Please fill the account Id.");
+    INVALID_ACCOUNT_NUMBER(1007, "Please fill the account number.");
 
     private final int code;
 

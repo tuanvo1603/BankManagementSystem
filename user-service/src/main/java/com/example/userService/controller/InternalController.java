@@ -16,7 +16,7 @@ public class InternalController {
     private final UserServiceImpl userService;
 
     @GetMapping("/existed-user/{userId}")
-    public boolean isExistedUserById(@PathVariable Long userId) {
+    public Boolean isExistedUserById(@PathVariable Long userId) {
         return userService.isExistedUserById(userId);
     }
 }

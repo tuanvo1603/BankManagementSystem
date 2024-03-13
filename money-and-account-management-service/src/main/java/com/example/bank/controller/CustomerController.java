@@ -26,9 +26,9 @@ public class CustomerController {
         return accountCreationApi.execute(accountCreationRequest);
     }
 
-    @GetMapping("/get-account-detail/{accountId}")
-    public AccountDetailFetchingResponse getAccountDetail(@PathVariable Long accountId) {
-        AccountDetailFetchingRequest accountDetailFetchingRequest = new AccountDetailFetchingRequest(accountId);
+    @GetMapping("/get-account-detail/{accountNumber}")
+    public AccountDetailFetchingResponse getAccountDetail(@PathVariable String accountNumber) {
+        AccountDetailFetchingRequest accountDetailFetchingRequest = new AccountDetailFetchingRequest(accountNumber);
         return accountDetailFetchingApi.execute(accountDetailFetchingRequest);
     }
 }

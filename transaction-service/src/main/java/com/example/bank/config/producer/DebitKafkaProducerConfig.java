@@ -19,7 +19,6 @@ import java.util.Map;
 public class DebitKafkaProducerConfig {
 
     @Bean
-    @Qualifier("debitProducerFactory")
     public ProducerFactory<String, DebitResponseMessage> debitProducerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -29,7 +28,6 @@ public class DebitKafkaProducerConfig {
     }
 
     @Bean
-    @Qualifier("debitKafkaTemplate")
     public KafkaTemplate<String, DebitResponseMessage> debitKafkaTemplate() {
         return new KafkaTemplate<>(debitProducerFactory());
     }

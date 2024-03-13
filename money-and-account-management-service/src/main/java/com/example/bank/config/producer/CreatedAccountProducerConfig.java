@@ -19,7 +19,6 @@ import java.util.Map;
 public class CreatedAccountProducerConfig {
 
     @Bean
-    @Qualifier("createdAccountProducerFactory")
     public ProducerFactory<String, CreatedAccountMessage> createdAccountProducerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -29,7 +28,6 @@ public class CreatedAccountProducerConfig {
     }
 
     @Bean
-    @Qualifier("createdAccountKafkaTemplate")
     public KafkaTemplate<String, CreatedAccountMessage> createdAccountKafkaTemplate() {
         return new KafkaTemplate<>(createdAccountProducerFactory());
     }

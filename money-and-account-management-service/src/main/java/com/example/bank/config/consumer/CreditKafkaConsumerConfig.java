@@ -22,7 +22,6 @@ import java.util.Map;
 public class CreditKafkaConsumerConfig {
 
     @Bean
-    @Qualifier("creditConsumerFactory")
     public ConsumerFactory<String, CreditResponseMessage> creditConsumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -33,7 +32,6 @@ public class CreditKafkaConsumerConfig {
     }
 
     @Bean
-    @Qualifier("creditKafkaListenerContainerFactory")
     public ConcurrentKafkaListenerContainerFactory<String, CreditResponseMessage> creditKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, CreditResponseMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(creditConsumerFactory());
