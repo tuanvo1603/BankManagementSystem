@@ -17,6 +17,7 @@ import java.util.UUID;
 public interface TransactionRepository extends JpaRepository<Transaction, UUID> {
 
     @Query(value = "SELECT t.* FROM transaction t JOIN account a ON t.destination_account_id = a.account_id " +
+            "or t.source_account_id = a.account_id "+
             "WHERE a.user_id = :user_id ORDER BY t.transaction_date DESC",
             countQuery = "SELECT COUNT(*) FROM transaction t JOIN account a ON t.destination_account_id = a.account_id " +
                     "WHERE a.user_id = :user_id",
