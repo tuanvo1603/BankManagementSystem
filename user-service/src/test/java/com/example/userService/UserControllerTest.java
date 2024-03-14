@@ -46,7 +46,7 @@ public class UserControllerTest {
 
         // Mocking role and userRole
         Role role = new Role();
-        role.setRole_id(45);
+        role.setRole_id(45L);
         role.setName("customer");
 
         UserRole userRole = new UserRole();

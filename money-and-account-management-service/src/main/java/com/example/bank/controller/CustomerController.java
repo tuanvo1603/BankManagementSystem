@@ -9,6 +9,7 @@ import com.example.bank.request.AllAccountFetchingRequest;
 import com.example.bank.response.AccountCreationResponse;
 import com.example.bank.response.AccountDetailFetchingResponse;
 import com.example.bank.response.AllAccountFetchingResponse;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +35,8 @@ public class CustomerController {
         return accountDetailFetchingApi.execute(accountDetailFetchingRequest);
     }
 
-//    public AllAccountFetchingRequest getAllUserAccount(){
+//    public AllAccountFetchingRequest getAllUserAccount(@PathVariable Long userId){
+//
 //
 //
 //    }

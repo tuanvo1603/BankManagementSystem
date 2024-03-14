@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@RestController
+
 @RequiredArgsConstructor
+@RestController("/user")
 public class UserController {
 
     private final UserService userService;
@@ -47,15 +48,14 @@ public class UserController {
     }
 
     //creating user
-    @PostMapping("/")
+    @PostMapping("/register")
     public User createUser(@RequestBody User user) throws Exception {
         //encoding password with bcryptpasswordencoder
 //        user.setPassword(this.bCryptPasswordEncoder.encode(user.getPassword()));
 
         Set<UserRole> roles = new HashSet<>();
-
         Role role = new Role();
-        role.setRole_id(45);
+        role.setRole_id(45L);
         role.setName("customer");
 
         UserRole userRole = new UserRole();
@@ -65,6 +65,11 @@ public class UserController {
 
         roles.add(userRole);
         return this.userService.createUser(user, roles);
+    }
+
+    @PostMapping("/update")
+    public User updateUser(@RequestBody User user){
+        return this.userService.updateUser(user);
     }
 
     @GetMapping("/{username}")
