@@ -15,7 +15,11 @@ public class UserController {
 
     @PostMapping("/users/new")
     public ResponseEntity<String> createUser(@ModelAttribute UserRequest userRequest){
-        userDetailsService.saveUser(userRequest);
+        try {
+            userDetailsService.saveUser(userRequest);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         return ResponseEntity.ok().body("OK");
     }
 

@@ -2,14 +2,16 @@ package com.example.bank.model;
 
 import com.example.bank.constant.TransactionType;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.sql.Date;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "transaction")
-@Data
 @Builder
 public class Transaction {
 
