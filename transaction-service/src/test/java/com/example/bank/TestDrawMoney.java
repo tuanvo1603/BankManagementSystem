@@ -22,7 +22,7 @@ public class TestDrawMoney {
 
     @Test
     public void testToDrawMoney(){
-        DrawMoneyRequest drawMoneyRequest = new DrawMoneyRequest(2L,21f);
+        DrawMoneyRequest drawMoneyRequest = new DrawMoneyRequest("232",21f);
 
         DrawMoneyResponse drawMoneyResponse = drawMoneyApi.execute(drawMoneyRequest);
 

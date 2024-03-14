@@ -1,8 +1,8 @@
 package com.example.bank;
 
-import com.example.bank.api.ExchangeApi;
-import com.example.bank.request.ExchangeRequest;
-import com.example.bank.response.ExchangeResponse;
+import com.example.bank.api.TransferApi;
+import com.example.bank.request.TransferRequest;
+import com.example.bank.response.TransferResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,13 +19,13 @@ import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 public class TestExchangeMoney {
 
     @Autowired
-    private ExchangeApi exchangeApi;
+    private TransferApi transferApi;
 
     @Test
     public void exchangeMoney() throws ExecutionException, InterruptedException {
-        ExchangeRequest exchangeRequest = new ExchangeRequest(202l,2l,999f);
-        ExchangeResponse exchangeResponse = exchangeApi.execute(exchangeRequest);
+        TransferRequest transferRequest = new TransferRequest("232","2323",999f);
+        TransferResponse transferResponse = transferApi.execute(transferRequest);
 
-        assertNotNull(exchangeResponse);
+        assertNotNull(transferResponse);
     }
 }

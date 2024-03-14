@@ -66,7 +66,9 @@ public class SecurityConfig {
                         new LoginUrlAuthenticationEntryPoint("/login"),
                         new MediaTypeRequestMatcher(MediaType.TEXT_HTML)))
                 .oauth2ResourceServer((resourceServer) -> resourceServer.jwt(Customizer.withDefaults()));
+        System.out.println("skfdsf");
         return http.build();
+
     }
 
 

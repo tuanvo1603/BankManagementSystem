@@ -9,12 +9,8 @@ import com.example.bank.model.Account;
 import com.example.bank.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.concurrent.ListenableFuture;
-
-import java.util.concurrent.CompletableFuture;
 
 @Service
 public class AccountService {
