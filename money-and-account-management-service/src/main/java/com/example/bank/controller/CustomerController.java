@@ -5,8 +5,10 @@ import com.example.bank.api.AccountDetailFetchingApi;
 import com.example.bank.model.Account;
 import com.example.bank.request.AccountCreationRequest;
 import com.example.bank.request.AccountDetailFetchingRequest;
+import com.example.bank.request.AllAccountFetchingRequest;
 import com.example.bank.response.AccountCreationResponse;
 import com.example.bank.response.AccountDetailFetchingResponse;
+import com.example.bank.response.AllAccountFetchingResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,4 +33,9 @@ public class CustomerController {
         AccountDetailFetchingRequest accountDetailFetchingRequest = new AccountDetailFetchingRequest(accountId);
         return accountDetailFetchingApi.execute(accountDetailFetchingRequest);
     }
+
+//    public AllAccountFetchingRequest getAllUserAccount(){
+//
+//
+//    }
 }
