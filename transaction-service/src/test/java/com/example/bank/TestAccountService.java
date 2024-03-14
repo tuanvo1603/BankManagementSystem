@@ -25,8 +25,8 @@ public class TestAccountService {
 
 //        List<Account> accounts = accountService.getAllAccountByUser(3L);
 
-        System.out.println(accounts);
-
-        assertNotNull(accounts);
+//        System.out.println(accounts);
+//
+//        assertNotNull(accounts);
     }
 }

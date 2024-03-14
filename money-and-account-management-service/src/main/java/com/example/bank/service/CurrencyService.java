@@ -1,5 +1,6 @@
 package com.example.bank.service;
 
+import com.example.bank.constant.CurrencySymbol;
 import com.example.bank.exception.AppException;
 import com.example.bank.exception.ErrorCode;
 import com.example.bank.model.Currency;
@@ -23,8 +24,8 @@ public class CurrencyService {
         return currencyRepository.findAll();
     }
 
-    public void deleteCurrency(Long currencyCode) {
-        currencyRepository.deleteById(currencyCode);
+    public void deleteCurrency(CurrencySymbol currencySymbol) {
+        currencyRepository.deleteBySymbolEquals(currencySymbol);
     }
 
     public void updateCurrency(Currency currency) {
@@ -33,5 +34,9 @@ public class CurrencyService {
         }
 
         currencyRepository.save(currency);
+    }
+
+    public Currency getCurrency(CurrencySymbol currencySymbol) {
+        return currencyRepository.findCurrencyBySymbolEquals(currencySymbol);
     }
 }
