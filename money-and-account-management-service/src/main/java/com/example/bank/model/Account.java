@@ -1,6 +1,7 @@
 package com.example.bank.model;
 
 import com.example.bank.constant.AccountType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,6 +16,7 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long accountId;
 
+    @JsonIgnore
     @Column(name = "user_id", nullable = false)
     private Long userId;
 

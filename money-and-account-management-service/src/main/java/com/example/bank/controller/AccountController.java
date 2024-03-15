@@ -3,13 +3,16 @@ package com.example.bank.controller;
 import com.example.bank.api.AccountCreationApi;
 import com.example.bank.api.AccountDetailFetchingApi;
 import com.example.bank.api.AllUserAccountFetchingApi;
+import com.example.bank.api.FetchingDestinationUserApi;
 import com.example.bank.model.Account;
 import com.example.bank.request.AccountCreationRequest;
 import com.example.bank.request.AccountDetailFetchingRequest;
 import com.example.bank.request.AllAccountFetchingRequest;
+import com.example.bank.request.DestinationAccountRequest;
 import com.example.bank.response.AccountCreationResponse;
 import com.example.bank.response.AccountDetailFetchingResponse;
 import com.example.bank.response.AllAccountFetchingResponse;
+import com.example.bank.response.UserInfoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,12 +21,13 @@ import org.springframework.web.bind.annotation.*;
 public class AccountController {
     @Autowired
     private AccountCreationApi accountCreationApi;
-
     @Autowired
     private AccountDetailFetchingApi accountDetailFetchingApi;
-
     @Autowired
     private AllUserAccountFetchingApi allUserAccountFetchingApi;
+
+    @Autowired
+    private FetchingDestinationUserApi fetchingDestinationUserApi;
 
     @PostMapping("/create-account")
     public AccountCreationResponse createAccount(@RequestBody Account account) {
@@ -41,5 +45,11 @@ public class AccountController {
     public AllAccountFetchingResponse getAllUserAccount(){
         AllAccountFetchingRequest request = new AllAccountFetchingRequest();
         return allUserAccountFetchingApi.execute(request);
+    }
+
+    @GetMapping("/get-username-account/{destinationId}")
+    public UserInfoResponse getDestinationUserInfo(@RequestParam Long destinationId){
+        DestinationAccountRequest request = new DestinationAccountRequest(destinationId);
+        return fetchingDestinationUserApi.execute(request);
     }
 }
