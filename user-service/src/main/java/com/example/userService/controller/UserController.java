@@ -9,8 +9,8 @@ import com.example.userService.exception.UserFoundException;
 import com.example.userService.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+//import org.springframework.security.core.Authentication;
+//import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
@@ -22,12 +22,12 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/test")
-    public String test(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userId = authentication.getName();
-        return "Ok Test" + userId;
-    }
+//    @GetMapping("/test")
+//    public String test(){
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String userId = authentication.getName();
+//        return "Ok Test" + userId;
+//    }
 
     @GetMapping("/test1")
     public String test1(){

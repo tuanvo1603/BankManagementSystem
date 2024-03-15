@@ -18,7 +18,7 @@ import java.util.Set;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int user_id;
+    private Long user_id;
     @Column(length = 128, nullable = false, unique = true)
     private String username;
     @Column(length = 64, nullable = false)
@@ -74,9 +74,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-    public int getUser_id() {
-        return user_id;
-    }
 
     public String getEmail() {
         return email;
@@ -92,10 +89,6 @@ public class User implements UserDetails {
 
     public Set<UserRole> getUserRoles() {
         return userRoles;
-    }
-
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
     }
 
     public void setUsername(String username) {
@@ -120,6 +113,14 @@ public class User implements UserDetails {
 
     public void setUserRoles(Set<UserRole> userRoles) {
         this.userRoles = userRoles;
+    }
+
+    public Long getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
     }
 }
 

@@ -31,11 +31,11 @@ public class AccountService {
     @Autowired
     private KafkaTemplate<String, CreatedAccountMessage> createdAccountKafkaTemplate;
 
-//    @CircuitBreaker(name = "CHECK_EXISTING_USER_BREAKER", fallbackMethod = "checkExistingUserFallBack")
-//    private boolean checkExistenceOfUser(Long userId) {
-//        Boolean isExistedUser = restTemplate.getForObject("http://localhost:8000/v1/internal/exist-user/" + userId, Boolean.class);
-//        return Boolean.TRUE.equals(isExistedUser);
-//    }
+    @CircuitBreaker(name = "CHECK_EXISTING_USER_BREAKER", fallbackMethod = "checkExistingUserFallBack")
+    private boolean checkExistenceOfUser(Long userId) {
+        Boolean isExistedUser = restTemplate.getForObject("http://localhost:8000/v1/internal/exist-user/" + userId, Boolean.class);
+        return Boolean.TRUE.equals(isExistedUser);
+    }
 
     private void checkExistingUserFallBack(Throwable throwable) {
         throw new AppException(ErrorCode.SERVER_OVER_LOADING);
@@ -43,9 +43,9 @@ public class AccountService {
 
     @Transactional
     public Account createAccount(Account account) {
-//        if(!checkExistenceOfUser(account.getUserId())) {
-//            throw new AppException(ErrorCode.USER_NOT_FOUND);
-//        }
+        if(!checkExistenceOfUser(account.getUserId())) {
+            throw new AppException(ErrorCode.USER_NOT_FOUND);
+        }
         if(account.getBalance() == null) {
             account.setBalance(INITIAL_BALANCE_VALUE);
         }
