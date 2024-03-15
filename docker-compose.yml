@@ -14,3 +14,16 @@ services:
     environment:
       KAFKA_ADVERTISED_HOST_NAME: localhost
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger
+    ports:
+      - "4318:4318"
+      - "6831:6831/udp"    # Jaeger Compact Thrift over UDP
+      - "6832:6832/udp"    # Jaeger Binary Thrift over UDP
+      - "5778:5778"        # Jaeger Agent's HTTP admin port
+      - "16686:16686"      # Jaeger Query UI
+      - "14268:14268"      # Jaeger Collector Thrift
+    environment:
+      - COLLECTOR_ZIPKIN_HTTP_PORT=9411  # Zipkin HTTP Thrift compatibility port
+      - LOG_LEVEL=INFO                   # Adjust as needed

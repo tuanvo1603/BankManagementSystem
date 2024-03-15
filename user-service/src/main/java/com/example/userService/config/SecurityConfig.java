@@ -14,7 +14,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth-> auth.anyRequest().permitAll());
+        http.authorizeHttpRequests(auth-> auth.antMatchers("/v1/internal/**").permitAll());
 
         return http.build();
     }
@@ -41,8 +41,8 @@ public class SecurityConfig {
 //        return jwtAuthenticationConverter;
 //    }
 
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+//    @Bean
+//    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
 }

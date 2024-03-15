@@ -42,7 +42,7 @@ public class CustomerController {
         return depositApi.execute(depositRequest);
     }
 
-    @PostMapping("/transfer/{sourceAccountId}/{destinationAccountId}/{money}")
+    @PostMapping("/transfer/{sourceAccountNumber}/{destinationAccountNumber}/{money}")
     public TransferResponse transfer(@PathVariable String sourceAccountNumber,
                                      @PathVariable String destinationAccountNumber,
                                      @PathVariable Float money){

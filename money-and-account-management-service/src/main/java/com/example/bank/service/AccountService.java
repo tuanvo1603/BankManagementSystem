@@ -34,6 +34,7 @@ public class AccountService {
     @CircuitBreaker(name = "CHECK_EXISTING_USER_BREAKER", fallbackMethod = "checkExistingUserFallBack")
     private boolean checkExistenceOfUser(Long userId) {
         Boolean isExistedUser = restTemplate.getForObject("http://localhost:8000/v1/internal/exist-user/" + userId, Boolean.class);
+
         return Boolean.TRUE.equals(isExistedUser);
     }
 
