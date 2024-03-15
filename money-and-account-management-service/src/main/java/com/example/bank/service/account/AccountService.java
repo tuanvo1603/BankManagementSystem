@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AccountService {
 
@@ -45,11 +47,14 @@ public class AccountService {
         return accountRepository.findById(accountId).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
     }
 
+    public List<Account> getAllUserAccount(Long userId){
+        return accountRepository.findByUserId(userId);
+    }
+
     public void updateAccount(Account account) {
         if(!accountRepository.existsById(account.getAccountId())) {
             throw new AppException(ErrorCode.ACCOUNT_NOT_FOUND);
         }
-
         accountRepository.save(account);
     }
 }

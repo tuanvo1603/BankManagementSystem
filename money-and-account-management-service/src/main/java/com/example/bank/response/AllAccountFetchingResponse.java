@@ -6,7 +6,7 @@ import java.util.List;
 
 public class AllAccountFetchingResponse extends ApiResponse {
 
-    private List<Account> accounts;
+    public List<Account> accounts;
 
     public AllAccountFetchingResponse(int code, String message) {
         super(code, message);
