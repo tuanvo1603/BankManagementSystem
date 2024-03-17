@@ -6,9 +6,9 @@ import lombok.Data;
 @Data
 public class DestinationAccountRequest extends ApiRequest{
     @NotEmpty(message = "INVALID_ACCOUNT_ID")
-    private Long destinationAccountId;
+    private String destinationAccount;
 
-    public DestinationAccountRequest(Long destinationAccountId){
-        this.destinationAccountId = destinationAccountId;
+    public DestinationAccountRequest(String destinationAccountId){
+        this.destinationAccount = destinationAccountId;
     }
 }

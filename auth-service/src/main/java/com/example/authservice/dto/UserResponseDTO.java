@@ -1,6 +1,6 @@
-package com.example.bank.response;
+package com.example.authservice.dto;
 
-import com.example.bank.dto.UserResponseDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +10,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserInfoResponse extends ApiResponse{
-
-    UserResponseDTO userResponseDTO;
-
+public class UserResponseDTO {
+    private Long userId;
+    private String fullName;
 }
+
