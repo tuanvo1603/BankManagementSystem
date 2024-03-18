@@ -7,10 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class AuthenticationController {
-    @GetMapping("/authentication/user")
+public class GatewayController {
+    @GetMapping("/current/user")
     public ResponseEntity<String> user(@AuthenticationPrincipal OAuth2User principal) {
-        System.out.println(principal.getName());
-        return ResponseEntity.ok("OK " + principal.getName());
+        return ResponseEntity.ok("Current " + principal.getName());
     }
 }
