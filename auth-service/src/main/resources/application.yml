@@ -15,8 +15,8 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
-logging:
-  level:
-    org:
-      springframework:
-        security: trace
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        security: trace

@@ -25,5 +25,46 @@ services:
       - "16686:16686"      # Jaeger Query UI
       - "14268:14268"      # Jaeger Collector Thrift
     environment:
-      - COLLECTOR_ZIPKIN_HTTP_PORT=9411  # Zipkin HTTP Thrift compatibility port
+#      - COLLECTOR_ZIPKIN_HTTP_PORT=9411  # Zipkin HTTP Thrift compatibility port
       - LOG_LEVEL=INFO                   # Adjust as needed
+#  grafana:
+#    image: grafana/grafana:latest
+#    container_name: grafana
+#    ports:
+#      - "3000:3000"
+#    volumes:
+#      - grafana_data:/var/lib/grafana
+#    depends_on:
+#      - prometheus
+#      - loki
+#    networks:
+#      - monitoring
+#
+#  loki:
+#    image: grafana/loki:latest
+#    container_name: loki
+#    ports:
+#      - "3100:3100"
+#    command: -config.file=/etc/loki/local-config.yaml
+#    volumes:
+#      - loki_data:/etc/loki
+#    networks:
+#      - monitoring
+#
+#  prometheus:
+#    image: prom/prometheus:latest
+#    container_name: prometheus
+#    ports:
+#      - "9090:9090"
+#    volumes:
+#      - prometheus_data:/etc/prometheus
+#    networks:
+#      - monitoring
+#
+#networks:
+#  monitoring:
+#
+#volumes:
+#  grafana_data:
+#  loki_data:
+#  prometheus_data:

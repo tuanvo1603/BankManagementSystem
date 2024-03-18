@@ -47,6 +47,9 @@ public class AccountService {
         if(!checkExistenceOfUser(account.getUserId())) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
+        if(accountRepository.existsAccountByAccountNumberEquals(account.getAccountNumber())) {
+            throw new AppException(ErrorCode.ACCOUNT_ALREADY_EXISTED);
+        }
         if(account.getBalance() == null) {
             account.setBalance(INITIAL_BALANCE_VALUE);
         }
@@ -73,7 +76,6 @@ public class AccountService {
         if(!accountRepository.existsById(account.getAccountId())) {
             throw new AppException(ErrorCode.ACCOUNT_NOT_FOUND);
         }
-
         accountRepository.save(account);
     }
 }

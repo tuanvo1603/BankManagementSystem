@@ -19,6 +19,16 @@ import java.util.Map;
 public class CreatedAccountProducerConfig {
 
     @Bean
+    public KafkaTemplate<String, CreatedAccountMessage> defaultRetryTopicKafkaTemplate() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        ProducerFactory<String, CreatedAccountMessage> producerFactory = new DefaultKafkaProducerFactory<>(props);
+        return new KafkaTemplate<>(producerFactory);
+    }
+
+    @Bean
     public ProducerFactory<String, CreatedAccountMessage> createdAccountProducerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
