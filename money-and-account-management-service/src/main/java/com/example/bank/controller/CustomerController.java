@@ -13,6 +13,7 @@ import com.example.bank.response.AccountCreationResponse;
 import com.example.bank.response.AccountDetailFetchingResponse;
 import com.example.bank.response.DeleteAccountResponse;
 import com.example.bank.response.UpdateAccountResponse;
+import com.example.bank.token.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,8 +34,9 @@ public class CustomerController {
     private DeleteAccountApi deleteAccountApi;
 
     @PostMapping("/create-account")
-    public AccountCreationResponse createAccount(@RequestBody Account account) {
-        AccountCreationRequest accountCreationRequest = new AccountCreationRequest(account);
+    public AccountCreationResponse createAccount(@RequestBody Account account, @RequestHeader("Authorization") String bearerToken) {
+        Token token = new Token(bearerToken.substring("Bearer ".length()));
+        AccountCreationRequest accountCreationRequest = new AccountCreationRequest(account, token);
         return accountCreationApi.execute(accountCreationRequest);
     }
 

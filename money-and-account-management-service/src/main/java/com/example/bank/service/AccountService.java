@@ -7,8 +7,12 @@ import com.example.bank.exception.ErrorCode;
 import com.example.bank.model.Account;
 import com.example.bank.repository.AccountRepository;
 import com.example.bank.service.DateService;
+import com.example.bank.token.Token;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,8 +36,11 @@ public class AccountService {
     private KafkaTemplate<String, CreatedAccountMessage> createdAccountKafkaTemplate;
 
     @CircuitBreaker(name = "CHECK_EXISTING_USER_BREAKER", fallbackMethod = "checkExistingUserFallBack")
-    private boolean checkExistenceOfUser(Long userId) {
-        Boolean isExistedUser = restTemplate.getForObject("http://localhost:8000/v1/internal/exist-user/" + userId, Boolean.class);
+    private boolean checkExistenceOfUser(Long userId, Token token) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token.getToken());
+        HttpEntity<Long> entity = new HttpEntity<>(userId, headers);
+        Boolean isExistedUser = restTemplate.exchange("http://localhost:8000/v1/internal/exist-user/", HttpMethod.GET, entity, Boolean.class).getBody();
 
         return Boolean.TRUE.equals(isExistedUser);
     }
@@ -43,8 +50,8 @@ public class AccountService {
     }
 
     @Transactional
-    public Account createAccount(Account account) {
-        if(!checkExistenceOfUser(account.getUserId())) {
+    public Account createAccount(Account account, Token token) {
+        if(!checkExistenceOfUser(account.getUserId(), token)) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
         if(accountRepository.existsAccountByAccountNumberEquals(account.getAccountNumber())) {

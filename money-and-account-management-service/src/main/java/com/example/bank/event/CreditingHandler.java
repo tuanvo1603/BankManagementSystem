@@ -5,7 +5,6 @@ import com.example.bank.exception.AppException;
 import com.example.bank.exception.ErrorCode;
 import com.example.bank.model.Account;
 import com.example.bank.repository.AccountRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -36,6 +35,6 @@ public class CreditingHandler {
 
     @KafkaListener(topics = "credit-dlt", groupId = "account_group")
     public void handleDLT(ConsumerRecord<String, CreditResponseMessage> record) {
-        System.out.println("tuan");
+        //Todo
     }
 }
