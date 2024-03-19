@@ -5,5 +5,6 @@ import com.example.bank.response.ApiResponse;
 
 
 public abstract class CommonApi<T extends ApiResponse, U extends ApiRequest> {
+
     public abstract T execute(U request);
 }
