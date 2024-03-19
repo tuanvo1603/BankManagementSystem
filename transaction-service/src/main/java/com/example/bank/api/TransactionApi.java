@@ -21,7 +21,7 @@ public class TransactionApi extends CommonApi<TransactionResponse, TransactionRe
     private TransactionService transactionService;
 
     @Override
-    public TransactionResponse execute(TransactionRequest request) throws ExecutionException, InterruptedException {
+    public TransactionResponse execute(TransactionRequest request) {
 
         Page<Transaction> transactions = transactionService.getAllTransactionOfAnUser(request.getUserId(),
                 request.getPageNumber(), PAGE_SIZE);

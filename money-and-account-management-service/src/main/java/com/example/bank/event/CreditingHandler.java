@@ -5,15 +5,18 @@ import com.example.bank.exception.AppException;
 import com.example.bank.exception.ErrorCode;
 import com.example.bank.model.Account;
 import com.example.bank.repository.AccountRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.RetryableTopic;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
+@Slf4j
 public class CreditingHandler {
 
     @Autowired
@@ -23,18 +26,18 @@ public class CreditingHandler {
     @KafkaListener(topics = "credit", groupId = "account_group")
     @Transactional
     public void handleCrediting(ConsumerRecord<String, CreditResponseMessage> record) {
-        System.out.println(record.value().toString());
-        Account account = accountRepository
-                .findByAccountNumber(record.value().getAccountNumber());
+        Account account = accountRepository.findByAccountNumber(record.value().getAccountNumber());
         if(account == null) {
             throw new AppException(ErrorCode.ACCOUNT_NOT_FOUND);
         }
         account.addMoney(record.value().getMoney());
         accountRepository.save(account);
+        log.info("A message is handled successfully.");
     }
 
     @KafkaListener(topics = "credit-dlt", groupId = "account_group")
     public void handleDLT(ConsumerRecord<String, CreditResponseMessage> record) {
         //Todo
+        log.info("A message is sent to dlt.");
     }
 }

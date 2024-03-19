@@ -31,13 +31,13 @@ public class CustomerController {
     private TransferApi transferApi;
 
     @PostMapping("/draw-money/{sourceAccountNumber}/{money}")
-    public DrawMoneyResponse drawMoney(@PathVariable String sourceAccountNumber, @PathVariable Float money) {
+    public DrawMoneyResponse drawMoney(@PathVariable String sourceAccountNumber, @PathVariable Long money) {
         DrawMoneyRequest drawMoneyRequest = new DrawMoneyRequest(sourceAccountNumber, money);
         return drawMoneyApi.execute(drawMoneyRequest);
     }
 
     @PostMapping("/deposit/{destinationAccountNumber}/{money}")
-    public DepositResponse deposit(@PathVariable String destinationAccountNumber, @PathVariable Float money) {
+    public DepositResponse deposit(@PathVariable String destinationAccountNumber, @PathVariable Long money) {
         DepositRequest depositRequest = new DepositRequest(destinationAccountNumber, money);
         return depositApi.execute(depositRequest);
     }
@@ -45,7 +45,7 @@ public class CustomerController {
     @PostMapping("/transfer/{sourceAccountNumber}/{destinationAccountNumber}/{money}")
     public TransferResponse transfer(@PathVariable String sourceAccountNumber,
                                      @PathVariable String destinationAccountNumber,
-                                     @PathVariable Float money){
+                                     @PathVariable Long money){
         TransferRequest transferRequest = new TransferRequest(sourceAccountNumber, destinationAccountNumber, money);
         return transferApi.execute(transferRequest);
     }

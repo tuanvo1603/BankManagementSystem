@@ -11,6 +11,9 @@ public class TopicConfig {
 
     @Bean
     public NewTopic createAccountTopic() {
-        return TopicBuilder.name(Topic.CREATED_ACCOUNT.getTopic()).build();
+        return TopicBuilder.name(Topic.CREATED_ACCOUNT.getTopic())
+                .partitions(3)
+                .replicas(3)
+                .build();
     }
 }

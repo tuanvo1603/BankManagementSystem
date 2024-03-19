@@ -37,7 +37,6 @@ public class CreditKafkaConsumerConfig {
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ConsumerConfig.GROUP_ID_CONFIG, GroupId.ACCOUNT_GROUP.getGroupId());
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
         return new DefaultKafkaConsumerFactory<>(props);
     }
 
@@ -45,7 +44,8 @@ public class CreditKafkaConsumerConfig {
     public ConcurrentKafkaListenerContainerFactory<String, CreditResponseMessage> creditKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, CreditResponseMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(creditConsumerFactory());
-        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.RECORD);
+        factory.getContainerProperties().setAssignmentCommitOption(ContainerProperties.AssignmentCommitOption.ALWAYS);
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.BATCH);
         factory.getContainerProperties().setEosMode(ContainerProperties.EOSMode.V2);
         return factory;
     }

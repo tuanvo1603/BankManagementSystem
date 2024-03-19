@@ -11,9 +11,9 @@ public class DrawMoneyRequest extends ApiRequest{
     private String sourceAccountNumber;
 
     @NotEmpty(message = "INVALID_MONEY_INPUT")
-    private Float money;
+    private Long money;
 
-    public DrawMoneyRequest(String sourceAccountNumber, Float money) {
+    public DrawMoneyRequest(String sourceAccountNumber, Long money) {
         this.sourceAccountNumber = sourceAccountNumber;
         this.money = money;
     }

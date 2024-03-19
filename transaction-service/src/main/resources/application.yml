@@ -16,14 +16,20 @@ spring:
   activemq:
     broker-url:
 
+#Kafka
   kafka:
-    producer:
-      retries: 1
+    consumer:
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "*"
 
 #Jeager
 tracing:
   url: http://localhost:4318/v1/traces
 
+#Actuator
 management:
   tracing:
     sampling:

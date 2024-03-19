@@ -7,8 +7,10 @@ import com.example.bank.exception.AppException;
 import com.example.bank.exception.ErrorCode;
 import com.example.bank.model.Account;
 import com.example.bank.model.DeadCreditMessage;
+import com.example.bank.model.DeadDebitMessage;
 import com.example.bank.repository.AccountRepository;
 import com.example.bank.repository.DeadCreditMessageRepository;
+import com.example.bank.repository.DeadDebitMessageRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -33,8 +35,11 @@ public class AccountService {
     @Autowired
     private DeadCreditMessageRepository deadCreditMessageRepository;
 
+    @Autowired
+    private DeadDebitMessageRepository deadDebitMessageRepository;
+
     @Transactional
-    public void credit(String destinationAccountNumber, Float money) {
+    public void credit(String destinationAccountNumber, Long money) {
         Account account = accountRepository.findByAccountNumber(destinationAccountNumber);
         if (destinationAccountNumber == null) {
             throw new AppException(ErrorCode.ACCOUNT_NOT_FOUND);
@@ -49,12 +54,12 @@ public class AccountService {
         });
     }
 
-    private void isBalanceSufficient(Account account, Float money) {
+    private void isBalanceSufficient(Account account, Long money) {
         if (account.getBalance() < money) throw new AppException(ErrorCode.NOT_ENOUGH_MONEY_IN_ACCOUNT);
     }
 
     @Transactional
-    public void debit(String sourceAccountNumber, Float money) {
+    public void debit(String sourceAccountNumber, Long money) {
         Account account = accountRepository.findByAccountNumber(sourceAccountNumber);
         if (sourceAccountNumber == null) {
             throw new AppException(ErrorCode.ACCOUNT_NOT_FOUND);
@@ -63,7 +68,17 @@ public class AccountService {
         account.subtractMoney(money);
         Account changedAccount = accountRepository.save(account);
         DebitResponseMessage debitResponseMessage = new DebitResponseMessage(changedAccount.getAccountNumber(), money);
-        debitKafkaTemplate.send(Topic.DEBIT.getTopic(), debitResponseMessage);
+        debitKafkaTemplate.send(Topic.DEBIT.getTopic(), debitResponseMessage).exceptionally(throwable -> {
+            DeadDebitMessage deadDebitMessage = modelMapper.map(debitResponseMessage, DeadDebitMessage.class);
+            deadDebitMessageRepository.save(deadDebitMessage);
+            return null;
+        });
+    }
+
+    @Transactional
+    public void transfer(String sourceAccountNumber, String destinationAccountNumber, Long money) {
+        this.debit(sourceAccountNumber, money);
+        this.credit(destinationAccountNumber, money);
     }
 
 }

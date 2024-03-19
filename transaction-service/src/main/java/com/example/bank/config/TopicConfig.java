@@ -12,11 +12,17 @@ public class TopicConfig {
 
     @Bean
     public NewTopic creditTopic() {
-        return TopicBuilder.name(Topic.CREDIT.getTopic()).build();
+        return TopicBuilder.name(Topic.CREDIT.getTopic())
+                .partitions(3)
+                .replicas(3)
+                .build();
     }
 
     @Bean
     public NewTopic debitTopic() {
-        return TopicBuilder.name(Topic.DEBIT.getTopic()).build();
+        return TopicBuilder.name(Topic.DEBIT.getTopic())
+                .partitions(3)
+                .replicas(3)
+                .build();
     }
 }

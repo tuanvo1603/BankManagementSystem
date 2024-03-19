@@ -6,7 +6,6 @@ import com.example.bank.exception.AppException;
 import com.example.bank.exception.ErrorCode;
 import com.example.bank.model.Account;
 import com.example.bank.repository.AccountRepository;
-import com.example.bank.service.DateService;
 import com.example.bank.token.Token;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class AccountService {
 
-    private static final Float INITIAL_BALANCE_VALUE = 0f;
+    private static final Long INITIAL_BALANCE_VALUE = 0L;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -49,20 +48,29 @@ public class AccountService {
         throw new AppException(ErrorCode.SERVER_OVER_LOADING);
     }
 
-    @Transactional
-    public Account createAccount(Account account, Token token) {
-        if(!checkExistenceOfUser(account.getUserId(), token)) {
+    private void validateAccount(Account account, Token token) {
+        if (!checkExistenceOfUser(account.getUserId(), token)) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
-        if(accountRepository.existsAccountByAccountNumberEquals(account.getAccountNumber())) {
+        if (accountRepository.existsAccountByAccountNumberEquals(account.getAccountNumber())) {
             throw new AppException(ErrorCode.ACCOUNT_ALREADY_EXISTED);
         }
-        if(account.getBalance() == null) {
+    }
+
+    @Transactional
+    public Account createAccount(Account account, Token token) {
+        this.validateAccount(account, token);
+        if (account.getBalance() == null) {
             account.setBalance(INITIAL_BALANCE_VALUE);
         }
         account.setCreateAt(dateService.getCurrentDate());
         Account savedAccount = accountRepository.save(account);
-        CreatedAccountMessage createdAccountMessage = new CreatedAccountMessage(savedAccount.getAccountId(), savedAccount.getAccountType(), savedAccount.getBalance(), account.getAccountNumber());
+        CreatedAccountMessage createdAccountMessage = CreatedAccountMessage.builder()
+                .accountId(savedAccount.getAccountId())
+                .accountType(savedAccount.getAccountType())
+                .balance(savedAccount.getBalance())
+                .accountNumber(savedAccount.getAccountNumber())
+                .build();
         createdAccountKafkaTemplate.send(Topic.CREATED_ACCOUNT.getTopic(), createdAccountMessage);
         return savedAccount;
     }
@@ -73,14 +81,14 @@ public class AccountService {
 
     public Account getAccountDetail(String accountNumber) {
         Account account = accountRepository.findByAccountNumber(accountNumber);
-        if(account == null) {
+        if (account == null) {
             throw new AppException(ErrorCode.ACCOUNT_NOT_FOUND);
         }
         return account;
     }
 
     public void updateAccount(Account account) {
-        if(!accountRepository.existsById(account.getAccountId())) {
+        if (!accountRepository.existsById(account.getAccountId())) {
             throw new AppException(ErrorCode.ACCOUNT_NOT_FOUND);
         }
         accountRepository.save(account);

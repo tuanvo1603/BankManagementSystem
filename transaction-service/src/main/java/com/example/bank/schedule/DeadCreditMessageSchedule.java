@@ -4,6 +4,7 @@ import com.example.bank.constant.Topic;
 import com.example.bank.dto.CreditResponseMessage;
 import com.example.bank.model.DeadCreditMessage;
 import com.example.bank.repository.DeadCreditMessageRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -13,7 +14,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class DeadTransactionSchedule {
+@Slf4j
+public class DeadCreditMessageSchedule implements CompletableMessage {
 
     @Autowired
     private DeadCreditMessageRepository deadCreditMessageRepository;
@@ -25,7 +27,9 @@ public class DeadTransactionSchedule {
     private ModelMapper modelMapper;
 
     @Scheduled(fixedDelay = 10000)
-    public void replayTransaction() {
+    @Override
+    public void replayMessage() {
+        log.info("A poll of dead credit message.");
         List<DeadCreditMessage> deadCreditMessages = deadCreditMessageRepository.findAll();
         deadCreditMessages.forEach(deadCreditMessage -> {
             CreditResponseMessage creditResponseMessage = modelMapper.map(deadCreditMessage, CreditResponseMessage.class);

@@ -23,7 +23,7 @@ public class Account {
     private AccountType accountType;
 
     @Column(nullable = false)
-    private Float balance;
+    private Long balance;
 
     @Column(name = "create_at", nullable = false)
     private Date createAt;
@@ -31,11 +31,11 @@ public class Account {
     @Column(name = "account_number", nullable = false, unique = true, columnDefinition = "CHAR(10)")
     private String accountNumber;
 
-    public void subtractMoney(Float money) {
+    public void subtractMoney(Long money) {
         this.balance -= money;
     }
 
-    public void addMoney(Float money) {
+    public void addMoney(Long money) {
         this.balance += money;
     }
 

@@ -13,9 +13,9 @@ public class DepositRequest extends ApiRequest{
     private String destinationAccountNumber;
 
     @NotEmpty(message = "INVALID_MONEY_INPUT")
-    private Float money;
+    private Long money;
 
-    public DepositRequest(String destinationAccountNumber, Float money) {
+    public DepositRequest(String destinationAccountNumber, Long money) {
         this.destinationAccountNumber = destinationAccountNumber;
         this.money = money;
     }

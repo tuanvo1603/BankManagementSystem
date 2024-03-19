@@ -27,7 +27,7 @@ public class Transaction {
     private String destinationAccountNumber;
 
     @Column(name = "amount", nullable = false)
-    private Float amount;
+    private Long amount;
 
     @Column(name = "transaction_type", nullable = false)
     @Enumerated(value = EnumType.STRING)

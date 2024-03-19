@@ -18,5 +18,5 @@ public class TransferRequest extends ApiRequest{
     private String destinationAccountNumber;
 
     @Positive(message = "INVALID_MONEY_INPUT")
-    private Float money;
+    private Long money;
 }

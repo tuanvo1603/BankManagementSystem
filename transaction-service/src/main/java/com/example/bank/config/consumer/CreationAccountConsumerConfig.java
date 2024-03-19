@@ -26,8 +26,7 @@ public class CreationAccountConsumerConfig {
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ConsumerConfig.GROUP_ID_CONFIG, GroupId.ACCOUNT_GROUP.getGroupId());
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class); // Using ErrorHandlingDeserializer for value
-        props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         return new DefaultKafkaConsumerFactory<>(props);
     }
 
@@ -35,9 +34,8 @@ public class CreationAccountConsumerConfig {
     public ConcurrentKafkaListenerContainerFactory<String, CreatedAccountMessage> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, CreatedAccountMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(creationConsumerConsumerFactory());
-//        factory.getContainerProperties().setErrorHandler(new SeekToCurrentErrorHandler()); // Error handling
-        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE); // Acknowledgment mode
-//        factory.getContainerProperties().setEosMode(EOSMode.BETA); // Enable exactly-once semantics (optional)
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.BATCH);
+        factory.getContainerProperties().setEosMode(ContainerProperties.EOSMode.V2);
         return factory;
     }
 }

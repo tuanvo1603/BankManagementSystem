@@ -13,5 +13,5 @@ public class DebitResponseMessage implements Serializable {
 
     private String accountNumber;
 
-    private Float money;
+    private Long money;
 }

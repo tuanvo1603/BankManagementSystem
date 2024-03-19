@@ -4,9 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "dead_credit_message")
+@Table(name = "dead_debit_message")
 @Data
-public class DeadCreditMessage {
+public class DeadDebitMessage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
