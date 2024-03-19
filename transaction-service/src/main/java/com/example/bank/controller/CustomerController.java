@@ -10,12 +10,14 @@ import com.example.bank.response.DepositResponse;
 import com.example.bank.response.DrawMoneyResponse;
 import com.example.bank.response.TransferResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/v1/customer")
@@ -38,6 +40,8 @@ public class CustomerController {
 
     @PostMapping("/deposit/{destinationAccountNumber}/{money}")
     public DepositResponse deposit(@PathVariable String destinationAccountNumber, @PathVariable Long money) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication.toString());
         DepositRequest depositRequest = new DepositRequest(destinationAccountNumber, money);
         return depositApi.execute(depositRequest);
     }

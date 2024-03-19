@@ -35,3 +35,9 @@ management:
     sampling:
       probability: 1.0
 
+#Variable
+jwkSetUri: http://localhost:8088/oauth2/jwks
+jwtAuthoritiesClaimName: authorities
+issuer: http://localhost:8088
+
+
