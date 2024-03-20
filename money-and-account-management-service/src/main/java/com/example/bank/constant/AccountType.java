@@ -1,5 +1,8 @@
 package com.example.bank.constant;
 
+import lombok.Getter;
+
+@Getter
 public enum AccountType {
 
     SAVINGS,

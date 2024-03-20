@@ -29,9 +29,9 @@ public class DrawMoneyApi extends CommonApi<DrawMoneyResponse, DrawMoneyRequest>
     @Override
     @Transactional
     public DrawMoneyResponse execute(DrawMoneyRequest request) {
-        accountService.debit(request.getSourceAccountId(), request.getMoney());
+        accountService.debit(request.getSourceAccountNumber(), request.getMoney());
         Transaction transaction = Transaction.builder()
-                .sourceAccountId(request.getSourceAccountId())
+                .sourceAccountNumber(request.getSourceAccountNumber())
                 .transactionType(TransactionType.DRAW_MONEY)
                 .transactionDate(dateService.getCurrentDate())
                 .amount(request.getMoney())

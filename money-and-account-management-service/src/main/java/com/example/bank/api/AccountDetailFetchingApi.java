@@ -3,7 +3,7 @@ package com.example.bank.api;
 import com.example.bank.model.Account;
 import com.example.bank.request.AccountDetailFetchingRequest;
 import com.example.bank.response.AccountDetailFetchingResponse;
-import com.example.bank.service.account.AccountService;
+import com.example.bank.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,7 @@ public class AccountDetailFetchingApi extends CommonApi<AccountDetailFetchingRes
 
     @Override
     public AccountDetailFetchingResponse execute(AccountDetailFetchingRequest request) {
-        Account account = accountService.getAccountDetail(request.getAccountId());
+        Account account = accountService.getAccountDetail(request.getAccountNumber());
 
         return new AccountDetailFetchingResponse(account);
     }

@@ -9,6 +9,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class AccountDetailFetchingRequest extends ApiRequest {
 
-    @NotEmpty(message = "INVALID_ACCOUNT_ID")
-    private Long accountId;
+    @NotEmpty(message = "INVALID_ACCOUNT_NUMBER")
+    private String accountNumber;
 }

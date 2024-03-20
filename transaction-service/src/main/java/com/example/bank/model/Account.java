@@ -3,13 +3,17 @@ package com.example.bank.model;
 import com.example.bank.constant.AccountType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "account")
 public class Account {
 
@@ -21,13 +25,16 @@ public class Account {
     private AccountType accountType;
 
     @Column(nullable = false)
-    private Float balance;
+    private Long balance;
 
-    public void subtractMoney(Float money) {
-        this.balance -= money;
+    @Column(name = "account_number", nullable = false, unique = true, columnDefinition = "CHAR(10)")
+    private String accountNumber;
+
+    public void subtractMoney(Long money) {
+        this.balance = this.balance + money;
     }
 
-    public void addMoney(Float money) {
+    public void addMoney(Long money) {
         this.balance += money;
     }
 

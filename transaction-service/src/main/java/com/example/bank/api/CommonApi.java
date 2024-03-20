@@ -5,7 +5,6 @@ import com.example.bank.response.ApiResponse;
 
 import java.util.concurrent.ExecutionException;
 
-
 public abstract class CommonApi<T extends ApiResponse, U extends ApiRequest> {
-    public abstract T execute(U request) throws ExecutionException, InterruptedException;
+    public abstract T execute(U request);
 }

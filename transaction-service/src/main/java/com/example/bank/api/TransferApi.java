@@ -11,8 +11,6 @@ import com.example.bank.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.ExecutionException;
-
 @Component
 public class TransferApi extends CommonApi<TransferResponse, TransferRequest>{
 
@@ -28,18 +26,16 @@ public class TransferApi extends CommonApi<TransferResponse, TransferRequest>{
     private DateService dateService;
 
     @Override
-    public TransferResponse execute(TransferRequest request) throws ExecutionException, InterruptedException {
-        accountService.credit(request.getDestinationAccountId(), request.getMoney());
-        accountService.debit(request.getSourceAccountId(), request.getMoney());
+    public TransferResponse execute(TransferRequest request) {
+        accountService.transfer(request.getSourceAccountNumber(), request.getDestinationAccountNumber(), request.getMoney());
         Transaction transaction = Transaction.builder()
-                .sourceAccountId(request.getSourceAccountId())
-                .destinationAccountId(request.getDestinationAccountId())
+                .sourceAccountNumber(request.getSourceAccountNumber())
+                .destinationAccountNumber(request.getDestinationAccountNumber())
                 .amount(request.getMoney())
                 .transactionType(TransactionType.TRANSFER)
                 .transactionDate(dateService.getCurrentDate())
                 .build();
         transactionService.createTransaction(transaction);
-
         return new TransferResponse(StatusCode.SUCCESS.getCode(), EXCHANGE_SUCCESSFULLY_NOTIFY);
     }
 }

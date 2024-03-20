@@ -2,14 +2,16 @@ package com.example.bank.model;
 
 import com.example.bank.constant.TransactionType;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.sql.Date;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "transaction")
-@Data
 @Builder
 public class Transaction {
 
@@ -18,14 +20,14 @@ public class Transaction {
     @Column(name = "transaction_id")
     private Long transactionId;
 
-    @Column(name = "source_account_id")
-    private Long sourceAccountId;
+    @Column(name = "source_account_number")
+    private String sourceAccountNumber;
 
-    @Column(name = "destination_account_id")
-    private Long destinationAccountId;
+    @Column(name = "destination_account_number")
+    private String destinationAccountNumber;
 
     @Column(name = "amount", nullable = false)
-    private Float amount;
+    private Long amount;
 
     @Column(name = "transaction_type", nullable = false)
     @Enumerated(value = EnumType.STRING)

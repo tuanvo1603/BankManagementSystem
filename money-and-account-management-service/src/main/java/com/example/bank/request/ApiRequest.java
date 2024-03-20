@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class ApiRequest {
 
-    private Token token;
+    protected Token token;
 
-    private String apiName;
+    protected String apiName;
 }
