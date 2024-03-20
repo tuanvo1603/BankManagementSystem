@@ -51,3 +51,9 @@ Thumbs.db
 ./.angular
 
 
+# lib
+/src/assets/libs
+/src/assets/images
+/src/assets/lang
+
+

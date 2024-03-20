@@ -28,7 +28,7 @@ export class TransactionComponent implements OnInit{
     moneyToExchange :'',
     destinationAccountId : ''
   }
-  
+
 
   constructor(private bankAccountService: BankAccountService, private formbuilder: FormBuilder
     ,private transactionService: TransactionService){}
@@ -48,7 +48,7 @@ export class TransactionComponent implements OnInit{
       }
     },(error) => {alert('loi roi kia')},() =>
     {this.transaction.sourceAccountId = this.currentAccount.accountId.toString();}
-    
+
     )
   }
 
@@ -66,11 +66,16 @@ export class TransactionComponent implements OnInit{
 
 getDestinationName(event: any) {
   const destinationAccount: string = event.target.value;
+
+  if(destinationAccount == this.currentAccount.accountNumber){
+    alert("invalid account number");
+    return;
+  }
+
   this.bankAccountService.getDestinationAccount(destinationAccount).subscribe((response) => {
     this.transaction.destinationName = response.userResponseDTO.fullName;
     this.transaction.destinationName = response.userResponseDTO.fullName
-    this.transaction.destinationAccountId = response.userResponseDTO.accountId;
-  },()=>{},()=>{})}
+    this.transaction.destinationAccountId = response.userResponseDTO.accountId;},(error)=>{},()=>{})}
 
 
 

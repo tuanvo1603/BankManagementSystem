@@ -23,6 +23,7 @@ import { NormalGuard } from './services/normal.guard';
 import { HomecardComponent } from './pages/user/homecard/homecard.component';
 import { TransactionComponent } from './pages/user/transaction/transaction.component';
 import { NotificationUserComponent } from './pages/user/notification/notification.component';
+import { BalanceComponent } from './pages/user/dashboard/balance.component';
 
 
 const routes: Routes = [
@@ -87,6 +88,10 @@ const routes: Routes = [
     path: 'user-dashboard',
     component: UserDashboardComponent,
     children: [
+      {
+        path: 'balance',
+        component: BalanceComponent
+      },
       {
         path: 'transaction',
         component: TransactionComponent

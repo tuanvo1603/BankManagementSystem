@@ -52,6 +52,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { HomecardComponent } from './pages/user/homecard/homecard.component';
 import { TransactionComponent } from './pages/user/transaction/transaction.component';
 import { NotificationUserComponent } from './pages/user/notification/notification.component';
+import { BalanceComponent } from './pages/user/dashboard/balance.component';
 
 
 
@@ -83,8 +84,8 @@ import { NotificationUserComponent } from './pages/user/notification/notificatio
     StartComponent,
     HomecardComponent,
     TransactionComponent,
-    NotificationUserComponent
-    
+    NotificationUserComponent,
+    BalanceComponent
   ],
   imports: [
     MatPaginatorModule,
