@@ -17,6 +17,7 @@ public class DebitHandler {
 
     @KafkaListener(topics = "debit", groupId = "account_group")
     public void handleDebiting(ConsumerRecord<String, Account> record) {
+        System.out.println(record);
         Account account = accountRepository
                 .findById(record.value().getAccountId())
                 .orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));

@@ -1,7 +1,6 @@
 package com.example.bank.config.consumer;
 
 import com.example.bank.constant.GroupId;
-import com.example.bank.dto.CreditResponseDTO;
 import com.example.bank.model.Account;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;

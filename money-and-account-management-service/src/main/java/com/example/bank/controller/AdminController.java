@@ -7,5 +7,4 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/admin/v1")
 public class AdminController {
 
-
 }

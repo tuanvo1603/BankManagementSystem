@@ -38,6 +38,7 @@ public class DepositingApi extends CommonApi<DepositingResponse, DepositingReque
                 .sourceAccountId(null)
                 .amount(request.getMoney())
                 .build();
+        System.out.println(transaction);
         transactionService.createTransaction(transaction);
 
         return new DepositingResponse(StatusCode.SUCCESS.getCode(), DEPOSITING_SUCCESSFULLY_NOTIFY);
