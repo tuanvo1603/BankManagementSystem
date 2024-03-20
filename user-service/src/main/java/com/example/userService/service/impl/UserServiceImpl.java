@@ -4,7 +4,6 @@ package com.example.userService.service.impl;
 import com.example.userService.enitity.User;
 import com.example.userService.enitity.UserRole;
 import com.example.userService.exception.UserFoundException;
-import com.example.userService.exception.UserNotFoundException;
 import com.example.userService.repository.RoleRepository;
 import com.example.userService.repository.UserRepository;
 import com.example.userService.service.TimeService;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -57,17 +55,7 @@ public class UserServiceImpl implements UserService {
     //getting user by username
     @Override
     public User getUser(String username) {
-        User user = this.userRepository.findByUsername(username);
-        return user;
-    }
-
-    @Override
-    public User getUserFromId(Long userId) throws UserNotFoundException {
-        User user = this.userRepository.getUserById(userId);
-        if (user == null){
-            throw new UserNotFoundException();
-        }
-        return user;
+        return this.userRepository.findByUsername(username);
     }
 
     @Override
@@ -81,4 +69,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    public Boolean isExistedUserById(Long userId) {
+        return userRepository.existsById(userId);
+    }
 }

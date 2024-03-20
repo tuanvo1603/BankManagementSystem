@@ -2,35 +2,41 @@ package com.example.bank.model;
 
 import com.example.bank.constant.AccountType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-import java.sql.Date;
+import java.math.BigDecimal;
 
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Table(name = "account")
-public class Account implements Serializable {
+public class Account {
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long accountId;
-
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
 
     @Column(name = "account_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
 
     @Column(nullable = false)
-    private Float balance;
+    private Long balance;
 
-    @Column(name = "create_at", nullable = false)
-    private Date createAt;
-
-    @Column(name = "account_number", nullable = false, unique = true, length = 17)
+    @Column(name = "account_number", nullable = false, unique = true, columnDefinition = "CHAR(10)")
     private String accountNumber;
+
+    public void subtractMoney(Long money) {
+        this.balance = this.balance + money;
+    }
+
+    public void addMoney(Long money) {
+        this.balance += money;
+    }
 
 }
 

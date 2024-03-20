@@ -5,16 +5,18 @@ import com.example.bank.api.AccountDetailFetchingApi;
 import com.example.bank.model.Account;
 import com.example.bank.request.AccountCreationRequest;
 import com.example.bank.request.AccountDetailFetchingRequest;
-import com.example.bank.request.AllAccountFetchingRequest;
+import com.example.bank.request.DeleteAccountRequest;
+import com.example.bank.request.UpdateAccountRequest;
 import com.example.bank.response.AccountCreationResponse;
 import com.example.bank.response.AccountDetailFetchingResponse;
-import com.example.bank.response.AllAccountFetchingResponse;
-import org.apache.catalina.User;
+import com.example.bank.response.DeleteAccountResponse;
+import com.example.bank.response.UpdateAccountResponse;
+import com.example.bank.token.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/customer/v1")
+@RequestMapping("/v1/customer")
 public class CustomerController {
 
     @Autowired
@@ -23,21 +25,34 @@ public class CustomerController {
     @Autowired
     private AccountDetailFetchingApi accountDetailFetchingApi;
 
+    @Autowired
+    private UpdateAccountApi updateAccountApi;
+
+    @Autowired
+    private DeleteAccountApi deleteAccountApi;
+
     @PostMapping("/create-account")
-    public AccountCreationResponse createAccount(@RequestBody Account account) {
-        AccountCreationRequest accountCreationRequest = new AccountCreationRequest(account);
+    public AccountCreationResponse createAccount(@RequestBody Account account, @RequestHeader("Authorization") String bearerToken) {
+        Token token = new Token(bearerToken.substring("Bearer ".length()));
+        AccountCreationRequest accountCreationRequest = new AccountCreationRequest(account, token);
         return accountCreationApi.execute(accountCreationRequest);
     }
 
-    @GetMapping("/get-account-detail/{accountId}")
-    public AccountDetailFetchingResponse getAccountDetail(@PathVariable Long accountId) {
-        AccountDetailFetchingRequest accountDetailFetchingRequest = new AccountDetailFetchingRequest(accountId);
+    @GetMapping("/get-account-detail/{accountNumber}")
+    public AccountDetailFetchingResponse getAccountDetail(@PathVariable String accountNumber) {
+        AccountDetailFetchingRequest accountDetailFetchingRequest = new AccountDetailFetchingRequest(accountNumber);
         return accountDetailFetchingApi.execute(accountDetailFetchingRequest);
     }
 
-//    public AllAccountFetchingRequest getAllUserAccount(@PathVariable Long userId){
-//
-//
-//
-//    }
+    @PutMapping("/update-account")
+    public UpdateAccountResponse updateAccount(@RequestBody Account account) {
+        UpdateAccountRequest updateAccountRequest = new UpdateAccountRequest(account);
+        return updateAccountApi.execute(updateAccountRequest);
+    }
+
+    @DeleteMapping("/delete-account/{accountNumber}")
+    public DeleteAccountResponse deleteAccount(@PathVariable String accountNumber) {
+        DeleteAccountRequest deleteAccountRequest = new DeleteAccountRequest(accountNumber);
+        return deleteAccountApi.execute(deleteAccountRequest);
+    }
 }

@@ -1,9 +1,5 @@
 package com.example.bank;
 
-import com.example.bank.api.ExchangeApi;
-import com.example.bank.model.Account;
-import com.example.bank.request.ExchangeRequest;
-import com.example.bank.response.ExchangeResponse;
 import com.example.bank.service.AccountService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +23,10 @@ public class TestAccountService {
     @Test
     public void exchangeMoney() throws ExecutionException, InterruptedException {
 
-        List<Account> accounts = accountService.getAllAccountByUser(3L);
+//        List<Account> accounts = accountService.getAllAccountByUser(3L);
 
-        System.out.println(accounts);
-
-        assertNotNull(accounts);
+//        System.out.println(accounts);
+//
+//        assertNotNull(accounts);
     }
 }

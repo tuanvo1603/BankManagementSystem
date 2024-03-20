@@ -6,7 +6,11 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum ERiskCategory {
-    NETWORK_SECURITY("Network Security"), PERMISSION_MANAGEMENT("Permission Management");
-    private String name;
+
+    NETWORK_SECURITY("Network Security"),
+
+    PERMISSION_MANAGEMENT("Permission Management");
+
+    private final String name;
 
 }

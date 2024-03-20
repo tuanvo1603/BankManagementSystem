@@ -15,6 +15,7 @@ public class UserActivityLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long logId;
+
     @Enumerated(EnumType.STRING)
     private EActivityType activityType;
     private Date timestamp;

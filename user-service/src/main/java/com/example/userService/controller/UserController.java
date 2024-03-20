@@ -4,22 +4,19 @@ package com.example.userService.controller;
 import com.example.userService.enitity.Role;
 import com.example.userService.enitity.User;
 import com.example.userService.enitity.UserRole;
-
-import com.example.userService.exception.UserFoundException;
-import com.example.userService.exception.UserNotFoundException;
 import com.example.userService.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
-
+@RestController
 @RequiredArgsConstructor
-@RestController()
 public class UserController {
 
     private final UserService userService;
@@ -28,7 +25,9 @@ public class UserController {
     public String test(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userId = authentication.getName();
-        return "Ok Test" + userId;
+        final String jwt = ((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getTokenValue();
+        System.out.println(jwt);
+        return "Ok Test" + userId + " token: " + jwt;
     }
 
     @GetMapping("/test1")
@@ -49,14 +48,15 @@ public class UserController {
     }
 
     //creating user
-    @PostMapping("/register")
+    @PostMapping("/")
     public User createUser(@RequestBody User user) throws Exception {
         //encoding password with bcryptpasswordencoder
 //        user.setPassword(this.bCryptPasswordEncoder.encode(user.getPassword()));
 
         Set<UserRole> roles = new HashSet<>();
+
         Role role = new Role();
-        role.setRole_id(45L);
+        role.setRole_id(45);
         role.setName("customer");
 
         UserRole userRole = new UserRole();
@@ -68,19 +68,9 @@ public class UserController {
         return this.userService.createUser(user, roles);
     }
 
-    @PostMapping("/update")
-    public User updateUser(@RequestBody User user){
-        return this.userService.updateUser(user);
-    }
-
     @GetMapping("/{username}")
     public User getUser(@PathVariable("username") String username) {
         return this.userService.getUser(username);
-    }
-
-    @GetMapping("/userinfo/{id}")
-    public User getUser(@PathVariable("userId") Long userId) throws UserNotFoundException {
-        return this.userService.getUserFromId(userId);
     }
 
     @DeleteMapping("/{userId}")
@@ -89,10 +79,10 @@ public class UserController {
     }
 
 
-    @ExceptionHandler(UserFoundException.class)
-    public ResponseEntity<?> exceptionHandler(UserFoundException ex) {
-        return ResponseEntity.ok(ex.getMessage());
-    }
+//    @ExceptionHandler(UserFoundException.class)
+//    public ResponseEntity<?> exceptionHandler(UserFoundException ex) {
+//        return ResponseEntity.ok(ex.getMessage());
+//    }
 
 
 }

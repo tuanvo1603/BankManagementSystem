@@ -8,7 +8,9 @@ import lombok.Setter;
 @Getter
 public enum Topic {
 
-    CREDIT("credit"),
+    CREDIT("credit_topic"),
+
+    DEBIT("debit_topic"),
 
     CREATED_ACCOUNT("created_account");
 

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ApiRequest {
 
-    private Token token;
+    protected Token token;
 
-    private String apiName;
+    protected String apiName;
 }
