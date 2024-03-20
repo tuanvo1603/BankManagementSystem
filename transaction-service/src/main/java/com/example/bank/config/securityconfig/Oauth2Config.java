@@ -31,15 +31,14 @@ public class Oauth2Config {
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain securityFilterChainOauth2(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> auth.requestMatchers("v1/customer/**").hasAuthority("SCOPE_ROLE_TEST"))
-                .csrf(AbstractHttpConfigurer::disable);
-        http.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {
-            
-            jwt.jwtAuthenticationConverter(jwtAuthenticationConverter());
-            jwt.decoder(jwtDecoder());
-        }));
-        http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
-        return http.build();
+        return http.authorizeHttpRequests(auth -> auth.requestMatchers("v1/customer/**").hasAuthority("SCOPE_ROLE_TEST"))
+                .csrf(AbstractHttpConfigurer::disable)
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {
+                    jwt.jwtAuthenticationConverter(jwtAuthenticationConverter());
+                    jwt.decoder(jwtDecoder());
+                }))
+                .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+                .build();
     }
 
     @Bean

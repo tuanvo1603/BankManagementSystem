@@ -11,6 +11,6 @@ public enum ERiskCategory {
 
     PERMISSION_MANAGEMENT("Permission Management");
 
-    private String name;
+    private final String name;
 
 }

@@ -18,7 +18,12 @@ public class CreationAccountHandler {
     @KafkaListener(topics = "createdAccount", groupId = "account_group")
     @Transactional
     public void handleCreationAccount(ConsumerRecord<String, CreatedAccountMessage> record) {
-        Account account = new Account(record.value().getAccountId(), record.value().getAccountType(), record.value().getBalance(), record.value().getAccountNumber());
+        Account account = Account.builder()
+                .accountId(record.value().getAccountId())
+                .accountNumber(record.value().getAccountNumber())
+                .accountType(record.value().getAccountType())
+                .balance(record.value().getBalance())
+                .build();
         accountRepository.save(account);
     }
 }
