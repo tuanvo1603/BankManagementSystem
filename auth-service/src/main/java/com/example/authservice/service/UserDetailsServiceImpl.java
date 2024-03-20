@@ -1,6 +1,8 @@
 package com.example.authservice.service;
 
 import com.example.authservice.dto.UserRequest;
+import com.example.authservice.dto.UserResponseDTO;
+import com.example.authservice.exception.UserCanNotFoundException;
 import com.example.authservice.model.User;
 import com.example.authservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +33,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .createdAt(new Date())
                 .build();
         userRepository.save(user);
+    }
+
+    public UserResponseDTO getUserById(Long userId) throws UserCanNotFoundException {
+        User user = userRepository.findById(userId).get();
+        if (user == null){
+            throw new UserCanNotFoundException();
+        }
+        return new UserResponseDTO(user.getUserId(), user.getFullName());
     }
 }

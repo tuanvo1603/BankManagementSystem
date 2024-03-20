@@ -6,6 +6,7 @@ import com.example.userService.enitity.User;
 import com.example.userService.enitity.UserRole;
 
 import com.example.userService.exception.UserFoundException;
+import com.example.userService.exception.UserNotFoundException;
 import com.example.userService.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ import java.util.Set;
 
 
 @RequiredArgsConstructor
-@RestController("/user")
+@RestController()
 public class UserController {
 
     private final UserService userService;
@@ -75,6 +76,11 @@ public class UserController {
     @GetMapping("/{username}")
     public User getUser(@PathVariable("username") String username) {
         return this.userService.getUser(username);
+    }
+
+    @GetMapping("/userinfo/{id}")
+    public User getUser(@PathVariable("userId") Long userId) throws UserNotFoundException {
+        return this.userService.getUserFromId(userId);
     }
 
     @DeleteMapping("/{userId}")

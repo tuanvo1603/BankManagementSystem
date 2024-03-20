@@ -3,6 +3,7 @@ package com.example.userService;
 import com.example.userService.enitity.Role;
 import com.example.userService.enitity.User;
 import com.example.userService.enitity.UserRole;
+import com.example.userService.exception.UserNotFoundException;
 import com.example.userService.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,13 @@ public class UserTest {
 
     @Autowired
     private UserService userService;
+
+
+    @Test
+    public void findUser() throws UserNotFoundException {
+        User user = userService.getUserFromId(1L);
+        assertNotNull(user);
+    }
 
     @Test
     public void testCreateUser() throws Exception {

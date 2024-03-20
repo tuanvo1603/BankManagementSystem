@@ -19,6 +19,7 @@ public enum ErrorCode {
 
     INVALID_ACCOUNT_ID(1007, "Please fill the account Id.");
 
+
     private final int code;
 
     private final String message;

@@ -13,6 +13,7 @@ import com.example.bank.response.AccountCreationResponse;
 import com.example.bank.response.AccountDetailFetchingResponse;
 import com.example.bank.response.AllAccountFetchingResponse;
 import com.example.bank.response.UserInfoResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,9 +48,9 @@ public class AccountController {
         return allUserAccountFetchingApi.execute(request);
     }
 
-    @GetMapping("/get-username-account/{destinationId}")
-    public UserInfoResponse getDestinationUserInfo(@RequestParam Long destinationId){
-        DestinationAccountRequest request = new DestinationAccountRequest(destinationId);
+    @GetMapping("/get-username-account/{destinationAccount}")
+    public UserInfoResponse getDestinationUserInfo(@PathVariable String destinationAccount) throws JsonProcessingException {
+        DestinationAccountRequest request = new DestinationAccountRequest(destinationAccount);
         return fetchingDestinationUserApi.execute(request);
     }
 }
