@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { JwkService } from 'src/app/services/Jwk.service';
 
 import { LoginService } from 'src/app/services/login.service';
 
@@ -10,6 +11,7 @@ import { LoginService } from 'src/app/services/login.service';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
+
   loginData = {
     username: '',
     password: '',
@@ -18,10 +20,18 @@ export class LoginComponent implements OnInit {
   constructor(
     private snack: MatSnackBar,
     private login: LoginService,
-    private router: Router
+    private router: Router,
+    private jwkSevice : JwkService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
+
+  signIn() {
+    // navigate to /balance here
+    this.router.navigate(['/user-dashboard/balance']);
+    // console.log(this.jwkSevice.getJwkSet());
+  }
 
   formSubmit() {
     console.log('login btn clicked');

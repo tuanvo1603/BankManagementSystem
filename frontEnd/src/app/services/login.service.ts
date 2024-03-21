@@ -31,12 +31,13 @@ export class LoginService {
 
   //isLogin: user is logged in or not
   public isLoggedIn() {
-    let tokenStr = localStorage.getItem('token');
-    if (tokenStr == undefined || tokenStr == '' || tokenStr == null) {
-      return false;
-    } else {
-      return true;
-    }
+    // let tokenStr = localStorage.getItem('token');
+    // if (tokenStr == undefined || tokenStr == '' || tokenStr == null) {
+    //   return false;
+    // } else {
+    //   return true;
+    // }
+    return true;
   }
 
   // logout : remove token from local storage

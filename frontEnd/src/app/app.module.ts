@@ -33,19 +33,9 @@ import { UserDashboardComponent } from './pages/user/user-dashboard/user-dashboa
 import { ProfileComponent } from './pages/profile/profile.component';
 import { SidebarComponent } from './pages/admin/sidebar/sidebar.component';
 import { WelcomeComponent } from './pages/admin/welcome/welcome.component';
-import { ViewCategoriesComponent } from './pages/admin/view-categories/view-categories.component';
-import { AddCategoryComponent } from './pages/admin/add-category/add-category.component';
-import { ViewQuizzesComponent } from './pages/admin/view-quizzes/view-quizzes.component';
-import { AddQuizComponent } from './pages/admin/add-quiz/add-quiz.component';
-import { UpdateQuizComponent } from './pages/admin/update-quiz/update-quiz.component';
-import { ViewQuizQuestionsComponent } from './pages/admin/view-quiz-questions/view-quiz-questions.component';
-import { AddQuestionComponent } from './pages/admin/add-question/add-question.component';
 
 
 import { SidebarComponent as UserSidebar } from './pages/user/sidebar/sidebar.component';
-import { LoadQuizComponent } from './pages/user/load-quiz/load-quiz.component';
-import { InstructionsComponent } from './pages/user/instructions/instructions.component';
-import { StartComponent } from './pages/user/start/start.component';
 import { NgxUiLoaderHttpModule, NgxUiLoaderModule } from 'ngx-ui-loader';
 import { BrowserModule } from '@angular/platform-browser';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
@@ -71,17 +61,7 @@ import { BalanceComponent } from './pages/user/dashboard/balance.component';
     ProfileComponent,
     SidebarComponent,
     WelcomeComponent,
-    ViewCategoriesComponent,
-    AddCategoryComponent,
-    ViewQuizzesComponent,
-    AddQuizComponent,
-    UpdateQuizComponent,
-    ViewQuizQuestionsComponent,
-    AddQuestionComponent,
     UserSidebar,
-    LoadQuizComponent,
-    InstructionsComponent,
-    StartComponent,
     HomecardComponent,
     TransactionComponent,
     NotificationUserComponent,
