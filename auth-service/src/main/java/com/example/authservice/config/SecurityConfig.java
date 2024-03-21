@@ -1,5 +1,6 @@
 package com.example.authservice.config;
 
+import com.example.authservice.model.User;
 import com.example.authservice.repository.UserRepository;
 import com.example.authservice.service.UserDetailsServiceImpl;
 import com.example.authservice.utils.Constants;
@@ -169,6 +170,7 @@ public class SecurityConfig {
                 Set<String> authorities = authentication.getAuthorities().stream()
                         .map(authority -> "ROLE_" + authority.getAuthority())
                         .collect(Collectors.toSet());
+                context.getClaims().claim("userId", ((User)authentication.getPrincipal()).getUserId());
                 context.getClaims().claim("roles", authorities);
             }
         };
