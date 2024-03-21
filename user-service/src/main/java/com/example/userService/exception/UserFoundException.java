@@ -1,6 +1,5 @@
 package com.example.userService.exception;
 
-
 public class UserFoundException extends Exception{
 
     public UserFoundException() {

@@ -4,7 +4,7 @@ public enum TransactionType {
 
     CREDIT,
 
-    DRAW_MONEY,
+    DEBIT,
 
     TRANSFER;
 }

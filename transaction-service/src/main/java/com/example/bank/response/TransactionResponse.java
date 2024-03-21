@@ -2,16 +2,15 @@ package com.example.bank.response;
 
 import com.example.bank.model.Transaction;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.domain.Page;
-
-
 
 @Getter
 @Setter
 public class TransactionResponse extends ApiResponse{
+
     private Page<Transaction> transaction;
+
     public TransactionResponse(int code, String message) {
         super(code, message);
     }

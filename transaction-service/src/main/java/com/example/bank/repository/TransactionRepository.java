@@ -16,10 +16,10 @@ import java.util.UUID;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, UUID> {
 
-    @Query(value = "SELECT t.* FROM transaction t JOIN account a ON t.destination_account_id = a.account_id " +
-            "or t.source_account_id = a.account_id " +
+    @Query(value = "SELECT t.* FROM transaction t JOIN account a ON t.destination_account_number = a.account_number " +
+            "or t.source_account_number = a.account_number " +
             "WHERE a.user_id = :user_id ORDER BY t.transaction_date DESC",
-            countQuery = "SELECT COUNT(*) FROM transaction t JOIN account a ON t.destination_account_id = a.account_id " +
+            countQuery = "SELECT COUNT(*) FROM transaction t JOIN account a ON t.destination_account_number = a.account_number " +
                     "WHERE a.user_id = :user_id",
             nativeQuery = true)
     Page<Transaction> getAllTransactionOfAnUser(@Param("user_id") Long user_id, Pageable pageable);

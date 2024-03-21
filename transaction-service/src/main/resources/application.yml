@@ -1,8 +1,11 @@
 server:
   port: 8091
 
-#Datasource
 spring:
+  application:
+    name: transaction-service
+
+#Datasource
   datasource:
     url: jdbc:mysql://localhost:3306/transactiondatabase
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -35,3 +38,17 @@ management:
     sampling:
       probability: 1.0
 
+#Variable
+jwkSetUri: http://localhost:8088/oauth2/jwks
+jwtAuthoritiesClaimName: authorities
+issuer: http://localhost:8088
+
+#Eureka
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:9000/eureka/
+
+#spring:
+#  config:
+#    import: configserver:http://localhost:9005

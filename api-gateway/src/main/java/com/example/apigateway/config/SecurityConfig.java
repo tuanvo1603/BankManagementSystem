@@ -1,5 +1,6 @@
 package com.example.apigateway.config;
 
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +26,11 @@ public class SecurityConfig {
                 .pathMatchers("/health", "/actuator/health/**").permitAll()
                 .anyExchange().authenticated())
                 .oauth2Login(Customizer.withDefaults())
+                .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
+                .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .build();
+    }
                 .oauth2Client(Customizer.withDefaults())
                 .logout(logout -> logout.logoutUrl("/logout").logoutSuccessHandler(successHandler(repository)))
                 .build();

@@ -1,6 +1,5 @@
 package com.example.bank;
 
-
 import com.example.bank.model.Transaction;
 import com.example.bank.service.TransactionService;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
@@ -19,6 +17,7 @@ import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 @Transactional
 @Rollback(value = false)
 public class TestTransactionService {
+
     @Autowired
     private TransactionService transactionService;
 

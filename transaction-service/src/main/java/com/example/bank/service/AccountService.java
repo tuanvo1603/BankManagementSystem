@@ -1,21 +1,11 @@
 package com.example.bank.service;
 
-import com.example.bank.constant.Topic;
-import com.example.bank.dto.CreditResponseMessage;
-import com.example.bank.dto.DebitResponseMessage;
 import com.example.bank.exception.AppException;
 import com.example.bank.exception.ErrorCode;
 import com.example.bank.model.Account;
-import com.example.bank.model.DeadCreditMessage;
-import com.example.bank.model.DeadDebitMessage;
 import com.example.bank.repository.AccountRepository;
-import com.example.bank.repository.DeadCreditMessageRepository;
-import com.example.bank.repository.DeadDebitMessageRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AccountService {
@@ -23,62 +13,23 @@ public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
-    @Autowired
-    private KafkaTemplate<String, CreditResponseMessage> creditKafkaTemplate;
-
-    @Autowired
-    private KafkaTemplate<String, DebitResponseMessage> debitKafkaTemplate;
-
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private DeadCreditMessageRepository deadCreditMessageRepository;
-
-    @Autowired
-    private DeadDebitMessageRepository deadDebitMessageRepository;
-
-    @Transactional
-    public void credit(String destinationAccountNumber, Long money) {
-        Account account = accountRepository.findByAccountNumber(destinationAccountNumber);
-        if (destinationAccountNumber == null) {
-            throw new AppException(ErrorCode.ACCOUNT_NOT_FOUND);
-        }
-        account.addMoney(money);
-        Account changedAccount = accountRepository.save(account);
-        CreditResponseMessage creditResponseMessage = new CreditResponseMessage(changedAccount.getAccountNumber(), money);
-        creditKafkaTemplate.send(Topic.CREDIT.getTopic(), creditResponseMessage).exceptionally(throwable -> {
-            DeadCreditMessage deadCreditMessage = modelMapper.map(creditResponseMessage, DeadCreditMessage.class);
-            deadCreditMessageRepository.save(deadCreditMessage);
-            return null;
-        });
-    }
-
-    private void isBalanceSufficient(Account account, Long money) {
+    public void isBalanceSufficient(Account account, Long money) {
         if (account.getBalance() < money) throw new AppException(ErrorCode.NOT_ENOUGH_MONEY_IN_ACCOUNT);
     }
 
-    @Transactional
-    public void debit(String sourceAccountNumber, Long money) {
-        Account account = accountRepository.findByAccountNumber(sourceAccountNumber);
-        if (sourceAccountNumber == null) {
+    public Account findAccount(String accountNumber) {
+        Account account = accountRepository.findByAccountNumber(accountNumber);
+        if (account == null) {
             throw new AppException(ErrorCode.ACCOUNT_NOT_FOUND);
         }
-        isBalanceSufficient(account, money);
-        account.subtractMoney(money);
-        Account changedAccount = accountRepository.save(account);
-        DebitResponseMessage debitResponseMessage = new DebitResponseMessage(changedAccount.getAccountNumber(), money);
-        debitKafkaTemplate.send(Topic.DEBIT.getTopic(), debitResponseMessage).exceptionally(throwable -> {
-            DeadDebitMessage deadDebitMessage = modelMapper.map(debitResponseMessage, DeadDebitMessage.class);
-            deadDebitMessageRepository.save(deadDebitMessage);
-            return null;
-        });
+        return account;
     }
 
-    @Transactional
-    public void transfer(String sourceAccountNumber, String destinationAccountNumber, Long money) {
-        this.debit(sourceAccountNumber, money);
-        this.credit(destinationAccountNumber, money);
+    public Account createAccount(Account account) {
+        return accountRepository.save(account);
     }
 
+    public void deleteAccount(String accountNumber) {
+        accountRepository.deleteByAccountNumberEquals(accountNumber);
+    }
 }
