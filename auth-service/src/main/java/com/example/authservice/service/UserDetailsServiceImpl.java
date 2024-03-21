@@ -1,6 +1,8 @@
 package com.example.authservice.service;
 
-import com.example.authservice.dto.UserRequest;
+import com.example.authservice.dto.UserResponseDTO;
+import com.example.authservice.dto.request.UserRequest;
+import com.example.authservice.exception.UserCanNotFoundException;
 import com.example.authservice.model.User;
 import com.example.authservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor

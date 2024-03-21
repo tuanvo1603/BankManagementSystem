@@ -2,6 +2,8 @@ package com.example.bank.controller;
 
 import com.example.bank.api.AccountCreationApi;
 import com.example.bank.api.AccountDetailFetchingApi;
+import com.example.bank.api.DeleteAccountApi;
+import com.example.bank.api.UpdateAccountApi;
 import com.example.bank.model.Account;
 import com.example.bank.request.AccountCreationRequest;
 import com.example.bank.request.AccountDetailFetchingRequest;

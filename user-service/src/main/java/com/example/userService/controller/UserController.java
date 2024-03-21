@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
+//import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
@@ -21,14 +21,14 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/test")
-    public String test(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userId = authentication.getName();
-        final String jwt = ((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getTokenValue();
-        System.out.println(jwt);
-        return "Ok Test" + userId + " token: " + jwt;
-    }
+//    @GetMapping("/test")
+//    public String test(){
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String userId = authentication.getName();
+//        final String jwt = ((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getTokenValue();
+//        System.out.println(jwt);
+//        return "Ok Test" + userId + " token: " + jwt;
+//    }
 
     @GetMapping("/test1")
     public String test1(){
@@ -56,7 +56,7 @@ public class UserController {
         Set<UserRole> roles = new HashSet<>();
 
         Role role = new Role();
-        role.setRole_id(45);
+//        role.setRole_id(45);
         role.setName("customer");
 
         UserRole userRole = new UserRole();

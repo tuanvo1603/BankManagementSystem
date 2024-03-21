@@ -4,6 +4,7 @@ package com.example.userService.service.impl;
 import com.example.userService.enitity.User;
 import com.example.userService.enitity.UserRole;
 import com.example.userService.exception.UserFoundException;
+import com.example.userService.exception.UserNotFoundException;
 import com.example.userService.repository.RoleRepository;
 import com.example.userService.repository.UserRepository;
 import com.example.userService.service.TimeService;
@@ -56,6 +57,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUser(String username) {
         return this.userRepository.findByUsername(username);
+    }
+
+    @Override
+    public User getUserFromId(Long userId) throws UserNotFoundException {
+        return null;
     }
 
     @Override
