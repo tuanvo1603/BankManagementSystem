@@ -4,13 +4,12 @@ package com.example.userService.controller;
 import com.example.userService.enitity.Role;
 import com.example.userService.enitity.User;
 import com.example.userService.enitity.UserRole;
-
-import com.example.userService.exception.UserFoundException;
 import com.example.userService.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.core.Authentication;
-//import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
@@ -22,12 +21,14 @@ public class UserController {
 
     private final UserService userService;
 
-//    @GetMapping("/test")
-//    public String test(){
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String userId = authentication.getName();
-//        return "Ok Test" + userId;
-//    }
+    @GetMapping("/test")
+    public String test(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userId = authentication.getName();
+        final String jwt = ((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getTokenValue();
+        System.out.println(jwt);
+        return "Ok Test" + userId + " token: " + jwt;
+    }
 
     @GetMapping("/test1")
     public String test1(){
@@ -78,10 +79,10 @@ public class UserController {
     }
 
 
-    @ExceptionHandler(UserFoundException.class)
-    public ResponseEntity<?> exceptionHandler(UserFoundException ex) {
-        return ResponseEntity.ok(ex.getMessage());
-    }
+//    @ExceptionHandler(UserFoundException.class)
+//    public ResponseEntity<?> exceptionHandler(UserFoundException ex) {
+//        return ResponseEntity.ok(ex.getMessage());
+//    }
 
 
 }

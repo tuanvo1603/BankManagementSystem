@@ -1,6 +1,8 @@
-package com.example.authservice.dto;
+package com.example.authservice.dto.request;
 
 import lombok.*;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor

@@ -1,7 +1,9 @@
 package com.example.authservice.config;
 
+import com.example.authservice.model.User;
 import com.example.authservice.repository.UserRepository;
 import com.example.authservice.service.UserDetailsServiceImpl;
+import com.example.authservice.utils.Constants;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
@@ -11,15 +13,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.AuthenticatedPrincipal;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,10 +37,11 @@ import org.springframework.security.oauth2.server.authorization.settings.Authori
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
-
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
@@ -49,6 +50,7 @@ import java.security.interfaces.RSAPublicKey;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
 
 @Configuration
 @RequiredArgsConstructor
@@ -62,21 +64,30 @@ public class SecurityConfig {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
                 .oidc(Customizer.withDefaults());
-        http.exceptionHandling((exceptions) -> exceptions.defaultAuthenticationEntryPointFor(
+        http.exceptionHandling(exceptions -> exceptions.defaultAuthenticationEntryPointFor(
                         new LoginUrlAuthenticationEntryPoint("/login"),
                         new MediaTypeRequestMatcher(MediaType.TEXT_HTML)))
-                .oauth2ResourceServer((resourceServer) -> resourceServer.jwt(Customizer.withDefaults()));
+                .oauth2ResourceServer(resourceServer -> resourceServer.jwt(Customizer.withDefaults()));
         return http.build();
     }
 
     @Bean
     @Order(2)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
+        http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/users/role/**").hasRole(Constants.ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.POST, "/users/create", "/users/update/**").hasAnyRole(Constants.ROLE_ADMIN, Constants.ROLE_STAFF)
+                        .requestMatchers(HttpMethod.DELETE, "/users/delete/**").hasAnyRole(Constants.ROLE_ADMIN, Constants.ROLE_STAFF)
+                        .requestMatchers(HttpMethod.GET, "/users/all").hasAnyRole(Constants.ROLE_ADMIN, Constants.ROLE_STAFF)
+                        .requestMatchers("/login").permitAll()
+                        .anyRequest().authenticated())
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .formLogin(Customizer.withDefaults());
+        http.logout(logout -> logout.deleteCookies("JSESSIONID").invalidateHttpSession(true));
         return http.build();
     }
-
 
     @Bean
     public RegisteredClientRepository registeredClientRepository() {
@@ -88,13 +99,29 @@ public class SecurityConfig {
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-                .redirectUri("http://127.0.0.1:8082/login/oauth2/code/reg-client")
+                .redirectUri("http://127.0.0.1:8080/login/oauth2/code/reg-client")
+                .postLogoutRedirectUri("http://127.0.0.1:8080/logged-out")
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                 .build();
-
         return new InMemoryRegisteredClientRepository(registeredClient);
+    }
+
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter(){
+        JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        grantedAuthoritiesConverter.setAuthorityPrefix("");
+        grantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
+
+        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
+        return jwtAuthenticationConverter;
+    }
+
+    @Bean
+    public AuthorizationServerSettings authorizationServerSettings() {
+        return AuthorizationServerSettings.builder().build();
     }
 
     @Bean
@@ -115,11 +142,6 @@ public class SecurityConfig {
     @Bean
     public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
         return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
-    }
-
-    @Bean
-    public AuthorizationServerSettings authorizationServerSettings() {
-        return AuthorizationServerSettings.builder().build();
     }
 
     @Bean
@@ -146,10 +168,10 @@ public class SecurityConfig {
             if(context.getTokenType().getValue().equals(OAuth2TokenType.ACCESS_TOKEN.getValue())){
                 Authentication authentication = context.getPrincipal();
                 Set<String> authorities = authentication.getAuthorities().stream()
-                        .map(GrantedAuthority::getAuthority)
+                        .map(authority -> "ROLE_" + authority.getAuthority())
                         .collect(Collectors.toSet());
-                authorities.add("ROLE_TEST");
-                context.getClaims().claim("authorities", authorities);
+                context.getClaims().claim("userId", ((User)authentication.getPrincipal()).getUserId());
+                context.getClaims().claim("roles", authorities);
             }
         };
     }
