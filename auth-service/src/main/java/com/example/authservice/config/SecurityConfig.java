@@ -1,5 +1,6 @@
 package com.example.authservice.config;
 
+import com.example.authservice.model.User;
 import com.example.authservice.repository.UserRepository;
 import com.example.authservice.service.UserDetailsServiceImpl;
 import com.nimbusds.jose.jwk.JWKSet;
@@ -21,6 +22,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -174,6 +176,7 @@ public class SecurityConfig {
                 Set<String> authorities = authentication.getAuthorities().stream()
                         .map(authority -> "ROLE_" + authority.getAuthority())
                         .collect(Collectors.toSet());
+                context.getClaims().claim("userId", ((User)authentication.getPrincipal()).getUserId());
                 context.getClaims().claim("authorities", authorities);
             }
         };

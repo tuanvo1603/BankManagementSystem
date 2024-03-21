@@ -1013,7 +1013,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     </schema>
     <schema id="293" parent="1" name="transactiondatabase">
       <Current>1</Current>
-      <LastIntrospectionLocalTimestamp>2024-03-19.14:30:06</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2024-03-21.09:01:16</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <schema id="294" parent="1" name="user-service">
@@ -1093,163 +1093,168 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <NotNull>1</NotNull>
       <Position>4</Position>
     </column>
-    <index id="312" parent="300" name="PRIMARY">
+    <column id="312" parent="300" name="user_id">
+      <DasType>bigint|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+    </column>
+    <index id="313" parent="300" name="PRIMARY">
       <ColNames>account_id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="313" parent="300" name="UK_66gkcp94endmotfwb8r4ocxm9">
+    <index id="314" parent="300" name="UK_66gkcp94endmotfwb8r4ocxm9">
       <ColNames>account_number</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="314" parent="300" name="PRIMARY">
+    <key id="315" parent="300" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <key id="315" parent="300" name="UK_66gkcp94endmotfwb8r4ocxm9">
+    <key id="316" parent="300" name="UK_66gkcp94endmotfwb8r4ocxm9">
       <UnderlyingIndexName>UK_66gkcp94endmotfwb8r4ocxm9</UnderlyingIndexName>
     </key>
-    <column id="316" parent="301" name="currency_code">
+    <column id="317" parent="301" name="currency_code">
       <DasType>bigint|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="317" parent="301" name="name">
+    <column id="318" parent="301" name="name">
       <DasType>varchar(128)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="318" parent="301" name="symbol">
+    <column id="319" parent="301" name="symbol">
       <DasType>enum(&apos;AED&apos;, &apos;AUD&apos;, &apos;BRL&apos;, &apos;CAD&apos;, &apos;CHF&apos;, &apos;CNY&apos;, &apos;EUR&apos;, &apos;GBP&apos;, &apos;HKD&apos;, &apos;IDR&apos;, &apos;INR&apos;, &apos;JPY&apos;, &apos;KRW&apos;, &apos;MXN&apos;, &apos;MYR&apos;, &apos;NOK&apos;, &apos;NZD&apos;, &apos;PHP&apos;, &apos;QAR&apos;, &apos;RUB&apos;, &apos;SAR&apos;, &apos;SEK&apos;, &apos;SGD&apos;, &apos;TRY&apos;, &apos;USD&apos;, &apos;ZAR&apos;)|0e</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <index id="319" parent="301" name="PRIMARY">
+    <index id="320" parent="301" name="PRIMARY">
       <ColNames>currency_code</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="320" parent="301" name="UK_ou8q9939fa4k88wjh17qwcmre">
+    <index id="321" parent="301" name="UK_ou8q9939fa4k88wjh17qwcmre">
       <ColNames>name</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="321" parent="301" name="UK_1s3curjt67vt8s1bl16ahdut6">
+    <index id="322" parent="301" name="UK_1s3curjt67vt8s1bl16ahdut6">
       <ColNames>symbol</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="322" parent="301" name="PRIMARY">
+    <key id="323" parent="301" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <key id="323" parent="301" name="UK_ou8q9939fa4k88wjh17qwcmre">
+    <key id="324" parent="301" name="UK_ou8q9939fa4k88wjh17qwcmre">
       <UnderlyingIndexName>UK_ou8q9939fa4k88wjh17qwcmre</UnderlyingIndexName>
     </key>
-    <key id="324" parent="301" name="UK_1s3curjt67vt8s1bl16ahdut6">
+    <key id="325" parent="301" name="UK_1s3curjt67vt8s1bl16ahdut6">
       <UnderlyingIndexName>UK_1s3curjt67vt8s1bl16ahdut6</UnderlyingIndexName>
     </key>
-    <column id="325" parent="302" name="transaction_id">
+    <column id="326" parent="302" name="transaction_id">
       <DasType>bigint|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="326" parent="302" name="account_number">
+    <column id="327" parent="302" name="account_number">
       <DasType>varchar(255)|0s</DasType>
       <Position>2</Position>
     </column>
-    <column id="327" parent="302" name="money">
+    <column id="328" parent="302" name="money">
       <DasType>float|0s</DasType>
       <Position>3</Position>
     </column>
-    <column id="328" parent="302" name="id">
+    <column id="329" parent="302" name="id">
       <DasType>bigint|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
     </column>
-    <index id="329" parent="302" name="PRIMARY">
+    <index id="330" parent="302" name="PRIMARY">
       <ColNames>transaction_id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="330" parent="302" name="PRIMARY">
+    <key id="331" parent="302" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="331" parent="303" name="next_val">
+    <column id="332" parent="303" name="next_val">
       <DasType>bigint|0s</DasType>
       <Position>1</Position>
     </column>
-    <column id="332" parent="304" name="id">
+    <column id="333" parent="304" name="id">
       <DasType>bigint|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="333" parent="304" name="account_number">
+    <column id="334" parent="304" name="account_number">
       <DasType>varchar(255)|0s</DasType>
       <Position>2</Position>
     </column>
-    <column id="334" parent="304" name="money">
+    <column id="335" parent="304" name="money">
       <DasType>float|0s</DasType>
       <Position>3</Position>
     </column>
-    <index id="335" parent="304" name="PRIMARY">
+    <index id="336" parent="304" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="336" parent="304" name="PRIMARY">
+    <key id="337" parent="304" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="337" parent="305" name="next_val">
+    <column id="338" parent="305" name="next_val">
       <DasType>bigint|0s</DasType>
       <Position>1</Position>
     </column>
-    <column id="338" parent="306" name="transaction_id">
+    <column id="339" parent="306" name="transaction_id">
       <DasType>bigint|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="339" parent="306" name="amount">
+    <column id="340" parent="306" name="amount">
       <DasType>bigint|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="340" parent="306" name="destination_account_number">
+    <column id="341" parent="306" name="destination_account_number">
       <DasType>varchar(255)|0s</DasType>
       <Position>3</Position>
     </column>
-    <column id="341" parent="306" name="source_account_number">
+    <column id="342" parent="306" name="source_account_number">
       <DasType>varchar(255)|0s</DasType>
       <Position>4</Position>
     </column>
-    <column id="342" parent="306" name="transaction_date">
+    <column id="343" parent="306" name="transaction_date">
       <DasType>date|0s</DasType>
       <NotNull>1</NotNull>
       <Position>5</Position>
     </column>
-    <column id="343" parent="306" name="transaction_type">
+    <column id="344" parent="306" name="transaction_type">
       <DasType>enum(&apos;CREDIT&apos;, &apos;DRAW_MONEY&apos;, &apos;TRANSFER&apos;)|0e</DasType>
       <NotNull>1</NotNull>
       <Position>6</Position>
     </column>
-    <index id="344" parent="306" name="PRIMARY">
+    <index id="345" parent="306" name="PRIMARY">
       <ColNames>transaction_id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="345" parent="306" name="PRIMARY">
+    <key id="346" parent="306" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="346" parent="307" name="next_val">
+    <column id="347" parent="307" name="next_val">
       <DasType>bigint|0s</DasType>
       <Position>1</Position>
     </column>

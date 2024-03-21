@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 
 @Data
 @Entity
@@ -20,6 +21,9 @@ public class Account {
     @Id
     private Long accountId;
 
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+
     @Column(name = "account_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
@@ -27,9 +31,11 @@ public class Account {
     @Column(nullable = false)
     private Long balance;
 
+    @Column(name = "create_at", nullable = false)
+    private Date createAt;
+
     @Column(name = "account_number", nullable = false, unique = true, columnDefinition = "CHAR(10)")
     private String accountNumber;
-
     public void subtractMoney(Long money) {
         this.balance = this.balance + money;
     }

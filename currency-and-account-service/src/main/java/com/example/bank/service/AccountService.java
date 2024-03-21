@@ -20,6 +20,12 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class AccountService {
 
+    private static final String USER_EXISTENCE_CHECKING_URL = "http://localhost:8000/v1/internal/exist-user";
+
+    private static final String SYN_CREATE_ACCOUNT_TO_TRANSACTION_SERVICE_URL = "http://localhost:8091/v1/customer/create-account";
+
+    private static final String SYN_DELETE_ACCOUNT_TO_TRANSACTION_SERVICE_URL = "http://localhost:8091/v1/customer/delete-account";
+
     private static final Long INITIAL_BALANCE_VALUE = 0L;
 
     @Autowired
@@ -39,7 +45,7 @@ public class AccountService {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
         HttpEntity<Long> entity = new HttpEntity<>(userId, headers);
-        Boolean isExistedUser = restTemplate.exchange("http://localhost:8000/v1/internal/exist-user/",
+        Boolean isExistedUser = restTemplate.exchange(USER_EXISTENCE_CHECKING_URL,
                 HttpMethod.GET,
                 entity,
                 Boolean.class)
@@ -51,7 +57,7 @@ public class AccountService {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
         HttpEntity<Account> entity = new HttpEntity<>(account, headers);
-        restTemplate.exchange("http://localhost:8091/v1/customer/create-account",
+        restTemplate.exchange(SYN_CREATE_ACCOUNT_TO_TRANSACTION_SERVICE_URL,
                 HttpMethod.POST,
                 entity,
                 Void.class);
@@ -61,7 +67,7 @@ public class AccountService {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
         HttpEntity<String> entity = new HttpEntity<>(accountNumber, headers);
-        restTemplate.exchange("http://localhost:8091/v1/customer/delete-account",
+        restTemplate.exchange(SYN_DELETE_ACCOUNT_TO_TRANSACTION_SERVICE_URL,
                 HttpMethod.DELETE,
                 entity,
                 Void.class);

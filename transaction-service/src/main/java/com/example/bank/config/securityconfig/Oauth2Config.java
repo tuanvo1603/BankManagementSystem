@@ -33,7 +33,7 @@ public class Oauth2Config {
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain securityFilterChainOauth2(HttpSecurity http) throws Exception {
-        return http.authorizeHttpRequests(auth -> auth.requestMatchers("v1/customer/**").hasAuthority("SCOPE_ROLE_CUSTOMER"))
+        return http.authorizeHttpRequests(auth -> auth.requestMatchers("v1/customer/**").hasRole("CUSTOMER"))
                 .csrf(AbstractHttpConfigurer::disable)
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {
                     jwt.jwtAuthenticationConverter(jwtAuthenticationConverter());
@@ -47,8 +47,12 @@ public class Oauth2Config {
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName(jwtAuthoritiesClaimName);
+        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
+
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
+        jwtAuthenticationConverter.setPrincipalClaimName("userId");
+
         return jwtAuthenticationConverter;
     }
 

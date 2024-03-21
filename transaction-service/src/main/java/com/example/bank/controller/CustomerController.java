@@ -9,8 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
 
 @RestController
 @RequestMapping("/v1/customer")
@@ -30,6 +34,9 @@ public class CustomerController {
 
     @Autowired
     private DeleteAccountApi deleteAccountApi;
+
+    @Autowired
+    private TransactionApi transactionApi;
 
     @PostMapping("/draw-money/{sourceAccountNumber}/{money}")
     public DrawMoneyResponse drawMoney(@PathVariable String sourceAccountNumber, @PathVariable Long money) {
@@ -51,9 +58,16 @@ public class CustomerController {
         return transferApi.execute(transferRequest);
     }
 
-//    @GetMapping("/get-transaction")
-//    public TransactionResponse getTransaction(HttpServletRequest servletRequest) {
-//    }
+    @GetMapping("/get-transaction/{pageNumber}")
+    public TransactionResponse getTransaction(@PathVariable Integer pageNumber, @AuthenticationPrincipal Jwt jwt) {
+        Long userId = (Long) jwt.getClaims()
+                .values()
+                .stream()
+                .toList()
+                .get(7);
+        TransactionRequest transactionRequest = new TransactionRequest(userId, pageNumber);
+        return transactionApi.execute(transactionRequest);
+    }
 
     @PostMapping("/create-account")
     public CreateAccountResponse createAccount(@RequestBody Account account) {
