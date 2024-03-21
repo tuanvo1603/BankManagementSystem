@@ -36,6 +36,7 @@ public class Account {
 
     @Column(name = "account_number", nullable = false, unique = true, columnDefinition = "CHAR(10)")
     private String accountNumber;
+
     public void subtractMoney(Long money) {
         this.balance = this.balance + money;
     }
