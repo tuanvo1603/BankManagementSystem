@@ -12,7 +12,6 @@
         <module name="currency-and-account-service" />
         <module name="api-gateway" />
         <module name="transaction-service" />
-        <module name="user-service" />
         <module name="eureka-server" />
       </profile>
     </annotationProcessing>
@@ -21,6 +20,7 @@
       <module name="oauth-server.main" target="17" />
       <module name="oauth-server.test" target="17" />
       <module name="test" target="17" />
+      <module name="user-service" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

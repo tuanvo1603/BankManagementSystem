@@ -19,6 +19,7 @@ import java.util.Set;
 public class UserController {
 
     private final UserDetailsServiceImpl userDetailsService;
+
     private final UserService userService;
 
     @GetMapping("/all")
@@ -59,7 +60,6 @@ public class UserController {
         userService.revokeRole(userId, role.getRoleId());
         return ResponseEntity.ok().build();
     }
-
 
     @GetMapping("/{username}")
     public ResponseEntity<UserDetails> getUser(@PathVariable String username){
