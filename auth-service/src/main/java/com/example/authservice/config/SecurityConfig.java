@@ -3,6 +3,7 @@ package com.example.authservice.config;
 import com.example.authservice.model.User;
 import com.example.authservice.repository.UserRepository;
 import com.example.authservice.service.UserDetailsServiceImpl;
+import com.example.authservice.utils.Constants;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
@@ -71,10 +72,10 @@ public class SecurityConfig {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
                 .oidc(Customizer.withDefaults());
-        http.exceptionHandling((exceptions) -> exceptions.defaultAuthenticationEntryPointFor(
+        http.exceptionHandling(exceptions -> exceptions.defaultAuthenticationEntryPointFor(
                         new LoginUrlAuthenticationEntryPoint("/login"),
                         new MediaTypeRequestMatcher(MediaType.TEXT_HTML)))
-                .oauth2ResourceServer((resourceServer) -> resourceServer.jwt(Customizer.withDefaults()));
+                .oauth2ResourceServer(resourceServer -> resourceServer.jwt(Customizer.withDefaults()));
         return http.build();
     }
 
@@ -84,10 +85,11 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/users/role/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/users/create", "/users/update/**").hasAnyRole("ADMIN", "STAFF")
-                        .requestMatchers(HttpMethod.DELETE, "/users/delete/**").hasAnyRole("ADMIN", "STAFF")
-                        .requestMatchers(HttpMethod.GET, "/users/all").hasAnyRole("ADMIN", "STAFF")
+
+                        .requestMatchers("/users/role/**").hasRole(Constants.ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.POST, "/users/create", "/users/update/**").hasAnyRole(Constants.ROLE_ADMIN, Constants.ROLE_STAFF)
+                        .requestMatchers(HttpMethod.DELETE, "/users/delete/**").hasAnyRole(Constants.ROLE_ADMIN, Constants.ROLE_STAFF)
+                        .requestMatchers(HttpMethod.GET, "/users/all").hasAnyRole(Constants.ROLE_ADMIN, Constants.ROLE_STAFF)
                         .requestMatchers("/login").permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
@@ -107,6 +109,7 @@ public class SecurityConfig {
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .redirectUri("http://127.0.0.1:8080/login/oauth2/code/reg-client")
+                .postLogoutRedirectUri("http://127.0.0.1:8080/logged-out")
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
@@ -177,7 +180,7 @@ public class SecurityConfig {
                         .map(authority -> "ROLE_" + authority.getAuthority())
                         .collect(Collectors.toSet());
                 context.getClaims().claim("userId", ((User)authentication.getPrincipal()).getUserId());
-                context.getClaims().claim("authorities", authorities);
+                context.getClaims().claim("roles", authorities);
             }
         };
     }
