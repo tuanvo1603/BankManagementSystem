@@ -15,7 +15,7 @@ public class CreationAccountHandler {
     @Autowired
     private AccountRepository accountRepository;
 
-    @KafkaListener(topics = "createdAccount", groupId = "account_group")
+    @KafkaListener(topics = "created_topic", groupId = "account_group")
     @Transactional
     public void handleCreationAccount(ConsumerRecord<String, CreatedAccountMessage> record) {
         Account account = Account.builder()
