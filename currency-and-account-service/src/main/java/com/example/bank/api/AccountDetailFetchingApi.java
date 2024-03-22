@@ -4,14 +4,14 @@ import com.example.bank.model.Account;
 import com.example.bank.request.AccountDetailFetchingRequest;
 import com.example.bank.response.AccountDetailFetchingResponse;
 import com.example.bank.service.AccountService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class AccountDetailFetchingApi extends CommonApi<AccountDetailFetchingResponse, AccountDetailFetchingRequest>{
 
-    @Autowired
-    private AccountService accountService;
+    private final AccountService accountService;
 
     @Override
     public AccountDetailFetchingResponse execute(AccountDetailFetchingRequest request) {

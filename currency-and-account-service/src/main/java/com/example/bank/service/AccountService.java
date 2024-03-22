@@ -7,7 +7,7 @@ import com.example.bank.exception.ErrorCode;
 import com.example.bank.model.Account;
 import com.example.bank.repository.AccountRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -20,24 +20,16 @@ import java.sql.Date;
 import java.time.LocalDate;
 
 @Service
+@RequiredArgsConstructor
 public class AccountService {
 
     private static final String USER_EXISTENCE_CHECKING_URL = "http://auth-service/v1/internal/exist-user";
-
     private static final String SYN_CREATE_ACCOUNT_TO_TRANSACTION_SERVICE_URL = "http://transaction-service/v1/customer/create-account";
-
     private static final String SYN_DELETE_ACCOUNT_TO_TRANSACTION_SERVICE_URL = "http://transaction-service/v1/customer/delete-account";
-
     private static final Long INITIAL_BALANCE_VALUE = 0L;
-
-    @Autowired
-    private AccountRepository accountRepository;
-
-    @Autowired
-    private RestTemplate restTemplate;
-
-    @Autowired
-    private KafkaTemplate<String, CreatedAccountMessage> createdAccountKafkaTemplate;
+    private final AccountRepository accountRepository;
+    private final RestTemplate restTemplate;
+    private final KafkaTemplate<String, CreatedAccountMessage> createdAccountKafkaTemplate;
 
     @CircuitBreaker(name = "CHECK_EXISTING_USER_BREAKER", fallbackMethod = "checkExistingUserFallBack")
     private boolean checkExistenceOfUser(Long userId, String token) {
