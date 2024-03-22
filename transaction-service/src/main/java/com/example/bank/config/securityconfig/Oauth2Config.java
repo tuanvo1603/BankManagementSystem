@@ -1,5 +1,6 @@
 package com.example.bank.config.securityconfig;
 
+import com.example.bank.constant.Role;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,8 @@ import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+
+import java.security.Principal;
 
 @Configuration
 @EnableWebSecurity
@@ -31,7 +34,7 @@ public class Oauth2Config {
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain securityFilterChainOauth2(HttpSecurity http) throws Exception {
-        return http.authorizeHttpRequests(auth -> auth.requestMatchers("v1/customer/**").hasAuthority("SCOPE_ROLE_TEST"))
+        return http.authorizeHttpRequests(auth -> auth.requestMatchers("v1/customer/**").hasRole(Role.CUSTOMER.getRole()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {
                     jwt.jwtAuthenticationConverter(jwtAuthenticationConverter());
@@ -45,8 +48,11 @@ public class Oauth2Config {
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName(jwtAuthoritiesClaimName);
+        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
+
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
+
         return jwtAuthenticationConverter;
     }
 

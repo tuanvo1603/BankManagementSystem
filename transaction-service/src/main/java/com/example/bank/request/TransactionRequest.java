@@ -11,7 +11,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TransactionRequest extends ApiRequest{
+
     @NotEmpty(message = "INVALID_USER_ID")
     private Long userId;
+
     private Integer pageNumber;
 }

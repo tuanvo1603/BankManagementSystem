@@ -24,4 +24,12 @@ public class AccountService {
         }
         return account;
     }
+
+    public Account createAccount(Account account) {
+        return accountRepository.save(account);
+    }
+
+    public void deleteAccount(String accountNumber) {
+        accountRepository.deleteByAccountNumberEquals(accountNumber);
+    }
 }
