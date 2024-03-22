@@ -6,7 +6,6 @@ import com.example.bank.exception.AppException;
 import com.example.bank.exception.ErrorCode;
 import com.example.bank.model.Account;
 import com.example.bank.repository.AccountRepository;
-import com.example.bank.utils.DateService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -16,6 +15,9 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+
+import java.sql.Date;
+import java.time.LocalDate;
 
 @Service
 public class AccountService {
@@ -30,9 +32,6 @@ public class AccountService {
 
     @Autowired
     private AccountRepository accountRepository;
-
-    @Autowired
-    private DateService dateService;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -92,7 +91,7 @@ public class AccountService {
         if (account.getBalance() == null) {
             account.setBalance(INITIAL_BALANCE_VALUE);
         }
-        account.setCreateAt(dateService.getCurrentDate());
+        account.setCreateAt(Date.valueOf(LocalDate.now()));
         Account createdAccount = accountRepository.save(account);
         this.synCreateAccountToTransactionService(createdAccount, token);
         CreatedAccountMessage createdAccountMessage = CreatedAccountMessage.builder()

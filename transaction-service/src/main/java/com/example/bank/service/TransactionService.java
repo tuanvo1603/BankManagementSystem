@@ -12,7 +12,6 @@ import com.example.bank.repository.AccountRepository;
 import com.example.bank.repository.DeadCreditMessageRepository;
 import com.example.bank.repository.DeadDebitMessageRepository;
 import com.example.bank.repository.TransactionRepository;
-import com.example.bank.utils.DateService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +21,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.Date;
+import java.time.LocalDate;
+
 
 @Service
 public class TransactionService {
@@ -50,8 +53,6 @@ public class TransactionService {
     @Autowired
     private DeadDebitMessageRepository deadDebitMessageRepository;
 
-    @Autowired
-    private DateService dateService;
 
     public Page<Transaction> getAllTransactionOfAnUser(Long userId, Integer pageNumber, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("transaction_date").descending());
@@ -65,7 +66,7 @@ public class TransactionService {
         accountRepository.save(account);
         if (transactionRecordCreatable) {
             Transaction transaction = Transaction.builder()
-                    .transactionDate(dateService.getCurrentDate())
+                    .transactionDate(Date.valueOf(LocalDate.now()))
                     .transactionType(TransactionType.CREDIT)
                     .destinationAccountNumber(destinationAccountNumber)
                     .amount(money)
@@ -89,7 +90,7 @@ public class TransactionService {
         accountRepository.save(account);
         if (transactionRecordCreatable) {
             Transaction transaction = Transaction.builder()
-                    .transactionDate(dateService.getCurrentDate())
+                    .transactionDate(Date.valueOf(LocalDate.now()))
                     .transactionType(TransactionType.DEBIT)
                     .sourceAccountNumber(sourceAccountNumber)
                     .amount(money)
@@ -110,7 +111,7 @@ public class TransactionService {
         this.debit(sourceAccountNumber, money, false);
         this.credit(destinationAccountNumber, money, false);
         Transaction transaction = Transaction.builder()
-                .transactionDate(dateService.getCurrentDate())
+                .transactionDate(Date.valueOf(LocalDate.now()))
                 .transactionType(TransactionType.TRANSFER)
                 .sourceAccountNumber(sourceAccountNumber)
                 .destinationAccountNumber(destinationAccountNumber)
