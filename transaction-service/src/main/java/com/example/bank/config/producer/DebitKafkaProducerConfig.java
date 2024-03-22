@@ -31,6 +31,7 @@ public class DebitKafkaProducerConfig {
         props.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, 3);
         props.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, "zstd");
         props.put(ProducerConfig.LINGER_MS_CONFIG, 50);
+
         return new DefaultKafkaProducerFactory<>(props);
     }
 
