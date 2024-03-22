@@ -30,7 +30,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:9000/eureka/
+      defaultZone: http://localhost:8761/eureka/
 #spring:
 #  config:
 #    import: configserver:http://localhost:9005

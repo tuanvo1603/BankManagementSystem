@@ -20,11 +20,11 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class AccountService {
 
-    private static final String USER_EXISTENCE_CHECKING_URL = "http://localhost:8000/v1/internal/exist-user";
+    private static final String USER_EXISTENCE_CHECKING_URL = "http://auth-service/v1/internal/exist-user";
 
-    private static final String SYN_CREATE_ACCOUNT_TO_TRANSACTION_SERVICE_URL = "http://localhost:8091/v1/customer/create-account";
+    private static final String SYN_CREATE_ACCOUNT_TO_TRANSACTION_SERVICE_URL = "http://transaction-service/v1/customer/create-account";
 
-    private static final String SYN_DELETE_ACCOUNT_TO_TRANSACTION_SERVICE_URL = "http://localhost:8091/v1/customer/delete-account";
+    private static final String SYN_DELETE_ACCOUNT_TO_TRANSACTION_SERVICE_URL = "http://transaction-service/v1/customer/delete-account";
 
     private static final Long INITIAL_BALANCE_VALUE = 0L;
 

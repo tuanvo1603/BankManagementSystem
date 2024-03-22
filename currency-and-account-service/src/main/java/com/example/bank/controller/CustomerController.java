@@ -13,11 +13,17 @@ import com.example.bank.response.AccountCreationResponse;
 import com.example.bank.response.AccountDetailFetchingResponse;
 import com.example.bank.response.DeleteAccountResponse;
 import com.example.bank.response.UpdateAccountResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/customer")
+@Slf4j
 public class CustomerController {
 
     @Autowired
@@ -35,6 +41,7 @@ public class CustomerController {
     @PostMapping("/create-account")
     public AccountCreationResponse createAccount(@RequestBody Account account, @RequestHeader("Authorization") String bearerToken) {
         String token = bearerToken.substring("Bearer ".length());
+        log.info(token);
         AccountCreationRequest accountCreationRequest = new AccountCreationRequest(account, token);
         return accountCreationApi.execute(accountCreationRequest);
     }

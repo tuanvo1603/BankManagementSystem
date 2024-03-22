@@ -51,7 +51,6 @@ public class Oauth2Security {
 
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
-        jwtAuthenticationConverter.setPrincipalClaimName("userId");
 
         return jwtAuthenticationConverter;
     }

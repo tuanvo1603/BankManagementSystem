@@ -1,5 +1,6 @@
 package com.example.bank.config.securityconfig;
 
+import com.example.bank.constant.Role;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +34,7 @@ public class Oauth2Config {
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain securityFilterChainOauth2(HttpSecurity http) throws Exception {
-        return http.authorizeHttpRequests(auth -> auth.requestMatchers("v1/customer/**").hasRole("CUSTOMER"))
+        return http.authorizeHttpRequests(auth -> auth.requestMatchers("v1/customer/**").hasRole(Role.CUSTOMER.getRole()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {
                     jwt.jwtAuthenticationConverter(jwtAuthenticationConverter());
@@ -51,7 +52,6 @@ public class Oauth2Config {
 
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
-        jwtAuthenticationConverter.setPrincipalClaimName("userId");
 
         return jwtAuthenticationConverter;
     }
