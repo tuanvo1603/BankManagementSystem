@@ -54,11 +54,6 @@ management:
     sampling:
       probability: 1.0
 
-#Variables
-jwkSetUri: http://localhost:8088/oauth2/jwks
-jwtAuthoritiesClaimName: roles
-issuer: http://localhost:8088
-
 #Eureka
 eureka:
   client:
