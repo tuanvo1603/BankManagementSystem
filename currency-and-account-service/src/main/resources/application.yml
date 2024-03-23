@@ -4,7 +4,11 @@ server:
 spring:
   application:
     name: currency-and-account-service
-
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8088
 #Datasource
   datasource:
     url: jdbc:mysql://localhost:3306/moneyaccountdatabase
