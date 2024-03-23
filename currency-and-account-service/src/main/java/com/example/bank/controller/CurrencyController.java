@@ -16,33 +16,33 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/admin")
-public class AdminController {
+@RequestMapping("/currency")
+public class CurrencyController {
 
     private final UpdateCurrencyApi updateCurrencyApi;
     private final CreateCurrencyApi createCurrencyApi;
     private final DeleteCurrencyApi deleteCurrencyApi;
     private final FetchCurrencyApi fetchCurrencyApi;
 
-    @PostMapping("/create-currency")
+    @PostMapping("/create")
     public CreateCurrencyResponse createCurrency(@RequestBody Currency currency) {
         CreateCurrencyRequest createCurrencyRequest = new CreateCurrencyRequest(currency);
         return createCurrencyApi.execute(createCurrencyRequest);
     }
 
-    @PutMapping("/update-currency")
+    @PutMapping("/update")
     public UpdateCurrencyResponse updateCurrency(@RequestBody Currency currency) {
         UpdateCurrencyRequest updateCurrencyRequest = new UpdateCurrencyRequest(currency);
         return updateCurrencyApi.execute(updateCurrencyRequest);
     }
 
-    @GetMapping("/fetch-currency/{currencySymbol}")
+    @GetMapping("/{currencySymbol}")
     public FetchCurrencyResponse fetchCurrency(@PathVariable CurrencySymbol currencySymbol) {
         FetchCurrencyRequest fetchCurrencyRequest = new FetchCurrencyRequest(currencySymbol);
         return fetchCurrencyApi.execute(fetchCurrencyRequest);
     }
 
-    @DeleteMapping("/delete-currency/{currencySymbol}")
+    @DeleteMapping("/delete/{currencySymbol}")
     public DeleteCurrencyResponse deleteCurrency(@PathVariable CurrencySymbol currencySymbol) {
         DeleteCurrencyRequest deleteCurrencyRequest = new DeleteCurrencyRequest(currencySymbol);
         return deleteCurrencyApi.execute(deleteCurrencyRequest);
