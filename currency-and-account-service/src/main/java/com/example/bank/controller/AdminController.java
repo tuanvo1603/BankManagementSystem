@@ -11,24 +11,18 @@ import com.example.bank.response.CreateCurrencyResponse;
 import com.example.bank.response.DeleteCurrencyResponse;
 import com.example.bank.response.FetchCurrencyResponse;
 import com.example.bank.response.UpdateCurrencyResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/v1/admin")
 public class AdminController {
 
-    @Autowired
-    private UpdateCurrencyApi updateCurrencyApi;
-
-    @Autowired
-    private CreateCurrencyApi createCurrencyApi;
-
-    @Autowired
-    private DeleteCurrencyApi deleteCurrencyApi;
-
-    @Autowired
-    private FetchCurrencyApi fetchCurrencyApi;
+    private final UpdateCurrencyApi updateCurrencyApi;
+    private final CreateCurrencyApi createCurrencyApi;
+    private final DeleteCurrencyApi deleteCurrencyApi;
+    private final FetchCurrencyApi fetchCurrencyApi;
 
     @PostMapping("/create-currency")
     public CreateCurrencyResponse createCurrency(@RequestBody Currency currency) {

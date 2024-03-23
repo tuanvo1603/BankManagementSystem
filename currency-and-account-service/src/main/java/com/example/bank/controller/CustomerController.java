@@ -13,30 +13,20 @@ import com.example.bank.response.AccountCreationResponse;
 import com.example.bank.response.AccountDetailFetchingResponse;
 import com.example.bank.response.DeleteAccountResponse;
 import com.example.bank.response.UpdateAccountResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+@Slf4j
 @RestController
 @RequestMapping("/v1/customer")
-@Slf4j
+@RequiredArgsConstructor
 public class CustomerController {
 
-    @Autowired
-    private AccountCreationApi accountCreationApi;
-
-    @Autowired
-    private AccountDetailFetchingApi accountDetailFetchingApi;
-
-    @Autowired
-    private UpdateAccountApi updateAccountApi;
-
-    @Autowired
-    private DeleteAccountApi deleteAccountApi;
+    private final AccountCreationApi accountCreationApi;
+    private final AccountDetailFetchingApi accountDetailFetchingApi;
+    private final UpdateAccountApi updateAccountApi;
+    private final DeleteAccountApi deleteAccountApi;
 
     @PostMapping("/create-account")
     public AccountCreationResponse createAccount(@RequestBody Account account, @RequestHeader("Authorization") String bearerToken) {
