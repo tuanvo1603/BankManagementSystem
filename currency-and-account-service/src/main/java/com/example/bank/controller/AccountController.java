@@ -14,10 +14,10 @@ import com.example.bank.response.AccountDetailFetchingResponse;
 import com.example.bank.response.DeleteAccountResponse;
 import com.example.bank.response.UpdateAccountResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
-@Slf4j
 @RestController
 @RequestMapping("/account")
 @RequiredArgsConstructor
@@ -29,9 +29,8 @@ public class AccountController {
     private final DeleteAccountApi deleteAccountApi;
 
     @PostMapping("/create")
-    public AccountCreationResponse createAccount(@RequestBody Account account, @RequestHeader("Authorization") String bearerToken) {
-        String token = bearerToken.substring("Bearer ".length());
-        log.info(token);
+    public AccountCreationResponse createAccount(@RequestBody Account account) {
+        String token = ((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getTokenValue();
         AccountCreationRequest accountCreationRequest = new AccountCreationRequest(account, token);
         return accountCreationApi.execute(accountCreationRequest);
     }
@@ -49,8 +48,8 @@ public class AccountController {
     }
 
     @DeleteMapping("/delete/{accountNumber}")
-    public DeleteAccountResponse deleteAccount(@PathVariable String accountNumber, @RequestHeader("Authorization") String bearerToken) {
-        String token = bearerToken.substring("Bearer ".length());
+    public DeleteAccountResponse deleteAccount(@PathVariable String accountNumber) {
+        String token = ((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getTokenValue();
         DeleteAccountRequest deleteAccountRequest = new DeleteAccountRequest(accountNumber, token);
         return deleteAccountApi.execute(deleteAccountRequest);
     }
