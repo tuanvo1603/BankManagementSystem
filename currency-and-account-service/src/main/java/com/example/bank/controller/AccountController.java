@@ -19,16 +19,16 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/customer")
+@RequestMapping("/account")
 @RequiredArgsConstructor
-public class CustomerController {
+public class AccountController {
 
     private final AccountCreationApi accountCreationApi;
     private final AccountDetailFetchingApi accountDetailFetchingApi;
     private final UpdateAccountApi updateAccountApi;
     private final DeleteAccountApi deleteAccountApi;
 
-    @PostMapping("/create-account")
+    @PostMapping("/create")
     public AccountCreationResponse createAccount(@RequestBody Account account, @RequestHeader("Authorization") String bearerToken) {
         String token = bearerToken.substring("Bearer ".length());
         log.info(token);
@@ -36,19 +36,19 @@ public class CustomerController {
         return accountCreationApi.execute(accountCreationRequest);
     }
 
-    @GetMapping("/get-account-detail/{accountNumber}")
+    @GetMapping("/detail/{accountNumber}")
     public AccountDetailFetchingResponse getAccountDetail(@PathVariable String accountNumber) {
         AccountDetailFetchingRequest accountDetailFetchingRequest = new AccountDetailFetchingRequest(accountNumber);
         return accountDetailFetchingApi.execute(accountDetailFetchingRequest);
     }
 
-    @PutMapping("/update-account")
+    @PutMapping("/update")
     public UpdateAccountResponse updateAccount(@RequestBody Account account) {
         UpdateAccountRequest updateAccountRequest = new UpdateAccountRequest(account);
         return updateAccountApi.execute(updateAccountRequest);
     }
 
-    @DeleteMapping("/delete-account/{accountNumber}")
+    @DeleteMapping("/delete/{accountNumber}")
     public DeleteAccountResponse deleteAccount(@PathVariable String accountNumber, @RequestHeader("Authorization") String bearerToken) {
         String token = bearerToken.substring("Bearer ".length());
         DeleteAccountRequest deleteAccountRequest = new DeleteAccountRequest(accountNumber, token);
