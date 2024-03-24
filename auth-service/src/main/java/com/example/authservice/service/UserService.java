@@ -10,6 +10,7 @@ import com.example.authservice.repository.RoleRepository;
 import com.example.authservice.repository.UserRepository;
 import com.example.authservice.utils.Constants;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -20,13 +21,14 @@ public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public UserResponse create(UserRequest userRequest){
 
         User user = User.builder()
                 .email(userRequest.getEmail())
                 .username(userRequest.getUsername())
-                .password(userRequest.getPassword())
+                .password(passwordEncoder.encode(userRequest.getPassword()))
                 .fullName(userRequest.getFullName())
                 .createdAt(new Date())
                 .build();
@@ -50,7 +52,7 @@ public class UserService {
         );
         user.setEmail(userRequest.getEmail());
         user.setUsername(userRequest.getUsername());
-        user.setPassword(userRequest.getPassword());
+        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         user.setFullName(userRequest.getFullName());
         userRepository.save(user);
         return userMapper.toUserResponse(user);
