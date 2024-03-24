@@ -1,7 +1,8 @@
 package com.example.authservice.service;
 
-import com.example.authservice.dto.request.UserRequest;
-import com.example.authservice.dto.response.UserResponse;
+import com.example.authservice.dto.UserRequest;
+import com.example.authservice.dto.UserResponse;
+import com.example.authservice.exception.DuplicatedException;
 import com.example.authservice.exception.NotFoundException;
 import com.example.authservice.mapper.UserMapper;
 import com.example.authservice.model.Role;
@@ -24,6 +25,14 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public UserResponse create(UserRequest userRequest){
+
+        if(userRepository.existsByUsername(userRequest.getUsername())) {
+            throw new DuplicatedException(Constants.ERROR_CODE.USERNAME_ALREADY_EXITED, userRequest.getUsername());
+        }
+
+        if(userRepository.existsByEmail(userRequest.getEmail())){
+            throw new DuplicatedException(Constants.ERROR_CODE.EMAIL_ALREADY_EXITED, userRequest.getEmail());
+        }
 
         User user = User.builder()
                 .email(userRequest.getEmail())
@@ -48,7 +57,7 @@ public class UserService {
 
     public UserResponse update(UserRequest userRequest, Long id){
         User user = userRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(Constants.ERROR_CODE.USER_NOT_FOUND)
+                () -> new NotFoundException(Constants.ERROR_CODE.USER_NOT_FOUND, id)
         );
         user.setEmail(userRequest.getEmail());
         user.setUsername(userRequest.getUsername());
@@ -60,22 +69,22 @@ public class UserService {
 
     public void delete(Long id){
         User user = userRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(Constants.ERROR_CODE.USER_NOT_FOUND)
+                () -> new NotFoundException(Constants.ERROR_CODE.USER_NOT_FOUND, id)
         );
         userRepository.delete(user);
     }
 
     public Set<Role> getRoleUser(Long userId){
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new NotFoundException(Constants.ERROR_CODE.USER_NOT_FOUND));
+                () -> new NotFoundException(Constants.ERROR_CODE.USER_NOT_FOUND, userId));
         return user.getRoles();
     }
 
-    public void assignRole(Long id, Long roleId){
-        User user = userRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(Constants.ERROR_CODE.USER_NOT_FOUND));
+    public void assignRole(Long userId, Long roleId){
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new NotFoundException(Constants.ERROR_CODE.USER_NOT_FOUND, userId));
         Role role = roleRepository.findById(roleId).orElseThrow(
-                () -> new NotFoundException(Constants.ERROR_CODE.ROLE_NOT_FOUND));
+                () -> new NotFoundException(Constants.ERROR_CODE.ROLE_NOT_FOUND, roleId));
         try {
             Set<Role> roles = user.getRoles();
             roles.add(role);
@@ -85,14 +94,14 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void revokeRole(Long id, Long roleId){
-        User user = userRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(Constants.ERROR_CODE.USER_NOT_FOUND));
+    public void revokeRole(Long userId, Long roleId){
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new NotFoundException(Constants.ERROR_CODE.USER_NOT_FOUND, userId));
         Role role = roleRepository.findById(roleId).orElseThrow(
-                () -> new NotFoundException(Constants.ERROR_CODE.ROLE_NOT_FOUND));
+                () -> new NotFoundException(Constants.ERROR_CODE.ROLE_NOT_FOUND, roleId));
         Set<Role> roles = user.getRoles();
         if (!roles.removeIf(r -> r.equals(role))) {
-            throw new NotFoundException(Constants.ERROR_CODE.ROLE_USER_NOT_FOUND);
+            throw new NotFoundException(Constants.ERROR_CODE.ROLE_USER_NOT_FOUND, role.getRoleId());
         }
         userRepository.save(user);
     }

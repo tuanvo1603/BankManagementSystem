@@ -1,10 +1,11 @@
 package com.example.authservice.controller;
 
-import com.example.authservice.dto.request.UserRequest;
-import com.example.authservice.dto.response.UserResponse;
+import com.example.authservice.dto.UserRequest;
+import com.example.authservice.dto.UserResponse;
 import com.example.authservice.model.Role;
 import com.example.authservice.service.UserDetailsServiceImpl;
 import com.example.authservice.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest){
+    public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest userRequest){
         return ResponseEntity.ok().body(userService.create(userRequest));
     }
 
