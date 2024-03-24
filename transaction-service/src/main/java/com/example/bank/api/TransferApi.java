@@ -5,19 +5,16 @@ import com.example.bank.request.TransferRequest;
 import com.example.bank.response.TransferResponse;
 import com.example.bank.utils.DateService;
 import com.example.bank.service.TransactionService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class TransferApi extends CommonApi<TransferResponse, TransferRequest>{
 
-    private static final String EXCHANGE_SUCCESSFULLY_NOTIFY = "Exchange successfully.";
-
-    @Autowired
-    private TransactionService transactionService;
-
-    @Autowired
-    private DateService dateService;
+    private static final String EXCHANGE_SUCCESSFULLY_NOTIFY = "Transfer successfully.";
+    private final TransactionService transactionService;
 
     @Override
     public TransferResponse execute(TransferRequest request) {

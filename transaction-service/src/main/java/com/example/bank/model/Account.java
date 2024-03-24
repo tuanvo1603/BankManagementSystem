@@ -29,7 +29,7 @@ public class Account {
     private AccountType accountType;
 
     @Column(nullable = false)
-    private Long balance;
+    private BigDecimal balance;
 
     @Column(name = "create_at", nullable = false)
     private Date createAt;
@@ -37,13 +37,12 @@ public class Account {
     @Column(name = "account_number", nullable = false, unique = true, columnDefinition = "CHAR(10)")
     private String accountNumber;
 
-    public void subtractMoney(Long money) {
-        this.balance = this.balance + money;
+    public void subtractMoney(BigDecimal money) {
+        this.balance = this.balance.subtract(money);
     }
 
-    public void addMoney(Long money) {
-        this.balance += money;
+    public void addMoney(BigDecimal money) {
+        this.balance = this.balance.add(money);
     }
-
 }
 

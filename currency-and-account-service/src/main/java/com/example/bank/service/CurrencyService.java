@@ -32,7 +32,6 @@ public class CurrencyService {
         if(!currencyRepository.existsById(currency.getCurrencyCode())) {
             throw new AppException(ErrorCode.CURRENCY_NOT_FOUND);
         }
-
         currencyRepository.save(currency);
     }
 

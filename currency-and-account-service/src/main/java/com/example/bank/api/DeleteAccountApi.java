@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DeleteAccountApi extends CommonApi<DeleteAccountResponse, DeleteAccountRequest>{
 
-    private static final String DELETE_ACCOUNT_SUCCESSFULLY = "delete account successfully.";
+    private static final String DELETE_ACCOUNT_SUCCESSFULLY = "Delete account successfully.";
     private final AccountService accountService;
 
     @Override

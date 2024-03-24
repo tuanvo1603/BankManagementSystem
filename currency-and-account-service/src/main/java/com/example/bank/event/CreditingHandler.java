@@ -21,7 +21,7 @@ public class CreditingHandler {
 
     private final AccountRepository accountRepository;
 
-    @RetryableTopic(attempts = "3", backoff = @Backoff(delay = 2000L, multiplier = 2))
+    @RetryableTopic(backoff = @Backoff(delay = 2000L, multiplier = 2))
     @KafkaListener(topics = "credit-topic", groupId = "account_group")
     @Transactional
     public void handleCrediting(ConsumerRecord<String, CreditResponseMessage> record) {

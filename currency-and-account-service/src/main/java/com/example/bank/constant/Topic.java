@@ -10,9 +10,11 @@ public enum Topic {
 
     CREDIT("credit-topic"),
 
-    DEBIT("debit-topic"),
+    DEDUCT("deduct-topic"),
 
-    CREATED_ACCOUNT("created-account");
+    CREATED_ACCOUNT("created-account"),
+
+    TRANSFER("transfer-topic");
 
     private final String topic;
 }

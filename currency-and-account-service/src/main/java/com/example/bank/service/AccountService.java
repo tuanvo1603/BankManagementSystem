@@ -16,27 +16,32 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class AccountService {
 
-    private static final String USER_EXISTENCE_CHECKING_URL = "http://auth-service/v1/internal/exist-user";
+    private static final String EXIST_USER_URL = "http://auth-service/v1/users/exist-user";
     private static final String SYN_CREATE_ACCOUNT_TO_TRANSACTION_SERVICE_URL = "http://transaction-service/v1/customer/create-account";
     private static final String SYN_DELETE_ACCOUNT_TO_TRANSACTION_SERVICE_URL = "http://transaction-service/v1/customer/delete-account";
-    private static final Long INITIAL_BALANCE_VALUE = 0L;
+    private static final BigDecimal INITIAL_BALANCE_VALUE = new BigDecimal(0);
+
     private final AccountRepository accountRepository;
+
     private final RestTemplate restTemplate;
+
     private final KafkaTemplate<String, CreatedAccountMessage> createdAccountKafkaTemplate;
 
     @CircuitBreaker(name = "CHECK_EXISTING_USER_BREAKER", fallbackMethod = "checkExistingUserFallBack")
-    private boolean checkExistenceOfUser(Long userId, String token) {
+    private boolean existUser(Long userId, String token) {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
         HttpEntity<Long> entity = new HttpEntity<>(userId, headers);
-        Boolean isExistedUser = restTemplate.exchange(USER_EXISTENCE_CHECKING_URL,
+        Boolean isExistedUser = restTemplate.exchange(EXIST_USER_URL,
                 HttpMethod.GET,
                 entity,
                 Boolean.class)
@@ -69,7 +74,7 @@ public class AccountService {
     }
 
     private void validateAccountBeforeCreation(Account account, String token) {
-        if (!checkExistenceOfUser(account.getUserId(), token)) {
+        if (!existUser(account.getUserId(), token)) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
         if (accountRepository.existsAccountByAccountNumberEquals(account.getAccountNumber())) {
@@ -79,7 +84,7 @@ public class AccountService {
 
     @Transactional
     public Account createAccount(Account account, String token) {
-//        this.validateAccountBeforeCreation(account, token);
+        this.validateAccountBeforeCreation(account, token);
         if (account.getBalance() == null) {
             account.setBalance(INITIAL_BALANCE_VALUE);
         }
@@ -113,10 +118,22 @@ public class AccountService {
         return account;
     }
 
-    public void updateAccount(Account account) {
-        if (!accountRepository.existsById(account.getAccountId())) {
-            throw new AppException(ErrorCode.ACCOUNT_NOT_FOUND);
+    @Transactional
+    public void updateAccount(Long accountId, String newAccountNumber) {
+        if(accountRepository.existsAccountByAccountNumberEquals(newAccountNumber)) {
+            throw new AppException(ErrorCode.ACCOUNT_ALREADY_EXISTED);
         }
+        Account account = accountRepository.findById(accountId).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
+        account.setAccountNumber(newAccountNumber);
         accountRepository.save(account);
+    }
+
+    public List<Account> getAllUserAccounts(Long userId) {
+        if(!accountRepository.existsAccountsByUserId(userId)) {
+            throw new AppException(ErrorCode.USER_ACCOUNT_NOT_FOUND);
+        }else {
+            return accountRepository.getAccountByUserId(userId);
+        }
+
     }
 }

@@ -94,4 +94,8 @@ public class UserService {
         }
         userRepository.save(user);
     }
+
+    public boolean existUserById(Long userId) {
+        return userRepository.existsById(userId);
+    }
 }

@@ -12,8 +12,8 @@ public class AllAccountFetchingResponse extends ApiResponse {
         super(code, message);
     }
 
-    public AllAccountFetchingResponse(List<Account> accounts) {
-        super();
+    public AllAccountFetchingResponse(int code, String message, List<Account> accounts) {
+        super(code, message);
         this.accounts = accounts;
     }
 }

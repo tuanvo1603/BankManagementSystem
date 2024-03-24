@@ -1,6 +1,5 @@
 package com.example.bank.request;
 
-import com.example.bank.model.Account;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,5 +9,7 @@ import lombok.Setter;
 @Getter
 public class UpdateAccountRequest extends ApiRequest{
 
-    private Account account;
+    private Long accountId;
+
+    private String newAccountNumber;
 }

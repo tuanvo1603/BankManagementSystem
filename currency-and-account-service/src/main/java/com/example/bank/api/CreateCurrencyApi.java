@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class CreateCurrencyApi extends CommonApi<CreateCurrencyResponse, CreateCurrencyRequest>{
 
-    private static final String CREATE_CURRENCY_SUCCESSFULLY = "create currency successfully.";
+    private static final String CREATE_CURRENCY_SUCCESSFULLY = "Create currency successfully.";
     private final CurrencyService currencyService;
 
     @Override

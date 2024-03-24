@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,7 +18,7 @@ public class CreatedAccountMessage {
 
     private AccountType accountType;
 
-    private Long balance;
+    private BigDecimal balance;
 
     private String accountNumber;
 }

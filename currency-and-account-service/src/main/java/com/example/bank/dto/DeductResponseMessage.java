@@ -5,13 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DebitResponseMessage implements Serializable {
+public class DeductResponseMessage implements Serializable {
 
     private String accountNumber;
 
-    private Long money;
+    private BigDecimal money;
 }

@@ -5,23 +5,21 @@ import com.example.bank.request.DepositRequest;
 import com.example.bank.response.DepositResponse;
 import com.example.bank.utils.DateService;
 import com.example.bank.service.TransactionService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class DepositApi extends CommonApi<DepositResponse, DepositRequest>{
 
-    @Autowired
-    private TransactionService transactionService;
-
-    @Autowired
-    private DateService dateService;
+    private final TransactionService transactionService;
 
     private static final String DEPOSITING_SUCCESSFULLY_NOTIFY = "Deposit successfully.";
 
     @Override
     public DepositResponse execute(DepositRequest request) {
-        transactionService.credit(request.getDestinationAccountNumber(), request.getMoney(), true);
+        transactionService.credit(request.getDestinationAccountNumber(), request.getMoney());
         return new DepositResponse(StatusCode.SUCCESS.getCode(), DEPOSITING_SUCCESSFULLY_NOTIFY);
     }
 }

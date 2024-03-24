@@ -10,6 +10,4 @@ import lombok.NoArgsConstructor;
 public class ApiRequest {
 
     protected String token;
-
-    protected String apiName;
 }

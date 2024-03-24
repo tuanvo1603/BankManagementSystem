@@ -7,6 +7,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorCode {
 
+    PARAMETER_NOT_VALID(999, null),
+
+    INVALID_PARAMETER_TYPE(1000, "Parameter type is not suitable."),
+
     ACCOUNT_NOT_FOUND(1001, "Account has not been registered."),
 
     CURRENCY_NOT_FOUND(1003, "There is not this currency in system."),
@@ -21,8 +25,9 @@ public enum ErrorCode {
 
     USER_NOT_FOUND(1008, "User has not been registered"),
 
-    REQUEST_TIMEOUT(1009, "Request Timeout.");
+    REQUEST_TIMEOUT(1009, "Request Timeout."),
 
+    USER_ACCOUNT_NOT_FOUND(1010, "User does not have account in the system.");
 
     private final int code;
 

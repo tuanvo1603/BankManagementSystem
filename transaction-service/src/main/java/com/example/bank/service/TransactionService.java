@@ -3,17 +3,13 @@ package com.example.bank.service;
 import com.example.bank.constant.Topic;
 import com.example.bank.constant.TransactionType;
 import com.example.bank.dto.CreditResponseMessage;
-import com.example.bank.dto.DebitResponseMessage;
-import com.example.bank.model.Account;
-import com.example.bank.model.DeadCreditMessage;
-import com.example.bank.model.DeadDebitMessage;
-import com.example.bank.model.Transaction;
-import com.example.bank.repository.AccountRepository;
-import com.example.bank.repository.DeadCreditMessageRepository;
-import com.example.bank.repository.DeadDebitMessageRepository;
-import com.example.bank.repository.TransactionRepository;
+import com.example.bank.dto.DeductResponseMessage;
+import com.example.bank.dto.TransferResponseMessage;
+import com.example.bank.model.*;
+import com.example.bank.repository.*;
+import com.example.bank.utils.DateService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,37 +18,39 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 
 
 @Service
+@RequiredArgsConstructor
 public class TransactionService {
 
-    @Autowired
-    private TransactionRepository transactionRepository;
+    private final TransactionRepository transactionRepository;
+    private final AccountRepository accountRepository;
+    private final AccountService accountService;
+    private final KafkaTemplate<String, CreditResponseMessage> creditKafkaTemplate;
+    private final KafkaTemplate<String, DeductResponseMessage> deductKafkaTemplate;
+    private final KafkaTemplate<String, TransferResponseMessage> transferKafkaTemplate;
+    private final ModelMapper modelMapper;
+    private final DeadCreditMessageRepository deadCreditMessageRepository;
+    private final DeadDebitMessageRepository deadDebitMessageRepository;
+    private final DeadTransferMessageRepository deadTransferMessageRepository;
+    private final DateService dateService;
 
-    @Autowired
-    private AccountRepository accountRepository;
+    private void subtractMoneyInAccount(String accountNumber, BigDecimal money) {
+        Account account = accountService.findAccount(accountNumber);
+        accountService.isBalanceSufficient(account, money);
+        account.subtractMoney(money);
+        accountRepository.save(account);
+    }
 
-    @Autowired
-    private AccountService accountService;
-
-    @Autowired
-    private KafkaTemplate<String, CreditResponseMessage> creditKafkaTemplate;
-
-    @Autowired
-    private KafkaTemplate<String, DebitResponseMessage> debitKafkaTemplate;
-
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private DeadCreditMessageRepository deadCreditMessageRepository;
-
-    @Autowired
-    private DeadDebitMessageRepository deadDebitMessageRepository;
-
+    private void addMoneyToAccount(String accountNumber, BigDecimal money) {
+        Account account = accountService.findAccount(accountNumber);
+        account.addMoney(money);
+        accountRepository.save(account);
+    }
 
     public Page<Transaction> getAllTransactionOfAnUser(Long userId, Integer pageNumber, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("transaction_date").descending());
@@ -60,19 +58,16 @@ public class TransactionService {
     }
 
     @Transactional
-    public void credit(String destinationAccountNumber, Long money, boolean transactionRecordCreatable) {
-        Account account = accountService.findAccount(destinationAccountNumber);
-        account.addMoney(money);
-        accountRepository.save(account);
-        if (transactionRecordCreatable) {
-            Transaction transaction = Transaction.builder()
-                    .transactionDate(Date.valueOf(LocalDate.now()))
-                    .transactionType(TransactionType.CREDIT)
-                    .destinationAccountNumber(destinationAccountNumber)
-                    .amount(money)
-                    .build();
-            transactionRepository.save(transaction);
-        }
+    public void credit(String destinationAccountNumber, BigDecimal money) {
+        this.addMoneyToAccount(destinationAccountNumber, money);
+        Transaction transaction = Transaction.builder()
+                .transactionDate(dateService.getCurrentDate())
+                .transactionType(TransactionType.CREDIT)
+                .destinationAccountNumber(destinationAccountNumber)
+                .amount(money)
+                .build();
+        transactionRepository.save(transaction);
+
         CreditResponseMessage creditResponseMessage = new CreditResponseMessage(destinationAccountNumber, money);
         creditKafkaTemplate.send(Topic.CREDIT.getTopic(), creditResponseMessage)
                 .exceptionally(throwable -> {
@@ -83,40 +78,44 @@ public class TransactionService {
     }
 
     @Transactional
-    public void debit(String sourceAccountNumber, Long money, boolean transactionRecordCreatable) {
-        Account account = accountService.findAccount(sourceAccountNumber);
-        accountService.isBalanceSufficient(account, money);
-        account.subtractMoney(money);
-        accountRepository.save(account);
-        if (transactionRecordCreatable) {
-            Transaction transaction = Transaction.builder()
-                    .transactionDate(Date.valueOf(LocalDate.now()))
-                    .transactionType(TransactionType.DEBIT)
-                    .sourceAccountNumber(sourceAccountNumber)
-                    .amount(money)
-                    .build();
-            transactionRepository.save(transaction);
-        }
-        DebitResponseMessage debitResponseMessage = new DebitResponseMessage(sourceAccountNumber, money);
-        debitKafkaTemplate.send(Topic.DEBIT.getTopic(), debitResponseMessage)
+    public void deduct(String sourceAccountNumber, BigDecimal money) {
+        subtractMoneyInAccount(sourceAccountNumber, money);
+        Transaction transaction = Transaction.builder()
+                .transactionDate(dateService.getCurrentDate())
+                .transactionType(TransactionType.DEBIT)
+                .sourceAccountNumber(sourceAccountNumber)
+                .amount(money)
+                .build();
+        transactionRepository.save(transaction);
+
+        DeductResponseMessage deductResponseMessage = new DeductResponseMessage(sourceAccountNumber, money);
+        deductKafkaTemplate.send(Topic.DEDUCT.getTopic(), deductResponseMessage)
                 .exceptionally(throwable -> {
-                    DeadDebitMessage deadDebitMessage = modelMapper.map(debitResponseMessage, DeadDebitMessage.class);
-                    deadDebitMessageRepository.save(deadDebitMessage);
+                    DeadDeductMessage deadDeductMessage = modelMapper.map(deductResponseMessage, DeadDeductMessage.class);
+                    deadDebitMessageRepository.save(deadDeductMessage);
                     return null;
                 });
     }
 
     @Transactional
-    public void transfer(String sourceAccountNumber, String destinationAccountNumber, Long money) {
-        this.debit(sourceAccountNumber, money, false);
-        this.credit(destinationAccountNumber, money, false);
+    public void transfer(String sourceAccountNumber, String destinationAccountNumber, BigDecimal money) {
+        subtractMoneyInAccount(sourceAccountNumber, money);
+        addMoneyToAccount(destinationAccountNumber, money);
         Transaction transaction = Transaction.builder()
-                .transactionDate(Date.valueOf(LocalDate.now()))
+                .transactionDate(dateService.getCurrentDate())
                 .transactionType(TransactionType.TRANSFER)
                 .sourceAccountNumber(sourceAccountNumber)
                 .destinationAccountNumber(destinationAccountNumber)
                 .amount(money)
                 .build();
         transactionRepository.save(transaction);
+
+        TransferResponseMessage transferResponseMessage = new TransferResponseMessage(sourceAccountNumber, destinationAccountNumber, money);
+        transferKafkaTemplate.send(Topic.TRANSFER.getTopic(), transferResponseMessage)
+                .exceptionally(throwable -> {
+                    DeadTransferMessage deadTransferMessage = modelMapper.map(transferResponseMessage, DeadTransferMessage.class);
+                    deadTransferMessageRepository.save(deadTransferMessage);
+                    return null;
+                });
     }
 }

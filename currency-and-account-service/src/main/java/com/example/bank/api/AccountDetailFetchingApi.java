@@ -1,5 +1,6 @@
 package com.example.bank.api;
 
+import com.example.bank.exception.StatusCode;
 import com.example.bank.model.Account;
 import com.example.bank.request.AccountDetailFetchingRequest;
 import com.example.bank.response.AccountDetailFetchingResponse;
@@ -16,7 +17,6 @@ public class AccountDetailFetchingApi extends CommonApi<AccountDetailFetchingRes
     @Override
     public AccountDetailFetchingResponse execute(AccountDetailFetchingRequest request) {
         Account account = accountService.getAccountDetail(request.getAccountNumber());
-
-        return new AccountDetailFetchingResponse(account);
+        return new AccountDetailFetchingResponse(StatusCode.SUCCESS.getCode(), null ,account);
     }
 }

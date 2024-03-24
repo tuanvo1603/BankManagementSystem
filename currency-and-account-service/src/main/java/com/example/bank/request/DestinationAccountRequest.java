@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class DestinationAccountRequest extends ApiRequest{
+
     @NotEmpty(message = "INVALID_ACCOUNT_ID")
     private String destinationAccount;
 

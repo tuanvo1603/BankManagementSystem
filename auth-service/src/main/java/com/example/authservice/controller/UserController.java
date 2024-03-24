@@ -18,7 +18,7 @@ import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("users")
+@RequestMapping("v1/users")
 public class UserController {
 
     private final UserDetailsServiceImpl userDetailsService;
@@ -78,5 +78,11 @@ public class UserController {
     public ResponseEntity<?> getUserById(@PathVariable Long userId) throws UserCanNotFoundException {
         UserResponseDTO user = userDetailsService.getUserById(userId);
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @GetMapping("/exist-user")
+    public boolean existUser(@RequestBody String userId) {
+        Long id = Long.parseLong(userId);
+        return userService.existUserById(id);
     }
 }

@@ -14,10 +14,11 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     @Query(value = "select * from Account where user_id = :userId", nativeQuery = true)
     List<Account> getAccountByUserId(@Param("userId") Long userId);
 
-    List<Account> findByUserId(Long UserId);
+    boolean existsAccountsByUserId(Long userId);
 
     @Query(value = "select * from Account a where a.account_number = :destinationAccount", nativeQuery = true)
     Account getUserIdByAccountNumber(@Param("destinationAccount") String destinationAccount);
+
     @Query("SELECT a FROM Account a WHERE a.accountNumber = :accountNumber")
     Account findByAccountNumber(@Param("accountNumber") String accountNumber);
 

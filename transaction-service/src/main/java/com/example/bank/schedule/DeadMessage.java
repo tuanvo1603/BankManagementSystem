@@ -1,6 +1,6 @@
 package com.example.bank.schedule;
 
-public interface CompletableMessage {
+public interface DeadMessage {
     
     public void replayMessage();
 }

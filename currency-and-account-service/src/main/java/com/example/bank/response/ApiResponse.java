@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @NoArgsConstructor
 public class ApiResponse {
 
-    private int code;
+    protected int code;
 
-    private String message;
+    protected String message;
 }

@@ -11,8 +11,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DeleteCurrencyApi extends CommonApi<DeleteCurrencyResponse, DeleteCurrencyRequest>{
 
-    private static final String DELETE_CURRENCY_SUCCESSFULLY = "delete currency successfully.";
-
+    private static final String DELETE_CURRENCY_SUCCESSFULLY = "Delete currency successfully.";
     private final CurrencyService currencyService;
 
     @Override

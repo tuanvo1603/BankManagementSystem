@@ -6,12 +6,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
 public class UserInfoResponse extends ApiResponse{
 
     UserResponseDTO userResponseDTO;
 
+    public UserInfoResponse(int code, String message, UserResponseDTO userResponseDTO) {
+        super(code, message);
+        this.userResponseDTO = userResponseDTO;
+    }
+
+    public UserInfoResponse(int code, String message) {
+        super(code, message);
+    }
 }

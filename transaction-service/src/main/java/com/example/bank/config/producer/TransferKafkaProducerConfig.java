@@ -1,6 +1,7 @@
 package com.example.bank.config.producer;
 
-import com.example.bank.dto.DebitResponseMessage;
+import com.example.bank.dto.DeductResponseMessage;
+import com.example.bank.dto.TransferResponseMessage;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
@@ -12,12 +13,11 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
-
 @Configuration
-public class DebitKafkaProducerConfig {
+public class TransferKafkaProducerConfig {
 
     @Bean
-    public ProducerFactory<String, DebitResponseMessage> debitProducerFactory() {
+    public ProducerFactory<String, TransferResponseMessage> transferProducerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -36,7 +36,7 @@ public class DebitKafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, DebitResponseMessage> debitKafkaTemplate() {
-        return new KafkaTemplate<>(debitProducerFactory());
+    public KafkaTemplate<String, TransferResponseMessage> debitKafkaTemplate() {
+        return new KafkaTemplate<>(transferProducerFactory());
     }
 }

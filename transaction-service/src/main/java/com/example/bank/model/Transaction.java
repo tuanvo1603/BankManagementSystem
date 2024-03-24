@@ -4,6 +4,7 @@ import com.example.bank.constant.TransactionType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 
 @AllArgsConstructor
@@ -27,7 +28,7 @@ public class Transaction {
     private String destinationAccountNumber;
 
     @Column(name = "amount", nullable = false)
-    private Long amount;
+    private BigDecimal amount;
 
     @Column(name = "transaction_type", nullable = false)
     @Enumerated(value = EnumType.STRING)

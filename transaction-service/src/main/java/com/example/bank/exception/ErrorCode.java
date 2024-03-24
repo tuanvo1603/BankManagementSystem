@@ -7,6 +7,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorCode {
 
+    PARAMETER_NOT_VALID(999, null),
+
+    INVALID_PARAMETER_TYPE(1000, "Parameter type is not suitable."),
+
     INVALID_MONEY_INPUT(1000, "Money is less than 0."),
 
     ACCOUNT_NOT_FOUND(1001, "Account has not been registered."),

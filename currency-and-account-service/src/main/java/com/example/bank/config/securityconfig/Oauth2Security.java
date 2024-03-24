@@ -1,5 +1,6 @@
 package com.example.bank.config.securityconfig;
 
+import com.example.bank.constant.Role;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,7 +8,6 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -33,7 +33,10 @@ public class Oauth2Security {
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain securityFilterChainOauth2(HttpSecurity http) throws Exception {
-        return http.authorizeHttpRequests(auth -> auth.requestMatchers("v1/customer/**").hasRole("CUSTOMER"))
+        return http.authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("v1/customer/**").hasRole(Role.CUSTOMER.getRole());
+                    auth.requestMatchers("v1/admin/**").hasRole(Role.ADMIN.getRole());
+                })
                 .csrf(AbstractHttpConfigurer::disable)
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {
                     jwt.jwtAuthenticationConverter(jwtAuthenticationConverter());

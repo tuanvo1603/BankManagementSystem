@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class UpdateCurrencyApi extends CommonApi<UpdateCurrencyResponse, UpdateCurrencyRequest>{
 
-    private static final String UPDATE_CURRENCY_SUCCESSFULLY = "update currency successfully.";
+    private static final String UPDATE_CURRENCY_SUCCESSFULLY = "Update currency successfully.";
     private final CurrencyService currencyService;
 
     @Override
