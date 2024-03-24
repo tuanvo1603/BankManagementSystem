@@ -3,6 +3,8 @@ package com.example.bank.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "dead_credit_message")
 @Data
@@ -16,5 +18,5 @@ public class DeadCreditMessage {
     private String accountNumber;
 
     @Column(name = "money")
-    private Float money;
+    private BigDecimal money;
 }

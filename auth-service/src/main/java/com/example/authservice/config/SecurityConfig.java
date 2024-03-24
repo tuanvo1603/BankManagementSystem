@@ -86,10 +86,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
 
-                        .requestMatchers("/users/role/**").hasRole(Constants.ROLE_ADMIN)
-                        .requestMatchers(HttpMethod.POST, "/users/create", "/users/update/**").hasAnyRole(Constants.ROLE_ADMIN, Constants.ROLE_STAFF)
-                        .requestMatchers(HttpMethod.DELETE, "/users/delete/**").hasAnyRole(Constants.ROLE_ADMIN, Constants.ROLE_STAFF)
-                        .requestMatchers(HttpMethod.GET, "/users/all").hasAnyRole(Constants.ROLE_ADMIN, Constants.ROLE_STAFF)
+                        .requestMatchers("/v1/users/role/**").hasRole(Constants.ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.POST, "/v1/users/create", "/users/update/**").hasAnyRole(Constants.ROLE_ADMIN, Constants.ROLE_STAFF)
+                        .requestMatchers(HttpMethod.DELETE, "/v1/users/delete/**").hasAnyRole(Constants.ROLE_ADMIN, Constants.ROLE_STAFF)
+                        .requestMatchers(HttpMethod.GET, "/v1/users/all").hasAnyRole(Constants.ROLE_ADMIN, Constants.ROLE_STAFF)
                         .requestMatchers("/login").permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))

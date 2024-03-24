@@ -3,9 +3,12 @@ package com.example.authservice.controller;
 import com.example.authservice.dto.request.UserRequest;
 import com.example.authservice.dto.response.UserResponse;
 import com.example.authservice.model.Role;
+import com.example.authservice.dto.UserResponseDTO;
+import com.example.authservice.exception.UserCanNotFoundException;
 import com.example.authservice.service.UserDetailsServiceImpl;
 import com.example.authservice.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +18,7 @@ import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("users")
+@RequestMapping("v1/users")
 public class UserController {
 
     private final UserDetailsServiceImpl userDetailsService;
@@ -66,5 +69,20 @@ public class UserController {
         return ResponseEntity.ok().body(userDetailsService.loadUserByUsername(username));
     }
 
+    @GetMapping("/users/test")
+    public ResponseEntity<String> test(){
+        return ResponseEntity.ok().body("OK");
+    }
 
+    @GetMapping("user/{userId}")
+    public ResponseEntity<?> getUserById(@PathVariable Long userId) throws UserCanNotFoundException {
+        UserResponseDTO user = userDetailsService.getUserById(userId);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @GetMapping("/exist-user")
+    public boolean existUser(@RequestBody String userId) {
+        Long id = Long.parseLong(userId);
+        return userService.existUserById(id);
+    }
 }

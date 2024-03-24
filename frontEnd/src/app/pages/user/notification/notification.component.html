@@ -1,0 +1,103 @@
+
+<div class="card" id="contactList">
+    <div class="card-header">
+        <div class="row align-items-center g-3">
+            <div class="col-md-3">
+                <h5 class="card-title mb-0">All Transactions</h5>
+            </div>
+            <!--end col-->
+            <div class="col-md-auto ms-auto">
+                <div class="d-flex gap-2">
+                    <div class="search-box">
+                        <input type="text" class="form-control search" placeholder="Search for transactions...">
+                        <i class="ri-search-line search-icon"></i>
+                    </div>
+                    <button class="btn btn-success"><i class="ri-equalizer-line align-bottom me-1"></i> Filters</button>
+                </div>
+            </div>
+            <!--end col-->
+        </div>
+        <!--end row-->
+    </div>
+    <!--end card-header-->
+    <div class="card-body">
+        <div class="table-responsive table-card">
+            <table class="table align-middle table-nowrap" id="customerTable">
+                <thead class="table-light text-muted">
+                    <tr>
+                        <th class="sort" data-sort="name" scope="col" style="width: 60px;"></th>
+                        <th class="sort" data-sort="date" scope="col">Timestamp</th>
+                        <th class="sort" data-sort="currency_name" scope="col">Currency</th>
+                        <th class="sort" data-sort="form_name" scope="col">Form</th>
+                        <th class="sort" data-sort="to_name" scope="col">To</th>
+                        <th class="sort" data-sort="details" scope="col">Details</th>
+                        <th class="sort" data-sort="transaction_id" scope="col">Transaction ID</th>
+                        <th class="sort" data-sort="type" scope="col">Type</th>
+                        <th class="sort" data-sort="amount" scope="col">Amount</th>
+                        <th class="sort" data-sort="status" scope="col">Status</th>
+                    </tr>
+                    <!--end tr-->
+                </thead>
+                <tbody class="list form-check-all" *ngFor="let transaction of transactionPage.transaction">
+                    <tr>
+                        <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ001</a></td>
+                        <td>
+                            <div class="avatar-xs">
+                                <div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16">
+                                    <i class="ri-arrow-right-up-fill"></i>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="date">{{transaction.transactionDate}} <small class="text-muted">08:00AM</small></td>
+                        <td class="currency_name">
+                            <div class="d-flex align-items-center">
+                                <img src="assets/images/svg/crypto-icons/btc.svg" alt="" class="avatar-xxs me-2 material-shadow"> BTC
+                            </div>
+                        </td>
+                        <td class="form_name">{{transaction.destinationAccountId}}</td>
+                        <td class="to_name">{{transaction.sourceAccountId}}</td>
+                        <td class="details">Membership Fees</td>
+                        <td class="transaction_id">{{transaction.transactionId}}</td>
+                        <td class="type">{{transaction.transactionType}}</td>
+                        <td>
+                            <!-- <h6 class="text-danger mb-1 amount">-142.35 BTC</h6> -->
+                            <p class="text-muted mb-0">${{transaction.amount}}</p>
+                        </td>
+                        <td class="status">
+                            <span class="badge bg-warning-subtle text-warning fs-11"><i class="ri-time-line align-bottom"></i> Processing</span>
+                        </td>
+                    </tr>
+                    <!--end tr-->
+                    
+    
+                </tbody>
+            </table>
+            <!--end table-->
+            <div class="noresult" style="display: none">
+                <div class="text-center">
+                    <!-- <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#405189,secondary:#0ab39c" style="width:75px;height:75px"></lord-icon> -->
+                    <h5 class="mt-2">Sorry! No Result Found</h5>
+                    <p class="text-muted mb-0">We've searched more than 150+ transactions We did not find any transactions for you search.</p>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-end mt-3">
+
+            <!-- how to ngIf transaction.pageNumber = 0 so disabled previos and transaction.pageNumber = transaction.totalPage will disable Next button -->
+            <div class="pagination-wrap hstack gap-2">
+                <a class="page-item pagination-prev " 
+                [ngClass]="{'disabled' : transactionPage.pageNumber == 0}" (click)="goToPreviosPage()">
+                    Previous
+                </a>
+                <ul class="pagination listjs-pagination mb-0"></ul>
+                <a class="page-item pagination-next" 
+                [ngClass]="{'disabled': transactionPage.pageNumber == transactionPage.totalPages}" (click)="goToNextPage()">
+                    Next
+                </a>
+            </div>
+            <!-- help me fix this -->
+
+        </div>
+    </div>
+    <!--end card-body-->
+</div>

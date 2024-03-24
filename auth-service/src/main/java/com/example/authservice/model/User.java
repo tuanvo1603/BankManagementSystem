@@ -16,7 +16,7 @@ import java.util.*;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "`user`")
+@Table(name = "user")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

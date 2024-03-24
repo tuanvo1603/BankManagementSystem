@@ -4,16 +4,15 @@ import com.example.bank.exception.StatusCode;
 import com.example.bank.request.DeleteCurrencyRequest;
 import com.example.bank.response.DeleteCurrencyResponse;
 import com.example.bank.service.CurrencyService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class DeleteCurrencyApi extends CommonApi<DeleteCurrencyResponse, DeleteCurrencyRequest>{
 
-    private static final String DELETE_CURRENCY_SUCCESSFULLY = "delete currency successfully.";
-
-    @Autowired
-    private CurrencyService currencyService;
+    private static final String DELETE_CURRENCY_SUCCESSFULLY = "Delete currency successfully.";
+    private final CurrencyService currencyService;
 
     @Override
     public DeleteCurrencyResponse execute(DeleteCurrencyRequest request) {

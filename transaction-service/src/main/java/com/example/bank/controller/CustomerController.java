@@ -4,56 +4,42 @@ import com.example.bank.api.*;
 import com.example.bank.model.Account;
 import com.example.bank.request.*;
 import com.example.bank.response.*;
-import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
+import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/v1/customer")
+@RequiredArgsConstructor
 public class CustomerController {
 
-    @Autowired
-    private DrawMoneyApi drawMoneyApi;
+    private final DrawMoneyApi drawMoneyApi;
+    private final DepositApi depositApi;
+    private final TransferApi transferApi;
+    private final CreateAccountApi createAccountApi;
+    private final DeleteAccountApi deleteAccountApi;
+    private final TransactionApi transactionApi;
 
-    @Autowired
-    private DepositApi depositApi;
-
-    @Autowired
-    private TransferApi transferApi;
-
-    @Autowired
-    private CreateAccountApi createAccountApi;
-
-    @Autowired
-    private DeleteAccountApi deleteAccountApi;
-
-    @Autowired
-    private TransactionApi transactionApi;
-
-    @PostMapping("/draw-money/{sourceAccountNumber}/{money}")
-    public DrawMoneyResponse drawMoney(@PathVariable String sourceAccountNumber, @PathVariable Long money) {
+    @PostMapping("/draw-money")
+    public DrawMoneyResponse drawMoney(@RequestParam String sourceAccountNumber, @RequestParam BigDecimal money) {
         DrawMoneyRequest drawMoneyRequest = new DrawMoneyRequest(sourceAccountNumber, money);
         return drawMoneyApi.execute(drawMoneyRequest);
     }
 
-    @PostMapping("/deposit/{destinationAccountNumber}/{money}")
-    public DepositResponse deposit(@PathVariable String destinationAccountNumber, @PathVariable Long money) {
+    @PostMapping("/deposit")
+    public DepositResponse deposit(@RequestParam String destinationAccountNumber, @RequestParam BigDecimal money) {
         DepositRequest depositRequest = new DepositRequest(destinationAccountNumber, money);
         return depositApi.execute(depositRequest);
     }
 
-    @PostMapping("/transfer/{sourceAccountNumber}/{destinationAccountNumber}/{money}")
-    public TransferResponse transfer(@PathVariable String sourceAccountNumber,
-                                     @PathVariable String destinationAccountNumber,
-                                     @PathVariable Long money){
+    @PostMapping("/transfer")
+    public TransferResponse transfer(@RequestParam String sourceAccountNumber,
+                                     @RequestParam String destinationAccountNumber,
+                                     @RequestParam BigDecimal money){
         TransferRequest transferRequest = new TransferRequest(sourceAccountNumber, destinationAccountNumber, money);
         return transferApi.execute(transferRequest);
     }
@@ -71,6 +57,7 @@ public class CustomerController {
 
     @PostMapping("/create-account")
     public CreateAccountResponse createAccount(@RequestBody Account account) {
+//        throw new RuntimeException();
         CreateAccountRequest createAccountRequest = new CreateAccountRequest(account);
         return createAccountApi.execute(createAccountRequest);
     }

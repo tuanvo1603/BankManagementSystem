@@ -7,11 +7,13 @@ import lombok.Getter;
 @Getter
 public enum Topic {
 
-    CREATED_ACCOUNT("created_topic"),
+    CREATED_ACCOUNT("created-topic"),
 
-    CREDIT("credit_topic"),
+    CREDIT("credit-topic"),
 
-    DEBIT("debit_topic");
+    DEDUCT("deduct-topic"),
+
+    TRANSFER("transfer-topic");
 
     private final String topic;
 }

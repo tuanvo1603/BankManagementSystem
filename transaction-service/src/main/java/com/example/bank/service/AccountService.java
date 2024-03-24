@@ -4,17 +4,23 @@ import com.example.bank.exception.AppException;
 import com.example.bank.exception.ErrorCode;
 import com.example.bank.model.Account;
 import com.example.bank.repository.AccountRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
 
 @Service
+@RequiredArgsConstructor
 public class AccountService {
 
-    @Autowired
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
 
-    public void isBalanceSufficient(Account account, Long money) {
-        if (account.getBalance() < money) throw new AppException(ErrorCode.NOT_ENOUGH_MONEY_IN_ACCOUNT);
+    public void isBalanceSufficient(Account account, BigDecimal money) {
+        if (account.getBalance().compareTo(money) < 0) {
+            throw new AppException(ErrorCode.NOT_ENOUGH_MONEY_IN_ACCOUNT);
+        }
     }
 
     public Account findAccount(String accountNumber) {
@@ -29,6 +35,7 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
+    @Transactional
     public void deleteAccount(String accountNumber) {
         accountRepository.deleteByAccountNumberEquals(accountNumber);
     }

@@ -1,6 +1,6 @@
 package com.example.authservice;
 
-import com.example.authservice.dto.UserRequest;
+import com.example.authservice.dto.request.UserRequest;
 import com.example.authservice.service.UserDetailsServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

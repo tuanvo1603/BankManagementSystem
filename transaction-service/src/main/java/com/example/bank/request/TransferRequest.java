@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -18,5 +20,5 @@ public class TransferRequest extends ApiRequest{
     private String destinationAccountNumber;
 
     @Positive(message = "INVALID_MONEY_INPUT")
-    private Long money;
+    private BigDecimal money;
 }
