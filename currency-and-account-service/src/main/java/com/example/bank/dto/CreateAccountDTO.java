@@ -1,13 +1,10 @@
 package com.example.bank.dto;
 
 import com.example.bank.constant.AccountType;
-import com.example.bank.validation.AccountNumberValidation;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -15,18 +12,19 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Setter
 @Getter
+@Data
 public class CreateAccountDTO {
 
-    @NotEmpty(message = "User Id can not be blank.")
+//    @NotEmpty(message = "User Id can not be blank.")
     private Long userId;
 
-    @NotEmpty(message = "Account Type can not be blank.")
+//    @NotEmpty(message = "Account Type can not be blank.")
     private AccountType accountType;
 
-    @PositiveOrZero
+//    @PositiveOrZero
     private BigDecimal balance;
 
-    @AccountNumberValidation
-    @NotEmpty(message = "Account Number can not be blank.")
+//    @Pattern(regexp = "^[0-9]+$", message = "Account Number can not contain characters.")
+//    @NotEmpty(message = "Account Number can not be blank.")
     private String accountNumber;
 }
