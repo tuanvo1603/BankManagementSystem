@@ -7,6 +7,11 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8088
 #Datasource
   datasource:
     url: jdbc:mysql://localhost:3306/moneyaccountdatabase
@@ -34,8 +39,8 @@ spring:
 #CHECK_EXISTING_USER_BREAKER
 resilience4j:
   circuitbreaker:
-    configs:
-      default:
+    instances:
+      CHECK_EXISTING_USER_BREAKER:
         sliding-window-size: 10
         minimum-number-of-calls: 5
         wait-duration-in-open-state: 5000

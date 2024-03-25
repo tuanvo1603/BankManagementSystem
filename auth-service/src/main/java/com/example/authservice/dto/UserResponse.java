@@ -1,4 +1,4 @@
-package com.example.authservice.dto.response;
+package com.example.authservice.dto;
 
 import lombok.*;
 

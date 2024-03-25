@@ -21,10 +21,28 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: user-service
-          uri: http://localhost:8000
+        - id: auth-service
+          uri: lb://auth-service
           predicates:
-            - Path=/user/**
+            - Path=/users/**
+          filters:
+            - TokenRelay=
+        - id: account-service
+          uri: lb://currency-and-account-service
+          predicates:
+            - Path=/account/**
+          filters:
+            - TokenRelay=
+        - id: currency-service
+          uri: lb://currency-and-account-service
+          predicates:
+            - Path=/currency/**
+          filters:
+            - TokenRelay=
+        - id: transaction-service
+          uri: lb://transaction-service
+          predicates:
+            - Path=/transaction/**
           filters:
             - TokenRelay=
         - id:  angular
@@ -33,7 +51,6 @@ spring:
             - Path=/**
           filters:
             - TokenRelay=
-
 logging:
   level:
     org:
