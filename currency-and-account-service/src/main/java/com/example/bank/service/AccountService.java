@@ -25,8 +25,8 @@ import java.util.List;
 public class AccountService {
 
     private static final String EXIST_USER_URL = "http://auth-service/v1/users/exist-user";
-    private static final String SYN_CREATE_ACCOUNT_TO_TRANSACTION_SERVICE_URL = "http://transaction-service/v1/customer/create-account";
-    private static final String SYN_DELETE_ACCOUNT_TO_TRANSACTION_SERVICE_URL = "http://transaction-service/v1/customer/delete-account";
+    private static final String SYN_CREATE_ACCOUNT_TO_TRANSACTION_SERVICE_URL = "http://transaction-service/account/create";
+    private static final String SYN_DELETE_ACCOUNT_TO_TRANSACTION_SERVICE_URL = "http://transaction-service/account/delete";
     private static final BigDecimal INITIAL_BALANCE_VALUE = new BigDecimal(0);
     private final AccountRepository accountRepository;
     private final RestTemplate restTemplate;

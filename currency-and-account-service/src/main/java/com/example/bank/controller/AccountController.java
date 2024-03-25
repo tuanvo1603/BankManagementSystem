@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/v1/customer")
+@RequestMapping("/account")
 @RequiredArgsConstructor
 @Validated
-public class CustomerController {
+public class AccountController {
 
     private final AccountCreationApi accountCreationApi;
     private final AccountDetailFetchingApi accountDetailFetchingApi;
@@ -24,26 +24,26 @@ public class CustomerController {
     private final AllUserAccountFetchingApi allUserAccountFetchingApi;
     private final FetchingDestinationUserApi fetchingDestinationUserApi;
 
-    @PostMapping("/create-account")
+    @PostMapping("/create")
     public AccountCreationResponse createAccount(@RequestBody @Valid CreateAccountDTO createAccountDTO, @RequestHeader("Authorization") String bearerToken) {
         String token = bearerToken.substring("Bearer ".length());
         AccountCreationRequest accountCreationRequest = new AccountCreationRequest(createAccountDTO, token);
         return accountCreationApi.execute(accountCreationRequest);
     }
 
-    @GetMapping("/get-account-detail/{accountNumber}")
+    @GetMapping("/detail/{accountNumber}")
     public AccountDetailFetchingResponse getAccountDetail(@PathVariable String accountNumber) {
         AccountDetailFetchingRequest accountDetailFetchingRequest = new AccountDetailFetchingRequest(accountNumber);
         return accountDetailFetchingApi.execute(accountDetailFetchingRequest);
     }
 
-    @PutMapping("/update-account")
+    @PutMapping("/update")
     public UpdateAccountResponse updateAccount(@RequestParam Long accountId, @RequestParam String newAccountNumber) {
         UpdateAccountRequest updateAccountRequest = new UpdateAccountRequest(accountId, newAccountNumber);
         return updateAccountApi.execute(updateAccountRequest);
     }
 
-    @DeleteMapping("/delete-account")
+    @DeleteMapping("/delete")
     public DeleteAccountResponse deleteAccount(@RequestParam String accountNumber, @RequestHeader("Authorization") String bearerToken) {
         String token = bearerToken.substring("Bearer ".length());
         DeleteAccountRequest deleteAccountRequest = new DeleteAccountRequest(accountNumber, token);
