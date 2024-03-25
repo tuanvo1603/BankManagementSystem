@@ -7,7 +7,6 @@ import com.example.bank.dto.DeductResponseMessage;
 import com.example.bank.dto.TransferResponseMessage;
 import com.example.bank.model.*;
 import com.example.bank.repository.*;
-import com.example.bank.utils.DateService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -37,7 +36,6 @@ public class TransactionService {
     private final DeadCreditMessageRepository deadCreditMessageRepository;
     private final DeadDebitMessageRepository deadDebitMessageRepository;
     private final DeadTransferMessageRepository deadTransferMessageRepository;
-    private final DateService dateService;
 
     private void subtractMoneyInAccount(String accountNumber, BigDecimal money) {
         Account account = accountService.findAccount(accountNumber);
@@ -61,7 +59,7 @@ public class TransactionService {
     public void credit(String destinationAccountNumber, BigDecimal money) {
         this.addMoneyToAccount(destinationAccountNumber, money);
         Transaction transaction = Transaction.builder()
-                .transactionDate(dateService.getCurrentDate())
+                .transactionDate(Date.valueOf(LocalDate.now()))
                 .transactionType(TransactionType.CREDIT)
                 .destinationAccountNumber(destinationAccountNumber)
                 .amount(money)
@@ -81,7 +79,7 @@ public class TransactionService {
     public void deduct(String sourceAccountNumber, BigDecimal money) {
         subtractMoneyInAccount(sourceAccountNumber, money);
         Transaction transaction = Transaction.builder()
-                .transactionDate(dateService.getCurrentDate())
+                .transactionDate(Date.valueOf(LocalDate.now()))
                 .transactionType(TransactionType.DEBIT)
                 .sourceAccountNumber(sourceAccountNumber)
                 .amount(money)
@@ -102,7 +100,7 @@ public class TransactionService {
         subtractMoneyInAccount(sourceAccountNumber, money);
         addMoneyToAccount(destinationAccountNumber, money);
         Transaction transaction = Transaction.builder()
-                .transactionDate(dateService.getCurrentDate())
+                .transactionDate(Date.valueOf(LocalDate.now()))
                 .transactionType(TransactionType.TRANSFER)
                 .sourceAccountNumber(sourceAccountNumber)
                 .destinationAccountNumber(destinationAccountNumber)

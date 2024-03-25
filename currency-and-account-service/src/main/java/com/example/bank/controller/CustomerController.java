@@ -2,7 +2,6 @@ package com.example.bank.controller;
 
 import com.example.bank.api.*;
 import com.example.bank.dto.CreateAccountDTO;
-import com.example.bank.model.Account;
 import com.example.bank.request.*;
 import com.example.bank.response.*;
 import jakarta.validation.Valid;
