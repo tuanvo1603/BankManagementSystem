@@ -5,14 +5,17 @@ import com.example.bank.dto.CreateAccountDTO;
 import com.example.bank.model.Account;
 import com.example.bank.request.*;
 import com.example.bank.response.*;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
 @RequestMapping("/v1/customer")
 @RequiredArgsConstructor
+@Validated
 public class CustomerController {
 
     private final AccountCreationApi accountCreationApi;
@@ -23,7 +26,7 @@ public class CustomerController {
     private final FetchingDestinationUserApi fetchingDestinationUserApi;
 
     @PostMapping("/create-account")
-    public AccountCreationResponse createAccount(@RequestBody CreateAccountDTO createAccountDTO, @RequestHeader("Authorization") String bearerToken) {
+    public AccountCreationResponse createAccount(@RequestBody @Valid CreateAccountDTO createAccountDTO, @RequestHeader("Authorization") String bearerToken) {
         String token = bearerToken.substring("Bearer ".length());
         AccountCreationRequest accountCreationRequest = new AccountCreationRequest(createAccountDTO, token);
         return accountCreationApi.execute(accountCreationRequest);

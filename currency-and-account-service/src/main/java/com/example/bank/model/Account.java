@@ -3,6 +3,7 @@ package com.example.bank.model;
 import com.example.bank.constant.AccountType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
 import lombok.Data;
 

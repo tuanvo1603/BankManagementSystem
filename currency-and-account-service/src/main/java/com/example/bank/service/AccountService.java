@@ -7,21 +7,18 @@ import com.example.bank.exception.AppException;
 import com.example.bank.exception.ErrorCode;
 import com.example.bank.model.Account;
 import com.example.bank.repository.AccountRepository;
+import com.example.bank.utils.DateService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -34,7 +31,7 @@ public class AccountService {
     private static final BigDecimal INITIAL_BALANCE_VALUE = new BigDecimal(0);
     private final AccountRepository accountRepository;
     private final RestTemplate restTemplate;
-    private final KafkaTemplate<String, CreatedAccountMessage> createdAccountKafkaTemplate;
+    private final DateService dateService;
 
     @CircuitBreaker(name = "CHECK_EXISTING_USER_BREAKER", fallbackMethod = "checkExistingUserFallBack")
     private boolean existUser(Long userId, String token) {
@@ -64,7 +61,7 @@ public class AccountService {
     private void synDeleteAccountToTransactionService(String accountNumber, String token) {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(EXIST_USER_URL)
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(SYN_DELETE_ACCOUNT_TO_TRANSACTION_SERVICE_URL)
                 .queryParam("accountNumber", accountNumber);
         HttpEntity<?> entity = new HttpEntity<>(headers);
         restTemplate.exchange(builder.toUriString(),
@@ -84,6 +81,9 @@ public class AccountService {
         if (accountRepository.existsAccountByAccountNumberEquals(account.getAccountNumber())) {
             throw new AppException(ErrorCode.ACCOUNT_ALREADY_EXISTED);
         }
+        if (account.getBalance() == null) {
+            account.setBalance(INITIAL_BALANCE_VALUE);
+        }
     }
 
     @Transactional
@@ -93,21 +93,12 @@ public class AccountService {
                 .accountNumber(createAccountDTO.getAccountNumber())
                 .userId(createAccountDTO.getUserId())
                 .balance(createAccountDTO.getBalance())
+                .createAt(dateService.getCurrentDate())
                 .build();
         this.validateAccountBeforeCreation(account, token);
-        if (account.getBalance() == null) {
-            account.setBalance(INITIAL_BALANCE_VALUE);
-        }
-        account.setCreateAt(Date.valueOf(LocalDate.now()));
         Account createdAccount = accountRepository.save(account);
         this.synCreateAccountToTransactionService(createdAccount, token);
-        CreatedAccountMessage createdAccountMessage = CreatedAccountMessage.builder()
-                .accountId(createdAccount.getAccountId())
-                .accountType(createdAccount.getAccountType())
-                .balance(createdAccount.getBalance())
-                .accountNumber(createdAccount.getAccountNumber())
-                .build();
-        createdAccountKafkaTemplate.send(Topic.CREATED_ACCOUNT.getTopic(), createdAccountMessage);
+
         return createdAccount;
     }
 
