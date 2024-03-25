@@ -18,7 +18,9 @@ public class TransferApi extends CommonApi<TransferResponse, TransferRequest>{
 
     @Override
     public TransferResponse execute(TransferRequest request) {
-        transactionService.transfer(request.getSourceAccountNumber(), request.getDestinationAccountNumber(), request.getMoney());
+        for(int i = 0; i < 500; i++) {
+            transactionService.transfer(request.getSourceAccountNumber(), request.getDestinationAccountNumber(), request.getMoney());
+        }
         return new TransferResponse(StatusCode.SUCCESS.getCode(), EXCHANGE_SUCCESSFULLY_NOTIFY);
     }
 }

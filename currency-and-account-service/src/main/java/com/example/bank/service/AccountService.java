@@ -1,6 +1,7 @@
 package com.example.bank.service;
 
 import com.example.bank.constant.Topic;
+import com.example.bank.dto.CreateAccountDTO;
 import com.example.bank.dto.CreatedAccountMessage;
 import com.example.bank.exception.AppException;
 import com.example.bank.exception.ErrorCode;
@@ -8,6 +9,7 @@ import com.example.bank.model.Account;
 import com.example.bank.repository.AccountRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -15,6 +17,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -29,19 +32,18 @@ public class AccountService {
     private static final String SYN_CREATE_ACCOUNT_TO_TRANSACTION_SERVICE_URL = "http://transaction-service/v1/customer/create-account";
     private static final String SYN_DELETE_ACCOUNT_TO_TRANSACTION_SERVICE_URL = "http://transaction-service/v1/customer/delete-account";
     private static final BigDecimal INITIAL_BALANCE_VALUE = new BigDecimal(0);
-
     private final AccountRepository accountRepository;
-
     private final RestTemplate restTemplate;
-
     private final KafkaTemplate<String, CreatedAccountMessage> createdAccountKafkaTemplate;
 
     @CircuitBreaker(name = "CHECK_EXISTING_USER_BREAKER", fallbackMethod = "checkExistingUserFallBack")
     private boolean existUser(Long userId, String token) {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
-        HttpEntity<Long> entity = new HttpEntity<>(userId, headers);
-        Boolean isExistedUser = restTemplate.exchange(EXIST_USER_URL,
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(EXIST_USER_URL)
+                .queryParam("userId", userId);
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+        Boolean isExistedUser = restTemplate.exchange(builder.toUriString(),
                 HttpMethod.GET,
                 entity,
                 Boolean.class)
@@ -62,8 +64,10 @@ public class AccountService {
     private void synDeleteAccountToTransactionService(String accountNumber, String token) {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
-        HttpEntity<String> entity = new HttpEntity<>(accountNumber, headers);
-        restTemplate.exchange(SYN_DELETE_ACCOUNT_TO_TRANSACTION_SERVICE_URL,
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(EXIST_USER_URL)
+                .queryParam("accountNumber", accountNumber);
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+        restTemplate.exchange(builder.toUriString(),
                 HttpMethod.DELETE,
                 entity,
                 Void.class);
@@ -83,7 +87,13 @@ public class AccountService {
     }
 
     @Transactional
-    public Account createAccount(Account account, String token) {
+    public Account createAccount(CreateAccountDTO createAccountDTO, String token) {
+        Account account = Account.builder()
+                .accountType(createAccountDTO.getAccountType())
+                .accountNumber(createAccountDTO.getAccountNumber())
+                .userId(createAccountDTO.getUserId())
+                .balance(createAccountDTO.getBalance())
+                .build();
         this.validateAccountBeforeCreation(account, token);
         if (account.getBalance() == null) {
             account.setBalance(INITIAL_BALANCE_VALUE);

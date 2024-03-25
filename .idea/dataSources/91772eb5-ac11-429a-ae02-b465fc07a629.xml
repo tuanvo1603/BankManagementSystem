@@ -1010,7 +1010,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     </schema>
     <schema id="292" parent="1" name="moneyaccountdatabase">
       <Current>1</Current>
-      <LastIntrospectionLocalTimestamp>2024-03-13.01:55:40</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2024-03-25.02:21:29</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <schema id="293" parent="1" name="transactiondatabase">
@@ -1070,7 +1070,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <Position>3</Position>
     </column>
     <column id="306" parent="299" name="balance">
-      <DasType>float|0s</DasType>
+      <DasType>decimal(38,2 digit)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
     </column>

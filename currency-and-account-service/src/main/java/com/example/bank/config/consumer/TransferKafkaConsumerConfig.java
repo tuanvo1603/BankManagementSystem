@@ -15,6 +15,7 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 import java.util.HashMap;
 import java.util.Map;
+
 @Configuration
 public class TransferKafkaConsumerConfig {
 
@@ -33,7 +34,7 @@ public class TransferKafkaConsumerConfig {
         ConcurrentKafkaListenerContainerFactory<String, TransferResponseMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(transferConsumerFactory());
         factory.getContainerProperties().setAssignmentCommitOption(ContainerProperties.AssignmentCommitOption.ALWAYS);
-        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.BATCH);
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.RECORD);
         factory.getContainerProperties().setEosMode(ContainerProperties.EOSMode.V2);
         return factory;
     }
