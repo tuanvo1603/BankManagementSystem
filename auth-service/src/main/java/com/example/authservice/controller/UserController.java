@@ -19,7 +19,7 @@ import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("v1/users")
+@RequestMapping("/users")
 public class UserController {
 
     private final UserDetailsServiceImpl userDetailsService;
@@ -75,11 +75,11 @@ public class UserController {
         return ResponseEntity.ok().body("OK");
     }
 
-    @GetMapping("user/{userId}")
-    public ResponseEntity<?> getUserById(@PathVariable Long userId) throws UserCanNotFoundException {
-        UserResponseDTO user = userDetailsService.getUserById(userId);
-        return new ResponseEntity<>(user, HttpStatus.OK);
-    }
+//    @GetMapping("user/{userId}")
+//    public ResponseEntity<?> getUserById(@PathVariable Long userId) throws UserCanNotFoundException {
+//        UserResponseDTO user = userDetailsService.getUserById(userId);
+//        return new ResponseEntity<>(user, HttpStatus.OK);
+//    }
 
     @GetMapping("/exist-user")
     public boolean existUser(@RequestParam("userId") Long userId) {
