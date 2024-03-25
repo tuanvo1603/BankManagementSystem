@@ -3,12 +3,14 @@ package com.example.bank.model;
 import com.example.bank.constant.AccountType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.sql.Date;
 
 @Data
+@Builder
 @Entity
 @Table(name = "account")
 public class Account {
@@ -34,11 +36,11 @@ public class Account {
     private String accountNumber;
 
     public void subtractMoney(BigDecimal money) {
-        this.balance = this.balance.add(money);
+        this.balance = this.balance.subtract(money);
     }
 
     public void addMoney(BigDecimal money) {
-        this.balance = this.balance.subtract(money);
+        this.balance = this.balance.add(money);
     }
 
 }

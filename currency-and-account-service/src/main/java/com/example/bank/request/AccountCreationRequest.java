@@ -1,5 +1,6 @@
 package com.example.bank.request;
 
+import com.example.bank.dto.CreateAccountDTO;
 import com.example.bank.model.Account;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
@@ -9,10 +10,10 @@ import lombok.*;
 public class AccountCreationRequest extends ApiRequest{
 
     @NotEmpty(message = "ACCOUNT_NOT_FILLED")
-    private Account account;
+    private CreateAccountDTO createAccountDTO;
 
-    public AccountCreationRequest(Account account, String token) {
-        this.account = account;
+    public AccountCreationRequest(CreateAccountDTO createAccountDTO, String token) {
+        this.createAccountDTO = createAccountDTO;
         this.token = token;
     }
 }

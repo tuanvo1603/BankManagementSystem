@@ -63,7 +63,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/delete-account")
-    public DeleteAccountResponse deleteAccount(@RequestBody String accountNumber) {
+    public DeleteAccountResponse deleteAccount(@RequestParam("accountNumber") String accountNumber) {
         DeleteAccountRequest deleteAccountRequest = new DeleteAccountRequest(accountNumber);
         return deleteAccountApi.execute(deleteAccountRequest);
     }

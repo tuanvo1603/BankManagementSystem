@@ -81,8 +81,7 @@ public class UserController {
     }
 
     @GetMapping("/exist-user")
-    public boolean existUser(@RequestBody String userId) {
-        Long id = Long.parseLong(userId);
-        return userService.existUserById(id);
+    public boolean existUser(@RequestParam("userId") Long userId) {
+        return userService.existUserById(userId);
     }
 }

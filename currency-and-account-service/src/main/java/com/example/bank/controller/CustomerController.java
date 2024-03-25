@@ -1,6 +1,7 @@
 package com.example.bank.controller;
 
 import com.example.bank.api.*;
+import com.example.bank.dto.CreateAccountDTO;
 import com.example.bank.model.Account;
 import com.example.bank.request.*;
 import com.example.bank.response.*;
@@ -22,9 +23,9 @@ public class CustomerController {
     private final FetchingDestinationUserApi fetchingDestinationUserApi;
 
     @PostMapping("/create-account")
-    public AccountCreationResponse createAccount(@RequestBody Account account, @RequestHeader("Authorization") String bearerToken) {
+    public AccountCreationResponse createAccount(@RequestBody CreateAccountDTO createAccountDTO, @RequestHeader("Authorization") String bearerToken) {
         String token = bearerToken.substring("Bearer ".length());
-        AccountCreationRequest accountCreationRequest = new AccountCreationRequest(account, token);
+        AccountCreationRequest accountCreationRequest = new AccountCreationRequest(createAccountDTO, token);
         return accountCreationApi.execute(accountCreationRequest);
     }
 
