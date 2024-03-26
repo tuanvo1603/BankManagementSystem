@@ -20,7 +20,17 @@ spring:
             scope: openid, profile
   cloud:
     gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
       routes:
+        - id: transaction-service
+          uri:  http://localhost:8091
         - id: user-service
           uri: http://localhost:8000
           predicates:
