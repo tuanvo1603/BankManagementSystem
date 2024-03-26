@@ -1,12 +1,13 @@
 package com.example.authservice.controller;
 
-import com.example.authservice.dto.request.UserRequest;
-import com.example.authservice.dto.response.UserResponse;
+import com.example.authservice.dto.UserRequest;
+import com.example.authservice.dto.UserResponse;
 import com.example.authservice.model.Role;
 import com.example.authservice.dto.UserResponseDTO;
 import com.example.authservice.exception.UserCanNotFoundException;
 import com.example.authservice.service.UserDetailsServiceImpl;
 import com.example.authservice.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("v1/users")
+@RequestMapping("/users")
 public class UserController {
 
     private final UserDetailsServiceImpl userDetailsService;
@@ -31,7 +32,7 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest){
+    public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest userRequest){
         return ResponseEntity.ok().body(userService.create(userRequest));
     }
 
@@ -74,11 +75,11 @@ public class UserController {
         return ResponseEntity.ok().body("OK");
     }
 
-    @GetMapping("user/{userId}")
-    public ResponseEntity<?> getUserById(@PathVariable Long userId) throws UserCanNotFoundException {
-        UserResponseDTO user = userDetailsService.getUserById(userId);
-        return new ResponseEntity<>(user, HttpStatus.OK);
-    }
+//    @GetMapping("user/{userId}")
+//    public ResponseEntity<?> getUserById(@PathVariable Long userId) throws UserCanNotFoundException {
+//        UserResponseDTO user = userDetailsService.getUserById(userId);
+//        return new ResponseEntity<>(user, HttpStatus.OK);
+//    }
 
     @GetMapping("/exist-user")
     public boolean existUser(@RequestParam("userId") Long userId) {

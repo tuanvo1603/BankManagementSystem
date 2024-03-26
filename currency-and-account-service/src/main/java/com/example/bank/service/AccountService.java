@@ -1,13 +1,10 @@
 package com.example.bank.service;
 
-import com.example.bank.constant.Topic;
 import com.example.bank.dto.CreateAccountDTO;
-import com.example.bank.dto.CreatedAccountMessage;
 import com.example.bank.exception.AppException;
 import com.example.bank.exception.ErrorCode;
 import com.example.bank.model.Account;
 import com.example.bank.repository.AccountRepository;
-import com.example.bank.utils.DateService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
@@ -19,19 +16,21 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class AccountService {
 
-    private static final String EXIST_USER_URL = "http://auth-service/v1/users/exist-user";
-    private static final String SYN_CREATE_ACCOUNT_TO_TRANSACTION_SERVICE_URL = "http://transaction-service/v1/customer/create-account";
-    private static final String SYN_DELETE_ACCOUNT_TO_TRANSACTION_SERVICE_URL = "http://transaction-service/v1/customer/delete-account";
+    private static final String EXIST_USER_URL = "http://auth-service/users/exist-user";
+    private static final String SYN_CREATE_ACCOUNT_TO_TRANSACTION_SERVICE_URL = "http://transaction-service/account/create";
+    private static final String SYN_DELETE_ACCOUNT_TO_TRANSACTION_SERVICE_URL = "http://transaction-service/account/delete";
     private static final BigDecimal INITIAL_BALANCE_VALUE = new BigDecimal(0);
     private final AccountRepository accountRepository;
     private final RestTemplate restTemplate;
-    private final DateService dateService;
+
 
     @CircuitBreaker(name = "CHECK_EXISTING_USER_BREAKER", fallbackMethod = "checkExistingUserFallBack")
     private boolean existUser(Long userId, String token) {
@@ -93,7 +92,7 @@ public class AccountService {
                 .accountNumber(createAccountDTO.getAccountNumber())
                 .userId(createAccountDTO.getUserId())
                 .balance(createAccountDTO.getBalance())
-                .createAt(dateService.getCurrentDate())
+                .createAt(Date.valueOf(LocalDate.now()))
                 .build();
         this.validateAccountBeforeCreation(account, token);
         Account createdAccount = accountRepository.save(account);
