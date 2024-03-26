@@ -17,10 +17,10 @@ public class UserMapperImpl implements UserMapper{
             roles.add(role.getName());
         }
         return UserResponse.builder()
-                .id(user.getUserId())
                 .email(user.getEmail())
                 .username(user.getUsername())
                 .fullName(user.getFullName())
+                .createdAt(user.getCreatedAt())
                 .roles(roles)
                 .build();
     }

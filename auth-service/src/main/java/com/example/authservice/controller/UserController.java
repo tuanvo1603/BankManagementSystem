@@ -2,6 +2,7 @@ package com.example.authservice.controller;
 
 import com.example.authservice.dto.UserRequest;
 import com.example.authservice.dto.UserResponse;
+import com.example.authservice.mapper.UserMapper;
 import com.example.authservice.model.Role;
 import com.example.authservice.dto.UserResponseDTO;
 import com.example.authservice.exception.UserCanNotFoundException;
@@ -11,10 +12,15 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -23,8 +29,8 @@ import java.util.Set;
 public class UserController {
 
     private final UserDetailsServiceImpl userDetailsService;
-
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @GetMapping("/all")
     public ResponseEntity<List<UserResponse>> getUsers(){
@@ -66,13 +72,20 @@ public class UserController {
     }
 
     @GetMapping("/{username}")
-    public ResponseEntity<UserDetails> getUser(@PathVariable String username){
-        return ResponseEntity.ok().body(userDetailsService.loadUserByUsername(username));
+    public ResponseEntity<UserResponse> getUser(@PathVariable String username){
+        UserResponse userResponse = userMapper.toUserResponse(userDetailsService.loadUserByUsername(username));
+        return ResponseEntity.ok().body(userResponse);
     }
 
-    @GetMapping("/users/test")
-    public ResponseEntity<String> test(){
-        return ResponseEntity.ok().body("OK");
+    @GetMapping("/test")
+    public ResponseEntity<Map<String, Object>> test(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userId = authentication.getName();
+        final String jwt = ((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getTokenValue();
+        System.out.println(jwt);
+        Map<String, Object> result = new HashMap<>();
+        result.put("data", "Authorization server: " + userId + " token: " + jwt);
+        return ResponseEntity.ok().body(result);
     }
 
 //    @GetMapping("user/{userId}")
