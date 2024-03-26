@@ -1,0 +1,31 @@
+encrypt:
+  key: secretkey
+
+spring:
+  application:
+    name: config-server
+
+#  cloud:
+#    config:
+#      server:
+#        native:
+#          searchLocations: "file:///C:/Users/vx/OneDrive - Hanoi University of Science and Technology/Documents/Spring Boot/filesystem"
+#  profiles:
+#    active: native
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/tuanvo1603/CurrencyAndAccountServiceConfig.git
+#          repos:
+#            transaction-service:
+#              name: transaction-service
+#              uri: https://github.com/tuanvo1603/TransactionServiceConfig.git
+#            auth-service:
+#              uri: https://github.com/tuanvo1603/AuthServiceConfig.git
+#            currency-and-account-service:
+#              uri: https://github.com/tuanvo1603/CurrencyAndAccountServiceConfig.git
+server:
+  port: 9005
+
+

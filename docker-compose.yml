@@ -1,0 +1,70 @@
+version: '3'
+
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger
+    ports:
+      - "4318:4318"
+      - "6831:6831/udp"    # Jaeger Compact Thrift over UDP
+      - "6832:6832/udp"    # Jaeger Binary Thrift over UDP
+      - "5778:5778"        # Jaeger Agent's HTTP admin port
+      - "16686:16686"      # Jaeger Query UI
+      - "14268:14268"      # Jaeger Collector Thrift
+    environment:
+#      - COLLECTOR_ZIPKIN_HTTP_PORT=9411  # Zipkin HTTP Thrift compatibility port
+      - LOG_LEVEL=INFO                   # Adjust as needed
+#  grafana:
+#    image: grafana/grafana:latest
+#    container_name: grafana
+#    ports:
+#      - "3000:3000"
+#    volumes:
+#      - grafana_data:/var/lib/grafana
+#    depends_on:
+#      - prometheus
+#      - loki
+#    networks:
+#      - monitoring
+#
+#  loki:
+#    image: grafana/loki:latest
+#    container_name: loki
+#    ports:
+#      - "3100:3100"
+#    command: -config.file=/etc/loki/local-config.yaml
+#    volumes:
+#      - loki_data:/etc/loki
+#    networks:
+#      - monitoring
+#
+#  prometheus:
+#    image: prom/prometheus:latest
+#    container_name: prometheus
+#    ports:
+#      - "9090:9090"
+#    volumes:
+#      - prometheus_data:/etc/prometheus
+#    networks:
+#      - monitoring
+#
+#networks:
+#  monitoring:
+#
+#volumes:
+#  grafana_data:
+#  loki_data:
+#  prometheus_data:
