@@ -7,6 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorCode {
 
+    INVALID_PARAMETER_DATA(998, null),
+
     PARAMETER_NOT_VALID(999, null),
 
     INVALID_PARAMETER_TYPE(1000, "Parameter type is not suitable."),

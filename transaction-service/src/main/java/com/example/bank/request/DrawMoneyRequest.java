@@ -1,9 +1,12 @@
 package com.example.bank.request;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.math.BigDecimal;
 
@@ -12,9 +15,9 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class DrawMoneyRequest extends ApiRequest{
 
-    @NotEmpty(message = "INVALID_ACCOUNT_ID")
     private String sourceAccountNumber;
 
-    @NotEmpty(message = "INVALID_MONEY_INPUT")
     private BigDecimal money;
+
+    private Jwt jwt;
 }

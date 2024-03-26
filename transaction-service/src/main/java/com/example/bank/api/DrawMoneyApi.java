@@ -16,7 +16,7 @@ public class DrawMoneyApi extends CommonApi<DrawMoneyResponse, DrawMoneyRequest>
 
     @Override
     public DrawMoneyResponse execute(DrawMoneyRequest request) {
-        transactionService.deduct(request.getSourceAccountNumber(), request.getMoney());
+        transactionService.deduct(request.getSourceAccountNumber(), request.getMoney(), request.extractUserId(request.getJwt()));
         return new DrawMoneyResponse(StatusCode.SUCCESS.getCode(), DRAW_MONEY_SUCCESS_NOTIFY);
     }
 }

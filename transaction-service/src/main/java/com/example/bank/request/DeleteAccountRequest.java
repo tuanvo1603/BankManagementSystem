@@ -1,5 +1,6 @@
 package com.example.bank.request;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DeleteAccountRequest extends ApiRequest{
 
-    @NotEmpty(message = "INVALID_ACCOUNT_NUMBER")
+    @NotBlank(message = "INVALID_ACCOUNT_NUMBER")
     private String accountNumber;
 }

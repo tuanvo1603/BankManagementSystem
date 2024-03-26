@@ -16,7 +16,7 @@ public class UpdateAccountApi extends CommonApi<UpdateAccountResponse, UpdateAcc
 
     @Override
     public UpdateAccountResponse execute(UpdateAccountRequest request) {
-        accountService.updateAccount(request.getAccountId(), request.getNewAccountNumber());
+        accountService.updateAccount(request.getAccountId(), request.getNewAccountNumber(), request.getToken());
         return new UpdateAccountResponse(StatusCode.SUCCESS.getCode(), UPDATE_ACCOUNT_SUCCESSFULLY);
     }
 }

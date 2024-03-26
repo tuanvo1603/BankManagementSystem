@@ -39,4 +39,10 @@ public class AccountService {
     public void deleteAccount(String accountNumber) {
         accountRepository.deleteByAccountNumberEquals(accountNumber);
     }
+
+    public void updateAccount(Long accountId, String accountNumber) {
+        accountRepository.findById(accountId)
+                .orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND))
+                .setAccountNumber(accountNumber);
+    }
 }
