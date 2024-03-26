@@ -2,11 +2,14 @@ package com.example.bank.controller;
 
 import com.example.bank.api.CreateAccountApi;
 import com.example.bank.api.DeleteAccountApi;
+import com.example.bank.api.UpdateAccountApi;
 import com.example.bank.model.Account;
 import com.example.bank.request.CreateAccountRequest;
 import com.example.bank.request.DeleteAccountRequest;
+import com.example.bank.request.UpdateAccountRequest;
 import com.example.bank.response.CreateAccountResponse;
 import com.example.bank.response.DeleteAccountResponse;
+import com.example.bank.response.UpdateAccountResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +22,7 @@ public class AccountController {
 
     private final CreateAccountApi createAccountApi;
     private final DeleteAccountApi deleteAccountApi;
+    private final UpdateAccountApi updateAccountApi;
 
     @PostMapping("/create")
     public CreateAccountResponse createAccount(@RequestBody Account account) {
@@ -32,9 +36,11 @@ public class AccountController {
         return deleteAccountApi.execute(deleteAccountRequest);
     }
 
-    @PutMapping("/update-account")
-    public void updateAccount(@RequestParam("accountId") Long accountId, @RequestParam("accountNumber") String accountNumber) {
-
+    @PutMapping("/update")
+    public UpdateAccountResponse updateAccount(@RequestParam("accountId") Long accountId,
+                                               @RequestParam("accountNumber") String accountNumber) {
+        UpdateAccountRequest updateAccountRequest = new UpdateAccountRequest(accountId, accountNumber);
+        return updateAccountApi.execute(updateAccountRequest);
     }
 
 }

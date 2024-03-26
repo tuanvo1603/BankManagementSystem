@@ -4,7 +4,9 @@ import com.example.bank.api.*;
 import com.example.bank.dto.CreateAccountDTO;
 import com.example.bank.request.*;
 import com.example.bank.response.*;
+import com.example.bank.validation.AccountNumberValidation;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -33,20 +35,22 @@ public class AccountController {
     }
 
     @GetMapping("/detail/{accountNumber}")
-    public AccountDetailFetchingResponse getAccountDetail(@PathVariable @Valid String accountNumber) {
+    public AccountDetailFetchingResponse getAccountDetail(@PathVariable @AccountNumberValidation @NotBlank(message = "Account Number can not be blank.") String accountNumber) {
         AccountDetailFetchingRequest accountDetailFetchingRequest = new AccountDetailFetchingRequest(accountNumber);
         return accountDetailFetchingApi.execute(accountDetailFetchingRequest);
     }
 
     @PutMapping("/update")
     public UpdateAccountResponse updateAccount(@RequestParam @Valid Long accountId,
-                                               @RequestParam @Valid String newAccountNumber) {
-        UpdateAccountRequest updateAccountRequest = new UpdateAccountRequest(accountId, newAccountNumber);
+                                               @RequestParam @AccountNumberValidation @NotBlank(message = "Account Number can not be blank.") String newAccountNumber,
+                                               @RequestHeader("Authorization") String token) {
+        String bearerToken = token.substring("Bearer ".length());
+        UpdateAccountRequest updateAccountRequest = new UpdateAccountRequest(accountId, newAccountNumber, bearerToken);
         return updateAccountApi.execute(updateAccountRequest);
     }
 
     @DeleteMapping("/delete")
-    public DeleteAccountResponse deleteAccount(@RequestParam @Valid String accountNumber,
+    public DeleteAccountResponse deleteAccount(@RequestParam @AccountNumberValidation @NotBlank(message = "Account Number can not be blank.") String accountNumber,
                                                @RequestHeader("Authorization") String token) {
         String bearerToken = token.substring("Bearer ".length());
         DeleteAccountRequest deleteAccountRequest = new DeleteAccountRequest(accountNumber, bearerToken);
@@ -60,7 +64,7 @@ public class AccountController {
     }
 
     @GetMapping("/get-username-account/{destinationAccountNumber}")
-    public UserInfoResponse getDestinationUserInfo(@PathVariable @Valid String destinationAccountNumber) {
+    public UserInfoResponse getDestinationUserInfo(@PathVariable @AccountNumberValidation @NotBlank(message = "Account Number can not be blank.") String destinationAccountNumber) {
         DestinationAccountRequest request = new DestinationAccountRequest(destinationAccountNumber);
         return fetchingDestinationUserApi.execute(request);
     }
