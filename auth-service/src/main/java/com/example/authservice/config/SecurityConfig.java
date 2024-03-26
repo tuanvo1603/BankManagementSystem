@@ -85,7 +85,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/users/all").hasAnyRole(Constants.ROLE_ADMIN, Constants.ROLE_STAFF)
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
-                .formLogin(Customizer.withDefaults());
+                .formLogin(formLogin -> formLogin.loginPage("/login"));
         http.logout(logout -> logout.deleteCookies("JSESSIONID").invalidateHttpSession(true));
         return http.build();
     }
