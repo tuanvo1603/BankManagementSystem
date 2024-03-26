@@ -27,15 +27,15 @@ public class AccountService {
     private static final String EXIST_USER_URL = "http://auth-service/users/exist-user";
     private static final String SYN_CREATE_ACCOUNT_TO_TRANSACTION_SERVICE_URL = "http://transaction-service/account/create";
     private static final String SYN_DELETE_ACCOUNT_TO_TRANSACTION_SERVICE_URL = "http://transaction-service/account/delete";
+    private static final String SYN_UPDATE_ACCOUNT_TO_TRANSACTION_SERVICE_URL = "http://transaction-service/account/update";
     private static final BigDecimal INITIAL_BALANCE_VALUE = new BigDecimal(0);
     private final AccountRepository accountRepository;
     private final RestTemplate restTemplate;
 
 
-    @CircuitBreaker(name = "CHECK_EXISTING_USER_BREAKER", fallbackMethod = "checkExistingUserFallBack")
-    private boolean existUser(Long userId, String token) {
+    private boolean existUser(Long userId, String bearerToken) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(token);
+        headers.setBearerAuth(bearerToken);
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(EXIST_USER_URL)
                 .queryParam("userId", userId);
         HttpEntity<?> entity = new HttpEntity<>(headers);
@@ -47,9 +47,9 @@ public class AccountService {
         return Boolean.TRUE.equals(isExistedUser);
     }
 
-    private void synCreateAccountToTransactionService(Account account, String token) {
+    private void synCreateAccountToTransactionService(Account account, String bearerToken) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(token);
+        headers.setBearerAuth(bearerToken);
         HttpEntity<Account> entity = new HttpEntity<>(account, headers);
         restTemplate.exchange(SYN_CREATE_ACCOUNT_TO_TRANSACTION_SERVICE_URL,
                 HttpMethod.POST,
@@ -57,9 +57,9 @@ public class AccountService {
                 Void.class);
     }
 
-    private void synDeleteAccountToTransactionService(String accountNumber, String token) {
+    private void synDeleteAccountToTransactionService(String accountNumber, String bearerToken) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(token);
+        headers.setBearerAuth(bearerToken);
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(SYN_DELETE_ACCOUNT_TO_TRANSACTION_SERVICE_URL)
                 .queryParam("accountNumber", accountNumber);
         HttpEntity<?> entity = new HttpEntity<>(headers);
@@ -69,12 +69,21 @@ public class AccountService {
                 Void.class);
     }
 
-    private void checkExistingUserFallBack(Throwable throwable) {
-        throw new AppException(ErrorCode.REQUEST_TIMEOUT);
+    private void synUpdateAccountToTransactionService(Long accountId, String accountNumber, String bearerToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(bearerToken);
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(SYN_UPDATE_ACCOUNT_TO_TRANSACTION_SERVICE_URL)
+                .queryParam("accountNumber", accountNumber)
+                .queryParam("accountId", accountId);
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+        restTemplate.exchange(builder.toUriString(),
+                HttpMethod.PUT,
+                entity,
+                Void.class);
     }
 
-    private void validateAccountBeforeCreation(Account account, String token) {
-        if (!existUser(account.getUserId(), token)) {
+    private void validateAccountBeforeCreation(Account account, String bearerToken) {
+        if (!existUser(account.getUserId(), bearerToken)) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
         if (accountRepository.existsAccountByAccountNumberEquals(account.getAccountNumber())) {
@@ -85,8 +94,13 @@ public class AccountService {
         }
     }
 
+    public Account createAccountFallBack(CreateAccountDTO createAccountDTO, String bearerToken, Throwable throwable) {
+        throw new AppException(ErrorCode.REQUEST_TIMEOUT);
+    }
+
     @Transactional
-    public Account createAccount(CreateAccountDTO createAccountDTO, String token) {
+    @CircuitBreaker(name = "CREATE_ACCOUNT_BREAKER", fallbackMethod = "createAccountFallBack")
+    public Account createAccount(CreateAccountDTO createAccountDTO, String bearerToken) {
         Account account = Account.builder()
                 .accountType(createAccountDTO.getAccountType())
                 .accountNumber(createAccountDTO.getAccountNumber())
@@ -94,20 +108,27 @@ public class AccountService {
                 .balance(createAccountDTO.getBalance())
                 .createAt(Date.valueOf(LocalDate.now()))
                 .build();
-        this.validateAccountBeforeCreation(account, token);
+        this.validateAccountBeforeCreation(account, bearerToken);
         Account createdAccount = accountRepository.save(account);
-        this.synCreateAccountToTransactionService(createdAccount, token);
+        this.synCreateAccountToTransactionService(createdAccount, bearerToken);
 
         return createdAccount;
     }
 
     @Transactional
-    public void deleteAccount(String accountNumber, String token) {
+    @CircuitBreaker(name = "DELETE_ACCOUNT_BREAKER", fallbackMethod = "deleteAccountFallBack")
+    public void deleteAccount(String accountNumber, String bearerToken) {
         if(!accountRepository.existsAccountByAccountNumberEquals(accountNumber)) {
             throw new AppException(ErrorCode.ACCOUNT_NOT_FOUND);
         }
         accountRepository.deleteAccountByAccountNumber(accountNumber);
-        this.synDeleteAccountToTransactionService(accountNumber, token);
+        this.synDeleteAccountToTransactionService(accountNumber, bearerToken);
+    }
+
+    public Account deleteAccountFallBack(String accountNumber,
+                                         String bearerToken,
+                                         Throwable throwable) {
+        throw new AppException(ErrorCode.REQUEST_TIMEOUT);
     }
 
     public Account getAccountDetail(String accountNumber) {
@@ -119,13 +140,22 @@ public class AccountService {
     }
 
     @Transactional
-    public void updateAccount(Long accountId, String newAccountNumber) {
+    @CircuitBreaker(name = "UPDATE_ACCOUNT_BREAKER", fallbackMethod = "updateAccountFallBack")
+    public void updateAccount(Long accountId, String newAccountNumber, String bearerToken) {
         if(accountRepository.existsAccountByAccountNumberEquals(newAccountNumber)) {
             throw new AppException(ErrorCode.ACCOUNT_ALREADY_EXISTED);
         }
         Account account = accountRepository.findById(accountId).orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_FOUND));
         account.setAccountNumber(newAccountNumber);
         accountRepository.save(account);
+        this.synUpdateAccountToTransactionService(accountId, newAccountNumber, bearerToken);
+    }
+
+    public Account updateAccountFallBack(Long accountId,
+                                         String newAccountNumber,
+                                         String bearerToken,
+                                         Throwable throwable) {
+        throw new AppException(ErrorCode.REQUEST_TIMEOUT);
     }
 
     public List<Account> getAllUserAccounts(Long userId) {

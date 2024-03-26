@@ -11,12 +11,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class UpdateAccountApi extends CommonApi<UpdateAccountResponse, UpdateAccountRequest>{
 
-    private static final String UPDATE_ACCOUNT_SUCCESSFULLY = "Update account successfully.";
     private final AccountService accountService;
 
     @Override
     public UpdateAccountResponse execute(UpdateAccountRequest request) {
-        accountService.updateAccount(request.getAccountId(), request.getNewAccountNumber(), request.getToken());
-        return new UpdateAccountResponse(StatusCode.SUCCESS.getCode(), UPDATE_ACCOUNT_SUCCESSFULLY);
+        accountService.updateAccount(request.getAccountId(), request.getAccountNumber());
+        return new UpdateAccountResponse(StatusCode.SUCCESS.getCode(), null);
     }
 }

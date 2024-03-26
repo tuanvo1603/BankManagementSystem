@@ -18,4 +18,10 @@ public class UpdateAccountRequest extends ApiRequest{
 
     @NotBlank(message = "INVALID_ACCOUNT_NUMBER")
     private String newAccountNumber;
+
+    public UpdateAccountRequest(Long accountId, String newAccountNumber, String token) {
+        this.accountId = accountId;
+        this.newAccountNumber = newAccountNumber;
+        this.token = token;
+    }
 }

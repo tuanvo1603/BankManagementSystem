@@ -1,6 +1,7 @@
 package com.example.bank.dto;
 
 import com.example.bank.constant.AccountType;
+import com.example.bank.validation.AccountNumberValidation;
 import com.example.bank.validation.AccountTypeValidation;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -22,7 +23,7 @@ public class CreateAccountDTO {
     @PositiveOrZero(message = "The balance must be greater than or equal 0.")
     private BigDecimal balance;
 
-    @Pattern(regexp = "^[0-9]+$", message = "Account Number can not contain characters.")
+    @AccountNumberValidation
     @NotBlank(message = "Account Number can not be blank.")
     private String accountNumber;
 }
