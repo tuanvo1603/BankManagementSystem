@@ -25,28 +25,31 @@ public class AccountController {
     private final FetchingDestinationUserApi fetchingDestinationUserApi;
 
     @PostMapping("/create")
-    public AccountCreationResponse createAccount(@RequestBody @Valid CreateAccountDTO createAccountDTO, @RequestHeader("Authorization") String bearerToken) {
-        String token = bearerToken.substring("Bearer ".length());
-        AccountCreationRequest accountCreationRequest = new AccountCreationRequest(createAccountDTO, token);
+    public AccountCreationResponse createAccount(@RequestBody @Valid CreateAccountDTO createAccountDTO,
+                                                 @RequestHeader("Authorization") String token) {
+        String bearerToken = token.substring("Bearer ".length());
+        AccountCreationRequest accountCreationRequest = new AccountCreationRequest(createAccountDTO, bearerToken);
         return accountCreationApi.execute(accountCreationRequest);
     }
 
     @GetMapping("/detail/{accountNumber}")
-    public AccountDetailFetchingResponse getAccountDetail(@PathVariable String accountNumber) {
+    public AccountDetailFetchingResponse getAccountDetail(@PathVariable @Valid String accountNumber) {
         AccountDetailFetchingRequest accountDetailFetchingRequest = new AccountDetailFetchingRequest(accountNumber);
         return accountDetailFetchingApi.execute(accountDetailFetchingRequest);
     }
 
     @PutMapping("/update")
-    public UpdateAccountResponse updateAccount(@RequestParam Long accountId, @RequestParam String newAccountNumber) {
+    public UpdateAccountResponse updateAccount(@RequestParam @Valid Long accountId,
+                                               @RequestParam @Valid String newAccountNumber) {
         UpdateAccountRequest updateAccountRequest = new UpdateAccountRequest(accountId, newAccountNumber);
         return updateAccountApi.execute(updateAccountRequest);
     }
 
     @DeleteMapping("/delete")
-    public DeleteAccountResponse deleteAccount(@RequestParam String accountNumber, @RequestHeader("Authorization") String bearerToken) {
-        String token = bearerToken.substring("Bearer ".length());
-        DeleteAccountRequest deleteAccountRequest = new DeleteAccountRequest(accountNumber, token);
+    public DeleteAccountResponse deleteAccount(@RequestParam @Valid String accountNumber,
+                                               @RequestHeader("Authorization") String token) {
+        String bearerToken = token.substring("Bearer ".length());
+        DeleteAccountRequest deleteAccountRequest = new DeleteAccountRequest(accountNumber, bearerToken);
         return deleteAccountApi.execute(deleteAccountRequest);
     }
 
@@ -57,7 +60,7 @@ public class AccountController {
     }
 
     @GetMapping("/get-username-account/{destinationAccountNumber}")
-    public UserInfoResponse getDestinationUserInfo(@PathVariable String destinationAccountNumber) {
+    public UserInfoResponse getDestinationUserInfo(@PathVariable @Valid String destinationAccountNumber) {
         DestinationAccountRequest request = new DestinationAccountRequest(destinationAccountNumber);
         return fetchingDestinationUserApi.execute(request);
     }

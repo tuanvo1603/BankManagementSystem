@@ -1,21 +1,20 @@
 package com.example.bank.request;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
 public class UpdateAccountRequest extends ApiRequest{
 
-    @NotNull(message = "ACCOUNT_NOT_FOUND")
+    @NotBlank(message = "ACCOUNT_NOT_FOUND")
     private Long accountId;
 
     @NotBlank(message = "INVALID_ACCOUNT_NUMBER")
-    private String newAccountNumber;
+    private String accountNumber;
 }

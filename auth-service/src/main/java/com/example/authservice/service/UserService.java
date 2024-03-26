@@ -27,11 +27,11 @@ public class UserService {
     public UserResponse create(UserRequest userRequest){
 
         if(userRepository.existsByUsername(userRequest.getUsername())) {
-            throw new DuplicatedException(Constants.ERROR_CODE.USERNAME_ALREADY_EXITED, userRequest.getUsername());
+            throw new DuplicatedException(Constants.ERROR_CODE.USERNAME_ALREADY_EXISTED, userRequest.getUsername());
         }
 
         if(userRepository.existsByEmail(userRequest.getEmail())){
-            throw new DuplicatedException(Constants.ERROR_CODE.EMAIL_ALREADY_EXITED, userRequest.getEmail());
+            throw new DuplicatedException(Constants.ERROR_CODE.EMAIL_ALREADY_EXISTED, userRequest.getEmail());
         }
 
         User user = User.builder()

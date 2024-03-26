@@ -7,6 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorCode {
 
+    INVALID_PARAMETER_DATA(998, null),
+
     PARAMETER_NOT_VALID(999, null),
 
     INVALID_PARAMETER_TYPE(1000, "Parameter type is not suitable."),
@@ -21,7 +23,9 @@ public enum ErrorCode {
 
     INVALID_ACCOUNT_NUMBER(1007, "Please fill the account number."),
 
-    TRANSACTION_ERROR(1010, "The processing failed.");
+    TRANSACTION_ERROR(1010, "The processing failed."),
+
+    ERROR_AUTHENTICATE_ACCOUNT_OWNER(1011, "Error in authenticate account owner.");
 
     private final int code;
 
