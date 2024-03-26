@@ -50,9 +50,10 @@ public class AccountController {
         return deleteAccountApi.execute(deleteAccountRequest);
     }
 
-    @GetMapping("/get-all-user-account")
-    public AllAccountFetchingResponse getAllUserAccount(){
+    @GetMapping("/get-all-user-account/{pageNumber}")
+    public AllAccountFetchingResponse getAllUserAccount(@PathVariable Integer pageNumber){
         AllAccountFetchingRequest request = new AllAccountFetchingRequest();
+        request.setPageNumber(pageNumber);
         return allUserAccountFetchingApi.execute(request);
     }
 

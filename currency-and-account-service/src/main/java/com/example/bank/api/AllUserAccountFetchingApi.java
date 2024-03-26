@@ -6,6 +6,7 @@ import com.example.bank.request.AllAccountFetchingRequest;
 import com.example.bank.response.AllAccountFetchingResponse;
 import com.example.bank.service.AccountService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,12 +15,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AllUserAccountFetchingApi extends CommonApi<AllAccountFetchingResponse, AllAccountFetchingRequest>{
 
+    public static final Integer PAGE_SIZE_ACCOUNT = 4;
     private final AccountService accountService;
 
     @Override
     public AllAccountFetchingResponse execute(AllAccountFetchingRequest request) {
-        Long userId = 3L;
-        List<Account> accounts = accountService.getAllUserAccounts(userId);
-        return new AllAccountFetchingResponse(StatusCode.SUCCESS.getCode(), null, accounts);
+
+        Integer pageNumber = request.getPageNumber();
+
+        Page<Account> accountPage = accountService.getAllUserAccounts(pageNumber,PAGE_SIZE_ACCOUNT);
+        List<Account> accounts = accountPage.getContent();
+        Integer pageSize = accountPage.getSize();
+        Integer totalPage = accountPage.getTotalPages();
+
+        AllAccountFetchingResponse allAccountFetchingResponse = new
+                AllAccountFetchingResponse(StatusCode.SUCCESS.getCode(), null, accounts);
+        allAccountFetchingResponse.setTotalPage(totalPage);
+        allAccountFetchingResponse.setPageSize(pageSize);
+        return allAccountFetchingResponse;
     }
 }

@@ -7,6 +7,9 @@ import com.example.bank.model.Account;
 import com.example.bank.repository.AccountRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -128,12 +132,8 @@ public class AccountService {
         accountRepository.save(account);
     }
 
-    public List<Account> getAllUserAccounts(Long userId) {
-        if(!accountRepository.existsAccountsByUserId(userId)) {
-            throw new AppException(ErrorCode.USER_ACCOUNT_NOT_FOUND);
-        }else {
-            return accountRepository.getAccountByUserId(userId);
-        }
-
+    public Page<Account> getAllUserAccounts(Integer pageNumber, Integer pageSize) {
+        Pageable pageable = (Pageable) PageRequest.of(pageNumber, pageSize);
+        return accountRepository.findAll(pageable);
     }
 }

@@ -1,6 +1,8 @@
 package com.example.bank.repository;
 
 import com.example.bank.model.Account;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,6 +15,9 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     @Query(value = "select * from Account where user_id = :userId", nativeQuery = true)
     List<Account> getAccountByUserId(@Param("userId") Long userId);
+
+    @Override
+    Page<Account> findAll(Pageable pageable);
 
     boolean existsAccountsByUserId(Long userId);
 
