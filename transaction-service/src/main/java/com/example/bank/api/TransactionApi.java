@@ -13,12 +13,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TransactionApi extends CommonApi<TransactionResponse, TransactionRequest>{
 
-    public static final Integer PAGE_SIZE = 10;
+    private static final Integer PAGE_SIZE = 10;
     private final TransactionService transactionService;
 
     @Override
     public TransactionResponse execute(TransactionRequest request) {
-        Page<Transaction> transactions = transactionService.getAllTransactionOfAnUser(request.getUserId(),
+        Page<Transaction> transactions = transactionService.getAllTransactionOfAnUser(request.extractUserId(request.getJwt()),
                 request.getPageNumber(),
                 PAGE_SIZE);
         return new TransactionResponse(transactions);

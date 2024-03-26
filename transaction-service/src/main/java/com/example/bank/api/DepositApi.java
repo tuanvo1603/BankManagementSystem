@@ -11,9 +11,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DepositApi extends CommonApi<DepositResponse, DepositRequest>{
 
-    private final TransactionService transactionService;
-
     private static final String DEPOSITING_SUCCESSFULLY_NOTIFY = "Deposit successfully.";
+    private final TransactionService transactionService;
 
     @Override
     public DepositResponse execute(DepositRequest request) {

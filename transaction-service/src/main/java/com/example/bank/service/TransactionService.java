@@ -5,6 +5,8 @@ import com.example.bank.constant.TransactionType;
 import com.example.bank.dto.CreditResponseMessage;
 import com.example.bank.dto.DeductResponseMessage;
 import com.example.bank.dto.TransferResponseMessage;
+import com.example.bank.exception.AppException;
+import com.example.bank.exception.ErrorCode;
 import com.example.bank.model.*;
 import com.example.bank.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
-
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +51,12 @@ public class TransactionService {
         accountRepository.save(account);
     }
 
+    private void validateUserId(String sourceAccountNumber,Long userId) {
+        if(!accountRepository.existsAccountByAccountNumberEqualsAndUserId(sourceAccountNumber, userId)) {
+            throw new AppException(ErrorCode.ERROR_AUTHENTICATE_ACCOUNT_OWNER);
+        }
+    }
+
     public Page<Transaction> getAllTransactionOfAnUser(Long userId, Integer pageNumber, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("transaction_date").descending());
         return transactionRepository.getAllTransactionOfAnUser(userId, pageable);
@@ -76,11 +83,14 @@ public class TransactionService {
     }
 
     @Transactional
-    public void deduct(String sourceAccountNumber, BigDecimal money) {
+    public void deduct(String sourceAccountNumber,
+                       BigDecimal money,
+                       Long userId) {
+        this.validateUserId(sourceAccountNumber, userId);
         subtractMoneyInAccount(sourceAccountNumber, money);
         Transaction transaction = Transaction.builder()
                 .transactionDate(Date.valueOf(LocalDate.now()))
-                .transactionType(TransactionType.DEBIT)
+                .transactionType(TransactionType.DEDUCT)
                 .sourceAccountNumber(sourceAccountNumber)
                 .amount(money)
                 .build();
@@ -96,7 +106,11 @@ public class TransactionService {
     }
 
     @Transactional
-    public void transfer(String sourceAccountNumber, String destinationAccountNumber, BigDecimal money) {
+    public void transfer(String sourceAccountNumber,
+                         String destinationAccountNumber,
+                         BigDecimal money,
+                         Long userId) {
+        this.validateUserId(sourceAccountNumber, userId);
         subtractMoneyInAccount(sourceAccountNumber, money);
         addMoneyToAccount(destinationAccountNumber, money);
         Transaction transaction = Transaction.builder()
