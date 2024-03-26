@@ -3,7 +3,7 @@
     <div class="logo"></div>
     <ul nz-menu nzTheme="dark" nzMode="inline">
       <li nz-menu-item>
-        <a routerLink="home">
+        <a routerLink="dashboard">
           <span nz-icon nzType="user"></span>
           <span>Dashboard</span>
         </a>
@@ -45,10 +45,10 @@
     <nz-header>
       <div nz-flex [nzJustify]="'space-between'">
         <span class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
-              (click)="isCollapsed = !isCollapsed"></span>
+          (click)="isCollapsed = !isCollapsed"></span>
         <div nz-flex [nzAlign]="'center'" [nzJustify]="'center'" class="flex-item">
-          <h5 nz-typography>Admin</h5>
-          <nz-avatar nzSize="large" nzIcon="user"></nz-avatar>
+          <h5 nz-typography>{{ user?.username }}</h5>
+           <nz-avatar nzSize="large" nzIcon="user"></nz-avatar>
         </div>
       </div>
 
