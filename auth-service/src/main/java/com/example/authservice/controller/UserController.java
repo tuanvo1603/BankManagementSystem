@@ -72,27 +72,17 @@ public class UserController {
     }
 
     @GetMapping("/{username}")
-    public ResponseEntity<UserResponse> getUser(@PathVariable String username){
+    public ResponseEntity<UserResponse> getUserByUsername(@PathVariable String username){
         UserResponse userResponse = userMapper.toUserResponse(userDetailsService.loadUserByUsername(username));
         return ResponseEntity.ok().body(userResponse);
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<Map<String, Object>> test(){
+    @GetMapping("/info")
+    public ResponseEntity<UserResponse> getUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userId = authentication.getName();
-        final String jwt = ((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getTokenValue();
-        System.out.println(jwt);
-        Map<String, Object> result = new HashMap<>();
-        result.put("data", "Authorization server: " + userId + " token: " + jwt);
-        return ResponseEntity.ok().body(result);
+        UserResponse userResponse = userMapper.toUserResponse(userDetailsService.loadUserByUsername(authentication.getName()));
+        return ResponseEntity.ok().body(userResponse);
     }
-
-//    @GetMapping("user/{userId}")
-//    public ResponseEntity<?> getUserById(@PathVariable Long userId) throws UserCanNotFoundException {
-//        UserResponseDTO user = userDetailsService.getUserById(userId);
-//        return new ResponseEntity<>(user, HttpStatus.OK);
-//    }
 
     @GetMapping("/exist-user")
     public boolean existUser(@RequestParam("userId") Long userId) {
