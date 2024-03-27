@@ -27,7 +27,7 @@ public enum ErrorCode {
 
     USER_NOT_FOUND(1008, "User has not been registered"),
 
-    REQUEST_TIMEOUT(1009, "Request Timeout."),
+    REQUEST_TIMEOUT(1009, "Request Timeout or Server Overloading."),
 
     USER_ACCOUNT_NOT_FOUND(1010, "User does not have account in the system.");
 

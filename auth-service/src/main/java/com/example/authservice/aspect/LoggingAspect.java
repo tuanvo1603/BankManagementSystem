@@ -30,7 +30,7 @@ public class LoggingAspect {
     private final UserActivityLogService userActivityLogService;
     private final UserDetailsServiceImpl userDetailsService;
     
-    @Before("execution(* com.example.authservice.service.UserService.update(..))")
+    @AfterReturning("execution(* com.example.authservice.service.UserService.update(..))")
     public void logUpdateAccount(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
